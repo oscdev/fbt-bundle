@@ -15,6 +15,9 @@ database.sqlite
 .env
 .env.*
 
+shopify.app.*
+
+package-lock.json
 
 
 
