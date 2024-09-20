@@ -2,7 +2,6 @@ import { Banner, BlockStack, Button, Card, Icon, Box, InlineGrid, Page, Text } f
 import { EmailIcon, ExternalIcon, InfoIcon, PersonFilledIcon, QuestionCircleIcon, StarFilledIcon } from "@shopify/polaris-icons";
 import { Footer } from "../components/Footer.js";
 import logo from "../assets/images/logo.jpg";
-import "../assets/index.css";
 import { useNavigate } from "@remix-run/react";
 
 // help component
