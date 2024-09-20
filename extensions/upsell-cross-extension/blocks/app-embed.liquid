@@ -1,0 +1,9 @@
+{% comment %} Manage App Embed Enable/Disable Settings {% endcomment %}
+{% schema %}
+{
+  "name": "Upsell & Cross Sell",
+  "target": "head",
+  "settings":  [],
+  "available_if": "{{ app.metafields.app_settings.app_enabled }}"
+}
+{% endschema %}
