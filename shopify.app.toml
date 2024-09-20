@@ -3,7 +3,7 @@
 client_id = "3d1a2c1b4bfc22486552326ce0932459"
 name = "sr-upsell-bundle"
 handle = "sr-upsell-bundle"
-application_url = "https://3aeb-115-246-36-228.ngrok-free.app"
+application_url = "https://7460-115-246-36-228.ngrok-free.app"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_draft_orders,read_markets,read_products,read_scrip
 
 [auth]
 redirect_urls = [
-  "https://3aeb-115-246-36-228.ngrok-free.app/auth/callback",
-  "https://3aeb-115-246-36-228.ngrok-free.app/auth/shopify/callback",
-  "https://3aeb-115-246-36-228.ngrok-free.app/api/auth/callback"
+  "https://7460-115-246-36-228.ngrok-free.app/auth/callback",
+  "https://7460-115-246-36-228.ngrok-free.app/auth/shopify/callback",
+  "https://7460-115-246-36-228.ngrok-free.app/api/auth/callback"
 ]
 
 [webhooks]
