@@ -5,9 +5,9 @@ import { boundary } from "@shopify/shopify-app-remix/server";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { NavMenu } from "@shopify/app-bridge-react";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
-
+import { useNavigation } from "@remix-run/react";
 import { authenticate } from "../shopify.server";
-
+import { Spinner } from "@shopify/polaris";
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -18,16 +18,25 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function App() {
   const { apiKey } = useLoaderData<typeof loader>();
-
+  const navigation = useNavigation();
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
       <NavMenu>
         <Link to="/app" rel="home">
           Home
         </Link>
+        <Link to="/app/theme-setup">Dashboard</Link>
         <Link to="/app/bundle/new">Bundle</Link>
         <Link to="/app/help">Help</Link>
       </NavMenu>
+      {navigation.state === "loading" && (
+        <div className="loading-overlay-container" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(255, 255, 255, 0.5)", zIndex: 9999, display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <Spinner size="large" accessibilityLabel="Loading..." />
+          <div className="loading-overlay-spinner">
+            Loading...Please wait.
+          </div>
+        </div>
+      )}
       <Outlet />
     </AppProvider>
   );

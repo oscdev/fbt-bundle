@@ -1,0 +1,350 @@
+{% comment %} liquid color schema variables {% endcomment %}
+{% liquid
+  assign title_color = block.settings.title_color
+  assign button_text_color = block.settings.button_text_color
+  assign total_price_color = block.settings.total_price_color
+  assign product_title_color = block.settings.product_title_color
+  assign button_background = block.settings.button_background
+  assign button_border_radius = block.settings['button_border_radius']
+%}
+{% for item in product.metafields.oscp.cross.value.crossProducts %}
+  {% assign itemcross = item %}
+  {% assign crosssell_item = all_products[item.handle] %}
+  {% comment %} Check related product available or not {% endcomment %}
+  {% if crosssell_item.available == true and product.available %}
+    {% if product.metafields.oscp.cross != blank and itemcross contains 'id' %}
+      <div class="main-frequently">
+        <header class="cols">
+          <h2 class="related-products__heading h2">{{ block.settings.product_title_cross }}</h2>
+        </header>
+        <div class="frequently-inner">
+          <div class="frequently-product custom">
+            {% if product.metafields.oscp.cross %}
+            {% endif %}
+            {% comment %} This code for Display price calculations start {% endcomment %}
+            <div class="price-container">
+              {% assign total_price = product.variants.first.price %}
+              {% if product.variants.first.compare_at_price != blank %}
+              {% assign total_compare_at_price = product.variants.first.compare_at_price %}
+              {% else %}
+              {% assign total_compare_at_price = product.variants.first.price %}
+              {% endif %}
+              {% assign crossProducts = product.metafields.oscp.cross.value.crossProducts | slice: 0, 2 %}
+              {% for item in crossProducts %}
+                {% assign crosssell_item = all_products[item.handle] %}
+                {% if crosssell_item.available == true %}
+                  {% assign total_price = total_price | plus: crosssell_item.variants.first.price %}
+                  {% assign total_compare_at_price = total_compare_at_price
+                    | plus: crosssell_item.variants.first.compare_at_price
+                  %}
+                  {% if crosssell_item.variants.first.compare_at_price == blank %}
+                    {% assign total_compare_at_price = total_compare_at_price
+                      | plus: crosssell_item.variants.first.price
+                    %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              <p class="priceupdate">
+                {{ block.settings.total }}:
+                {% if total_compare_at_price > total_price %}
+                  <span class="old-price"> {{ total_compare_at_price | money_with_currency }} </span><br>
+                  <b>
+                    <span class="uaf__price" id="total_price"> {{ total_price | money_with_currency }} </span>
+                  </b>
+                {% else %}
+                  <b>
+                    <span class="uaf__price" id="total_price"> {{ total_price | money_with_currency }} </span>
+                  </b>
+                {% endif %}
+              </p>
+              {%- liquid
+                assign product_form_class = 'f8pr cart-total-pp'
+                assign product_form_id = 'quick-add-' | append: section.id | append: product.id | append: '-quick-add-form_x'
+              -%}
+              {%- form 'product', product, id: product_form_id, class: product_form_class, novalidate: 'novalidate' -%}
+                <fieldset>
+                  <div class="form">
+                    {% if product.available == true %}
+                      <input
+                        type="hidden"
+                        name="id[]"
+                        value="{{ product.variants.first.id }}"
+                        data-product-hide="product-1"
+                      >
+                    {% endif %}
+                    {% for item in crossProducts %}
+                      {% assign crosssell_item = all_products[item.handle] %}
+                      {% if crosssell_item.available == true %}
+                        <input
+                          type="hidden"
+                          name="id[]"
+                          value="{{ crosssell_item.variants.first.id }}"
+                          data-product-hide="product-{{ forloop.index }}"
+                        >
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                  <p class="submit">
+                    <button type="submit" class="overlay-tertiary">
+                      <span class="mobile-hide">{{ block.settings.cart_button }}</span>
+                      <i aria-hidden="true" class="icon-cart"></i>
+                    </button>
+                  </p>
+                </fieldset>
+              {%- endform -%}
+            </div>
+            {% comment %} This code for Display price calculations end {% endcomment %}
+
+            {% comment %} display listitems with checkbox, product title and price  {% endcomment %}
+            <div class="rec-title-parent">
+              <ul class="rec-title item-list item-image" id="prod">
+                {% if product.available == true %}
+                  {% comment %} This code for default product start{% endcomment %}
+                  <li class="recom">
+                    <div class="inner-recom">
+                      <div class="check-box">
+                        <input
+                          data-product-price="{{ product.variants.first.price }}"
+                          data-product-oldprice="{%- if product.variants.first.compare_at_price > product.variants.first.price -%}{{ product.variants.first.compare_at_price }}{% else %}{{ product.variants.first.price }}{%- endif -%}"
+                          type="checkbox"
+                          class="product-checkbox"
+                          id="product_{{ forloop.index }}"
+                          name="product_{{ forloop.index }}"
+                          value="{{ product.variants.first.id }}"
+                          checked
+                        >
+                      </div>
+                      <div class="outer-upper">
+                        <div class="upper">
+                          <div class="desktop-view-custom">
+                            <div class="recomimg">
+                              <div class="custom-related">
+                                {%- if product.featured_image != blank -%}
+                                  <img
+                                    srcset="
+                                      {%- if product.featured_image.width >= 165 -%}{{ product.featured_image | image_url: width: 165 }} 165w,{%- endif -%}
+                                      {%- if product.featured_image.width >= 360 -%}{{ product.featured_image | image_url: width: 360 }} 360w,{%- endif -%}
+                                      {%- if product.featured_image.width >= 533 -%}{{ product.featured_image | image_url: width: 533 }} 533w,{%- endif -%}
+                                      {%- if product.featured_image.width >= 720 -%}{{ product.featured_image | image_url: width: 720 }} 720w,{%- endif -%}
+                                      {%- if product.featured_image.width >= 940 -%}{{ product.featured_image | image_url: width: 940 }} 940w,{%- endif -%}
+                                      {%- if product.featured_image.width >= 1066 -%}{{ product.featured_image | image_url: width: 1066 }} 1066w,{%- endif -%}
+                                      {{ product.featured_image | image_url }} {{ product.featured_image.width }}w
+                                    "
+                                    src="{{ product.featured_image | image_url: width: 533 }}"
+                                    sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                                    alt="{{ product.featured_image.alt | escape }}"
+                                    class="motion-reduce"
+                                    loading="lazy"
+                                    width="{{ product.featured_image.width }}"
+                                    height="{{ product.featured_image.height }}"
+                                  >
+                                {%- else -%}
+                                  {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                                  <p class="customSvg">{{ product.title }}</p>
+                                {%- endif -%}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="prod-item">
+                          <a href="{{ product.url }}" class="product__title">
+                            <span class="customTitle"> {{ product.title }}</span>
+                          </a>
+                          <div class="elem_product__title">
+                          {% if product.variants.first.compare_at_price > product.variants.first.price %}
+                            <span class="old-price">
+                              {{ product.variants.first.compare_at_price | money_with_currency }}
+                            </span>&nbsp;
+                          {% endif %}
+                          <span class="uaf__price">{{ product.variants.first.price | money_with_currency }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  {% comment %} This code for default product end {% endcomment %}
+                {% endif %}
+                {% assign crossProducts = product.metafields.oscp.cross.value.crossProducts | slice: 0, 2 %}
+                {% for item in crossProducts %}
+                  {% assign crosssell_item = all_products[item.handle] %}
+                  {% if crosssell_item.available == true %}
+                    {% comment %} This code for related cross sell item products start {% endcomment %}
+                    <li data-product-list="product-1" id="prod1" class="recom">
+                      <div class="inner-recom">
+                        <div class="check-box">
+                          <input
+                            data-product-price="{{ crosssell_item.variants.first.price }}"
+                            data-product-oldprice="{%- if crosssell_item.variants.first.compare_at_price > crosssell_item.variants.first.price -%}{{ crosssell_item.variants.first.compare_at_price }}{% else %}{{ crosssell_item.variants.first.price }}{%- endif -%}"
+                            type="checkbox"
+                            class="product-checkbox"
+                            id="product_{{ forloop.index }}"
+                            name="product_{{ forloop.index }}"
+                            value="{{ crosssell_item.variants.first.id }}"
+                            checked
+                          >
+                        </div>
+
+                        <div class="outer-upper">
+                          <div class="upper">
+                            <div class="desktop-view-custom">
+                              <div class="recomimg">
+                                <div class="custom-related">
+                                  {%- if crosssell_item.featured_image != blank -%}
+                                    <img
+                                      srcset="
+                                        {%- if crosssell_item.featured_image.width >= 165 -%}{{ crosssell_item.featured_image | image_url: width: 165 }} 165w,{%- endif -%}
+                                        {%- if crosssell_item.featured_image.width >= 360 -%}{{ crosssell_item.featured_image | image_url: width: 360 }} 360w,{%- endif -%}
+                                        {%- if crosssell_item.featured_image.width >= 533 -%}{{ crosssell_item.featured_image | image_url: width: 533 }} 533w,{%- endif -%}
+                                        {%- if crosssell_item.featured_image.width >= 720 -%}{{ crosssell_item.featured_image | image_url: width: 720 }} 720w,{%- endif -%}
+                                        {%- if crosssell_item.featured_image.width >= 940 -%}{{ crosssell_item.featured_image | image_url: width: 940 }} 940w,{%- endif -%}
+                                        {%- if crosssell_item.featured_image.width >= 1066 -%}{{ crosssell_item.featured_image | image_url: width: 1066 }} 1066w,{%- endif -%}
+                                        {{ crosssell_item.featured_image | image_url }} {{ crosssell_item.featured_image.width }}w
+                                      "
+                                      src="{{ crosssell_item.featured_image | image_url: width: 533 }}"
+                                      sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                                      alt="{{ crosssell_item.featured_image.alt | escape }}"
+                                      class="motion-reduce"
+                                      loading="lazy"
+                                      width="{{ crosssell_item.featured_image.width }}"
+                                      height="{{ crosssell_item.featured_image.height }}"
+                                    >
+                                  {%- else -%}
+                                    {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder' }}
+                                    <p class="customSvg">{{ crosssell_item.title }}</p>
+                                  {%- endif -%}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="prod-item">
+                            <a href="{{ item.handle }}" class="product__title">
+                              <span class="customTitle"> {{ crosssell_item.title }}</span>
+                            </a>
+                            <div class="elem_product__title">
+                              {% if crosssell_item.variants.first.compare_at_price
+                                  > crosssell_item.variants.first.price
+                              %}
+                                <span class="old-price">
+                                  {{ crosssell_item.variants.first.compare_at_price | money_with_currency }} 
+                                </span> &nbsp;
+                              {% endif %}
+
+                              <span class="uaf__price">
+                                {{ crosssell_item.variants.first.price | money_with_currency }}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    {% comment %} This code for related cross sell item products end {% endcomment %}
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+<script type="text/oscpFrequently">
+  oscpfrequentlyConfig = {
+    priceTemplate: '{{ 0 | money_without_trailing_zeros }}',
+    totalPriceText: '{{ block.settings.total }}',
+  };
+</script>
+<style>
+  .main-frequently h2.related-products__heading.h2 {
+    color: {{ title_color }}
+  }
+  .main-frequently p.priceupdate {
+    color: {{ total_price_color }}
+  }
+  .main-frequently .price-container .overlay-tertiary {
+    background: {{ button_background }};
+    color: {{ button_text_color }}
+  }
+  .main-frequently .recom span.customTitle {
+    color: {{ product_title_color }}
+  }
+  .overlay-tertiary {
+    border-radius: {{ button_border_radius }}px;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Freq. Bought Together",
+  "target": "section",
+  "templates": ["product"],
+  "javascript": "frequently.js",
+  "stylesheet": "frequently.css",
+  "available_if": "{{ app.metafields.app_settings.app_enabled }}",
+  "settings": [
+    {
+      "type": "text",
+      "id": "product_title_cross",
+      "label": "Title",
+      "default": "Frequently Bought Together"
+    },
+    {
+      "type": "text",
+      "id": "cart_button",
+      "label": "Button Text Color",
+      "default": "Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "total",
+      "label": "Total Price",
+      "default": "Total price"
+    },
+    {
+      "type": "header",
+      "content": "Color Schema"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Heading",
+      "default": "#181818"
+    },
+    {
+      "type": "color",
+      "id": "product_title_color",
+      "label": "Product Title",
+      "default": "#181818"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button",
+      "default": "#fff"
+    },
+    {
+      "type": "color",
+      "id": "total_price_color",
+      "label": "Total Price",
+      "default": "#181818"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button Background",
+      "default": "#181818"
+    },
+    {
+      "type": "range",
+      "id": "button_border_radius",
+      "label": "Button Border Radius",
+      "default": 0,
+      "min": 0,
+      "max": 50
+    }
+  ]
+}
+{% endschema %}
