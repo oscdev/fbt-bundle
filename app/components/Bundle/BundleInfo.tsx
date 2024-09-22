@@ -11,7 +11,7 @@ export function BundleInfo(pros) {
                             label={<Text variant="headingMd" as="h6">Bundle name</Text>}
                             value={bundleName.value}
                             onChange={(e) => bundleName.onChange(e)}
-                            placeholder="Enter bundle name"
+                            placeholder="Bundle Name: e.g. Bundle of 3 Combos"
                             autoComplete="off"
                         />
 
@@ -19,7 +19,7 @@ export function BundleInfo(pros) {
                             label={<Text variant="headingMd" as="h6">Description</Text>}
                             value={description.value}
                             onChange={(e) => description.onChange(e)}
-                            placeholder="Buy this combo and save 10% OFF"
+                            placeholder="Short Description: e.g. Buy this combo and save 10% OFF"
                             autoComplete="off"
                         />
                     </FormLayout>
