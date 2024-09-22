@@ -92,17 +92,21 @@ export default function AdditionalPage() {
               onRemoveGlobalPriceRules={removeGlobalPriceRules}
               onMoveGlobalPriceRules={moveGlobalPriceRules}
             />
+            <Resource 
+              cartItems={cartItems}
+              onAddCartItems={addCartItems}
+              onEditCartItems={editCartItems}
+              onRemoveCartItems={removeCartItems}
+              onMoveCartItems={moveCartItems}
+            />
             <Customize />
           </BlockStack>
         </Layout.Section>
         <Layout.Section variant="oneThird">
-          <Card>
-            <BlockStack gap="200">
-              <Text as="h2" variant="headingMd">
-                Resources
-              </Text>
-            </BlockStack>
-          </Card>
+          <Preview 
+            bundleName={bundleName}
+            description={description}
+          />
         </Layout.Section>
       </Layout>
     </Page>
