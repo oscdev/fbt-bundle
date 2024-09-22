@@ -88,7 +88,11 @@ export default function AdditionalPage() {
             />
             <BundleDiscountInfo
               globalPriceRules={globalPriceRules}
+              onAddGlobalPriceRules={addGlobalPriceRules}
+              onRemoveGlobalPriceRules={removeGlobalPriceRules}
+              onMoveGlobalPriceRules={moveGlobalPriceRules}
             />
+            <Customize />
           </BlockStack>
         </Layout.Section>
         <Layout.Section variant="oneThird">
