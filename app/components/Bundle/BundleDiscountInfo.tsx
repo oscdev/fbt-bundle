@@ -33,8 +33,8 @@ export function BundleDiscountInfo(pros) {
                    <Popover
                     active={startVisible}
                     activator={  <TextField
-                      label={<Text variant="headingMd" as="h6">Start Date</Text>}
-                      value={value.value} Checkbox
+                      label={<Text variant="headingMd" as="h6">Start At</Text>}
+                      value={value.value} 
                       onChange={(e) => value.onChange(e)}
                       autoComplete="off"
                       onFocus={() => setStartVisible(true)}
@@ -53,7 +53,7 @@ export function BundleDiscountInfo(pros) {
                   <Popover
                     active={endVisible}
                     activator={ <TextField
-                      label={<Text variant="headingMd" as="h6">End Date</Text>}
+                      label={<Text variant="headingMd" as="h6">End At</Text>}
                       value={value.value}
                       onChange={(e) => value.onChange(e)}
                       autoComplete="off"
