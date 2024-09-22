@@ -45,14 +45,14 @@ export function Preview(pros) {
                 <InlineStack align="start" wrap={false} gap="300">
                   <SkeletonThumbnail size="small" />
                   <SkeletonBodyText lines={2} />
-                </InlineStack>
-                <InlineStack align="start" wrap={false} gap="300">
+                </InlineStack>                
+              </> : null}
+
+              <InlineStack align="start" wrap={false} gap="300">
                   <Text variant="bodyMd" as="p">Total: </Text>
                   <Text variant="bodyMd" as="p">Rs.00.00</Text>
                   <Text variant="bodyMd" as="p" textDecorationLine="line-through">Rs.00.00</Text>
                 </InlineStack>
-              </> : null}
-
 
               <Button disabled>Add to cart | Save 10%    </Button>
             </BlockStack>
