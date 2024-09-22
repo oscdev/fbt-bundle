@@ -3,8 +3,8 @@ import { PageActions, Text, ButtonGroup, Button, BlockStack, Grid, Thumbnail, Em
 import { Confirmation } from ".";
 
 export function Resource(props) {
-    const { cartItems, onAddCartItems, onEditCartItems, onRemoveCartItems, onMoveCartItems } = props;
-    const [productsMedia, setProductsMedia] = useState([]);
+    const { cartItems, onAddCartItems, onEditCartItems, onRemoveCartItems, onMoveCartItems, cartItemsMedia, setCartItemsMedia } = props;
+    //const [productsMedia, setProductsMedia] = useState([]);
     const [loading, setLoading] = useState(true);
 
 
@@ -46,9 +46,9 @@ export function Resource(props) {
     
           // Rearrange the input based on the order in productIdsOrder
           const output = productIdsOrder.map((id) => inputMap.get(id));
-          setProductsMedia(output);
+          setCartItemsMedia(output);
         } else {
-          setProductsMedia(data.products.edges);
+          setCartItemsMedia(data.products.edges);
         }
     
         setLoading(false);
@@ -116,7 +116,7 @@ export function Resource(props) {
                                             size="large"
                                         />
                                     ) : null}
-                                    {productsMedia.map(
+                                    {cartItemsMedia.map(
                                         ({ node: { title, featuredImage } }, index) => (
                                             <BlockStack gap="200" key={index}>
                                                 <Thumbnail

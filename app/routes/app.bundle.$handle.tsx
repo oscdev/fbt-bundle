@@ -1,11 +1,12 @@
 import { Box, Card, Layout, Link, List, Page, Text, BlockStack } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { useField, useDynamicList, useForm } from '@shopify/react-form';
-import { title } from "process";
 import { BundleInfo, Preview, Resource, BundleDiscountInfo, Customize, DatePickerSection } from "../components/Bundle/index";
-import bundle from "./app.bundle-tmp";
+import { useState } from "react";
 
 export default function AdditionalPage() {
+
+  const [cartItemsMedia, setCartItemsMedia] = useState([]);
 
   const emptyExpandedCartItemsFactory = (formArg) => ({
     merchandiseId: formArg.merchandiseId,
@@ -86,19 +87,21 @@ export default function AdditionalPage() {
               bundleName={bundleName}
               description={description}
             />
-            <BundleDiscountInfo
-              globalPriceRules={globalPriceRules}
-              onAddGlobalPriceRules={addGlobalPriceRules}
-              onRemoveGlobalPriceRules={removeGlobalPriceRules}
-              onMoveGlobalPriceRules={moveGlobalPriceRules}
-            />
             <Resource 
               cartItems={cartItems}
               onAddCartItems={addCartItems}
               onEditCartItems={editCartItems}
               onRemoveCartItems={removeCartItems}
               onMoveCartItems={moveCartItems}
+              cartItemsMedia={cartItemsMedia}
+              setCartItemsMedia={setCartItemsMedia}
             />
+            <BundleDiscountInfo
+              globalPriceRules={globalPriceRules}
+              onAddGlobalPriceRules={addGlobalPriceRules}
+              onRemoveGlobalPriceRules={removeGlobalPriceRules}
+              onMoveGlobalPriceRules={moveGlobalPriceRules}
+            />            
             <Customize />
           </BlockStack>
         </Layout.Section>
@@ -106,6 +109,7 @@ export default function AdditionalPage() {
           <Preview 
             bundleName={bundleName}
             description={description}
+            cartItemsMedia={cartItemsMedia} 
           />
         </Layout.Section>
       </Layout>
