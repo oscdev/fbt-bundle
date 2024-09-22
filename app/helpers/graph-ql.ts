@@ -77,5 +77,26 @@ export const QL = {
 			message
 		  }
 		}
-	  }`
+	  }`,
+	CREATE_BUNDLE_MUTATION: `mutation createProductMetafields($input: ProductInput!) {
+		productCreate(input: $input) {
+			product {
+			id
+			metafields(first: 3) {
+				edges {
+				node {
+					id
+					namespace
+					key
+					value
+				}
+				}
+			}
+			}
+			userErrors {
+			message
+			field
+			}
+		}
+	}`,
 };

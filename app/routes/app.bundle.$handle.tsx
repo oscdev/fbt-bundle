@@ -1,10 +1,30 @@
-import { Box, Card, Layout, Link, List, Page, Text, BlockStack } from "@shopify/polaris";
+import { Layout, Page, BlockStack } from "@shopify/polaris";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { useField, useDynamicList, useForm } from '@shopify/react-form';
-import { BundleInfo, Preview, Resource, BundleDiscountInfo, Customize, DatePickerSection } from "../components/Bundle/index";
+import { BundleInfo, Preview, Resource, BundleDiscountInfo, Customize } from "../components/Bundle/index";
 import { useState } from "react";
+import { json, redirect } from "@remix-run/node";
+import { useLoaderData, useSubmit , useNavigate} from "@remix-run/react";
 
-export default function AdditionalPage() {
+import { bundle } from "../services/index";
+
+export const action = async ({ params, request }) => {
+  const formData = await request.formData();
+  await bundle.setProduct(request, JSON.parse(formData.get("bundleData")));
+  return {success: true,}
+  //return redirect("/app");
+};
+
+export const loader = async ({ params, request }) => {
+  //const handle = params.handle;
+  //const { admin } = await authenticate.admin(request);  
+  return json({});
+};
+
+
+export default function Bubdle() {
+  const bundleResult = useLoaderData();
+  const submitForm = useSubmit();
 
   const [cartItemsMedia, setCartItemsMedia] = useState([]);
 
@@ -47,7 +67,7 @@ export default function AdditionalPage() {
       }], emptyGlobalPriceRulesFactory)
     },
     onSubmit: async (data) => {
-      console.log(data);
+      return submitForm({ bundleData: JSON.stringify(data) }, { method: "post" });      
     }
   });
 
