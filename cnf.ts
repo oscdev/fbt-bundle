@@ -6,7 +6,7 @@ export const cnf = {
         DB: "upsell_live"
     },
     debug: true,
-    UUID: "7f58f248-eb9e-4678-860e-39566c950875",
-    APPNAME: "sr-upsell-bundle",
+    UUID: "dee3dde5-6a4a-4123-8f24-9010aafd0c8a",
+    APPNAME: "oscp-upsell-cross-sell-1",
     SITEURL: "https://www.oscprofessionals.com"   
 };
