@@ -1,8 +1,8 @@
-import { Text, Link } from "@shopify/polaris";
+import { Text, Link, BlockStack } from "@shopify/polaris";
 
 export function Footer() {
   return (
-    <div id="customFooter">
+    <BlockStack inlineAlign="center">
       <Text as="p" fontWeight="regular">
         {" "}
         Copyright © 2024 |{" "}
@@ -23,6 +23,6 @@ export function Footer() {
         </Link>
       </Text>
       <br />
-    </div>
+    </BlockStack>
   );
 }
