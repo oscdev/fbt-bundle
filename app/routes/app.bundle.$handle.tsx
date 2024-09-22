@@ -102,7 +102,7 @@ export default function AdditionalPage() {
               onRemoveGlobalPriceRules={removeGlobalPriceRules}
               onMoveGlobalPriceRules={moveGlobalPriceRules}
             />            
-            <Customize />
+            {/* <Customize /> */}
           </BlockStack>
         </Layout.Section>
         <Layout.Section variant="oneThird">
