@@ -119,8 +119,8 @@ export default function Index() {
                   <Text variant="bodyLg" as="p">
                     If you need support with any features or setup, please reach out to our support team.</Text>
                   <ButtonGroup>
-                  <Button target="_blank" url="https://www.oscprofessionals.com/upsell-cross-sell-app-user-guide/">Get Started</Button>
-                    <Button onClick={handleClick} icon={ChatIcon}>Chat with us</Button>
+                  <Button variant="primary" target="_blank" url="https://www.oscprofessionals.com/upsell-cross-sell-app-user-guide/">Get Started</Button>
+                    <Button variant="primary" onClick={handleClick} icon={ChatIcon}>Chat with us</Button>
                   </ButtonGroup>
                 </BlockStack>
                 <img
@@ -150,7 +150,7 @@ export default function Index() {
                     <BlockStack gap="200">
                     <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">Frequently Bought Together</Text>
-                    <Button onClick={() => navigate("/app/bundle/new")} icon={ExternalIcon}>Create FBT</Button>
+                    <Button variant="primary" onClick={() => navigate("/app/bundle/new")} icon={ExternalIcon}>Create FBT</Button>
                   </InlineGrid>
                    <Text  variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text> 
                     </BlockStack>
@@ -159,7 +159,7 @@ export default function Index() {
                     <BlockStack gap="200">
                     <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">Simple Bundle</Text>
-                    <Button onClick={() => navigate("/app/bundle/new")} icon={ExternalIcon}>Create FBT Bundle</Button>
+                    <Button variant="primary" onClick={() => navigate("/app/bundle/new")} icon={ExternalIcon}>Create FBT Bundle</Button>
                   </InlineGrid>
                   <Text  variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text>   
                     </BlockStack>

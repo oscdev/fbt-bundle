@@ -12,7 +12,7 @@ export function BundleDiscountInfo(pros) {
   return (
     <Card>
       <BlockStack gap="200">
-        <Text variant="headingLg" as="h5">Apply Discount</Text>
+        <Text variant="headingMd" as="h2">Apply Discount</Text>
         <Form onSubmit={() => { }}>
           <FormLayout>
             {globalPriceRules.map(({ type, value, startAt, endAt }, index) => (
