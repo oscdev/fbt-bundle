@@ -12,10 +12,6 @@ export function Preview(pros) {
             <BlockStack gap="300">
               <Text alignment="center" variant="headingMd" as="h6">{(bundleName.value) ? bundleName.value : "Bundle of 3 Combos"}</Text>
               <Text variant="bodyLg" as="p">{(description.value) ? description.value : "Buy this combo and save 10% OFF"}</Text>
-
-
-
-
               {cartItemsMedia.map(
                 ({ node: { title, featuredImage } }, index) => (
                   <>
