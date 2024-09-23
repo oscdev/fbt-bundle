@@ -11,6 +11,8 @@ export const modelShopSettings = {
         try {
              // Authenticate the admin using the request object
             const { admin } = await authenticate.admin(request);
+
+            console.log('----------------------', admin )
              // Execute a GraphQL query to get the app status
             const shopData = await admin.graphql(
                 QL.APP_SETTING_GET_MUTATION

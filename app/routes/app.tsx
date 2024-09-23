@@ -8,12 +8,30 @@ import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { useNavigation } from "@remix-run/react";
 import { authenticate } from "../shopify.server";
 import { Spinner } from "@shopify/polaris";
+import fs from "fs";
+
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await authenticate.admin(request);
+  const { session } = await authenticate.admin(request);
+
+  // Log the complete request information
+  const requestInfo = {
+    date: new Date(),
+    method: request.method,
+    url: request.url,
+    body: request.body,
+    headers: Object.fromEntries(request.headers),
+    query: request.query,
+    params: request.params,
+  };
+
+  // Write the request information to a log file
+  fs.appendFile(`${process.cwd()}/storage/logs/${session?.shop}.txt`, " --------------------Generated Request Logs----------- \n\n " + JSON.stringify(requestInfo, null, 2),  err => {  })
 
   return json({ apiKey: process.env.SHOPIFY_API_KEY || "" });
+
+
 };
 
 export default function App() {
