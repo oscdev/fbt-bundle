@@ -101,11 +101,11 @@ const Bulkform = () => {
     const pickedResources = await window.shopify.resourcePicker({
       type: 'product',
       filter: {
-        variants: false
+        variants: false,
+        query: filterObj.join(" AND "),
       },
       action: 'select',
       multiple: false,
-      initialQuery: filterResourceStr.join(' AND '),
     });
 
     if (pickedResources && pickedResources.selection.length > 0) {

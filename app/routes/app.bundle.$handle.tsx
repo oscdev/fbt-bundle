@@ -1,17 +1,17 @@
 import { Layout, Page, BlockStack } from "@shopify/polaris";
-import { TitleBar } from "@shopify/app-bridge-react";
 import { useField, useDynamicList, useForm } from '@shopify/react-form';
 import { BundleInfo, Preview, Resource, BundleDiscountInfo, Customize } from "../components/Bundle/index";
 import { useState } from "react";
-import { json, redirect } from "@remix-run/node";
-import { useLoaderData, useSubmit , useNavigate} from "@remix-run/react";
-
+import { json } from "@remix-run/node";
+import { useLoaderData, useSubmit, useNavigate } from "@remix-run/react";
+import { Confirm } from "~/components/Confirm";
+import { Footer } from "../components/Footer";
 import { bundle } from "../services/index";
 
 export const action = async ({ params, request }) => {
   const formData = await request.formData();
   await bundle.setProduct(request, JSON.parse(formData.get("bundleData")));
-  return {success: true,}
+  return { success: true, }
   //return redirect("/app");
 };
 
@@ -25,9 +25,10 @@ export const loader = async ({ params, request }) => {
 export default function Bubdle() {
   const bundleResult = useLoaderData();
   const submitForm = useSubmit();
-
+  const [isConfirmExit, setIsConfirmExit] = useState(false);
+  const [confirmMsg, setConfirmMsg] = useState(false);
   const [cartItemsMedia, setCartItemsMedia] = useState([]);
-
+  const navigate = useNavigate();
   const emptyExpandedCartItemsFactory = (formArg) => ({
     merchandiseId: formArg.merchandiseId,
     handle: formArg.handle,
@@ -67,7 +68,7 @@ export default function Bubdle() {
       }], emptyGlobalPriceRulesFactory)
     },
     onSubmit: async (data) => {
-      return submitForm({ bundleData: JSON.stringify(data) }, { method: "post" });      
+      return submitForm({ bundleData: JSON.stringify(data) }, { method: "post" });
     }
   });
 
@@ -87,6 +88,26 @@ export default function Bubdle() {
     }
   } = dynamicLists;
 
+  function onShowForm() {
+    navigate("/app");
+}
+
+  function confirmExit() {
+    if (dirty) {
+        setIsConfirmExit(true)
+        setConfirmMsg('Are you sure you want to exit without saving');
+    } else {
+        onShowForm()
+    }
+}
+
+function onConfirmExit() {
+    onShowForm()
+}
+function onCancelExit() {
+    setIsConfirmExit(false)
+}
+
   return (
     <Page
       title="Create bundle for Frequently Bought Together"
@@ -97,9 +118,8 @@ export default function Bubdle() {
           submit()
         }
       }}
-      backAction={{ content: "Settings", onAction: () => { } }}
+      backAction={{ content: "Settings", onAction: () => confirmExit() }}
     >
-      <TitleBar title="Additional page" />
       <Layout>
         <Layout.Section>
           <BlockStack gap="300">
@@ -107,7 +127,7 @@ export default function Bubdle() {
               bundleName={bundleName}
               description={description}
             />
-            <Resource 
+            <Resource
               cartItems={cartItems}
               onAddCartItems={addCartItems}
               onEditCartItems={editCartItems}
@@ -121,18 +141,26 @@ export default function Bubdle() {
               onAddGlobalPriceRules={addGlobalPriceRules}
               onRemoveGlobalPriceRules={removeGlobalPriceRules}
               onMoveGlobalPriceRules={moveGlobalPriceRules}
-            />            
+            />
             {/* <Customize /> */}
           </BlockStack>
         </Layout.Section>
         <Layout.Section variant="oneThird">
-          <Preview 
+          <Preview
             bundleName={bundleName}
             description={description}
-            cartItemsMedia={cartItemsMedia} 
+            cartItemsMedia={cartItemsMedia}
           />
         </Layout.Section>
+        <Footer />
       </Layout>
+      <Confirm
+        isConfirm={isConfirmExit}
+        confirmMsg={confirmMsg}
+        onConfirm={onConfirmExit}
+        onCancel={onCancelExit}
+        returnData={null}
+      />
     </Page>
   );
 }
