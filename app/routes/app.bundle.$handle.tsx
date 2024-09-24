@@ -160,6 +160,7 @@ function onCancelExit() {
           <Preview
             bundleName={bundleName}
             description={description}
+            cartItems={cartItems}
             cartItemsMedia={cartItemsMedia}
           />
         </Layout.Section>
