@@ -111,8 +111,8 @@ export function Resource(props) {
         setProductIndex(null); // Reset the index
     }
 
-    
-    
+
+
     return (
         <Card>
             <Form onSubmit={() => { }}>
@@ -145,37 +145,45 @@ export function Resource(props) {
                                                 size="small"
                                             /></Text>
                                     ) : null}
-                                    {cartItemsMedia.map(
-                                        ({ node: { title, featuredImage } }, index) => (
-                                            <InlineGrid columns="1fr auto" key={index}>
-                                                <InlineStack gap="200" blockAlign="center" wrap={false}>
-                                                    <Tooltip content="Move Up">
-                                                        <Button variant="plain"
-                                                            icon={ArrowUpIcon}
-                                                            // onClick={() => moveCartItem(index, -1)}
-                                                            // disabled={index === 0}
-                                                        />
-                                                    </Tooltip>
-                                                    <Tooltip content="Move Down">
-                                                        <Button variant="plain"
-                                                            icon={ArrowDownIcon}
-                                                            // onClick={() => moveCartItem(index, 1)}
-                                                            // disabled={index === cartItems.length - 1}
-                                                        />
-                                                    </Tooltip>
-                                                    <Thumbnail
-                                                        source={featuredImage.url}
-                                                        alt={title}
-                                                    />
-                                                    <Text variant="bodyLg" as="p">{title}</Text>
+                                    {cartItems.map(
+                                        ({ merchandiseId }, index) => (
+                                            <>
+                                                {cartItemsMedia.map(
+                                                    ({ node: { id, title, featuredImage } }) => (
+                                                        (merchandiseId.value == id.split("/").pop()) && (
+                                                            <InlineGrid columns="1fr auto" key={index}>
+                                                                <InlineStack gap="200" blockAlign="center" wrap={false}>
+                                                                    <Tooltip content="Move Up">
+                                                                        <Button variant="plain"
+                                                                            icon={ArrowUpIcon}
+                                                                            disabled={index === 0}
+                                                                            onClick={() => onMoveCartItems(index - 1, index)}
+                                                                        />
+                                                                    </Tooltip>
+                                                                    <Tooltip content="Move Down">
+                                                                        <Button variant="plain"
+                                                                            icon={ArrowDownIcon}
+                                                                            disabled={index === cartItems.length - 1}
+                                                                            onClick={() => onMoveCartItems(index, index + 1)}
+                                                                        />
+                                                                    </Tooltip>
+                                                                    <Thumbnail
+                                                                        source={featuredImage.url}
+                                                                        alt={title}
+                                                                    />
+                                                                    <Text variant="bodyLg" as="p">{title}</Text>
 
-                                                </InlineStack>
-                                                <InlineStack gap="200" key={index} blockAlign="center">
-                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold"> <TextField label="Quantity" labelHidden type="number" value="1" autoComplete="off" /></Text>
-                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold"><Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => removeResource(index)}></Button></Text>
-                                                </InlineStack>
-                                                {/* <Divider borderColor="border-inverse" /> */}
-                                            </InlineGrid>
+                                                                </InlineStack>
+                                                                <InlineStack gap="200" key={index} blockAlign="center">
+                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold"> <TextField label="Quantity" labelHidden type="number" value="1" autoComplete="off" /></Text>
+                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold"><Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => removeResource(index)}></Button></Text>
+                                                                </InlineStack>
+                                                                {/* <Divider borderColor="border-inverse" /> */}
+                                                            </InlineGrid>
+                                                        )
+                                                    ),
+                                                )}
+                                            </>
                                         ),
                                     )}
                                 </BlockStack>
