@@ -2,7 +2,7 @@ import { Layout, Page, BlockStack } from "@shopify/polaris";
 import { useField, useDynamicList, useForm } from '@shopify/react-form';
 import { BundleInfo, Preview, Resource, BundleDiscountInfo, Customize } from "../components/Bundle/index";
 import { useState } from "react";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useSubmit, useNavigate } from "@remix-run/react";
 import { Confirm } from "~/components/Confirm";
 import { Footer } from "../components/Footer";
@@ -11,8 +11,8 @@ import { bundle } from "../services/index";
 export const action = async ({ params, request }) => {
   const formData = await request.formData();
   await bundle.setProduct(request, JSON.parse(formData.get("bundleData")));
-  return { success: true, }
-  //return redirect("/app");
+  //return { success: true, }
+  return redirect("/app/bundle/list");
 };
 
 export const loader = async ({ params, request }) => {

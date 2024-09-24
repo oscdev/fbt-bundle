@@ -6,7 +6,12 @@ export const bundle = {
 
     getProducts: async function (request) {
         const { admin } = await authenticate.admin(request);
-        
+        const products = await admin.graphql(
+            QL.GET_BUNDLE_MUTATION            
+        );
+        const productsJson = await products.json(); 
+
+        return productsJson.data.products.edges
     },
 
     getProduct: async function (request) {

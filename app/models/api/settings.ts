@@ -15,10 +15,11 @@ export const modelShopSettings = {
             const shopData = await admin.graphql(
                 QL.APP_SETTING_GET_MUTATION
             );
+            
             // Parse the JSON response from the GraphQL query
-            const shopDataJson = await shopData.json();
+            const shopDataJson = await shopData.json();            
             // Return the app status value from the response
-            return shopDataJson.data.currentAppInstallation.metafields.nodes[0].value;
+            return shopDataJson.data.currentAppInstallation.metafield.value;
         } catch (error) {
             // If an error occurs, log a warning message with the error details
             console.warn('AppStatus Error', JSON.stringify(error))
@@ -33,6 +34,9 @@ export const modelShopSettings = {
             const shopData = await admin.graphql(
                 QL.APP_SETTING_GET_MUTATION
             );
+
+            
+
             const shopDataJson = await shopData.json();
               // Execute a GraphQL mutation to set the app status
             const shopSetting = await admin.graphql(
@@ -191,6 +195,30 @@ export const modelShopSettings = {
             return output;
         }
     },
+
+    setBundleSearchableDefination : async function (admin) {
+        try {                       
+            const def = await admin.graphql(
+                QL.SET_BUNDLE_SEARCHABLE_MUTATION,
+                {
+                    variables: {
+                        "definition": {                          
+                          "name": "Bundle Searchable",
+                          "namespace": "oscp",
+                          "key": "fbtSearchable",                          
+                          "type": "single_line_text_field",
+                          "ownerType": "PRODUCT"
+                        }
+                      }                      
+                }
+            );
+            const defJson = await def.json();  
+            console.log('defJson', JSON.stringify(defJson))
+            return defJson;
+        } catch (error) {
+            
+        }
+    }
 }
 
 
