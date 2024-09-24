@@ -16,14 +16,18 @@ export const action = async ({ params, request }) => {
 };
 
 export const loader = async ({ params, request }) => {
-  //const handle = params.handle;
-  //const { admin } = await authenticate.admin(request);  
-  return json({});
+  const handle = params.handle;
+  const bundleResult = (handle == "new") ? {} : await bundle.getProduct(request, handle);
+  return json({ bundleResult, handle });
 };
 
 
 export default function Bubdle() {
-  const bundleResult = useLoaderData();
+  const { bundleResult, handle } = useLoaderData();
+
+  console.log("bundleResult", JSON.stringify(bundleResult));
+  console.log("handle", handle);
+
   const submitForm = useSubmit();
   const [isConfirmExit, setIsConfirmExit] = useState(false);
   const [confirmMsg, setConfirmMsg] = useState(false);
@@ -43,6 +47,13 @@ export default function Bubdle() {
     endAt: formArg.quantity
   });
 
+  const defaultGlobalPriceRules = [{
+    value: '',
+    type: '',
+    startAt: '',
+    endAt: ''
+  }]
+
   const {
     submit,
     reset,
@@ -53,19 +64,14 @@ export default function Bubdle() {
     fields: { bundleName, description, customer, minPurchasableItem },
   } = useForm({
     fields: {
-      bundleName: useField(''),
-      description: useField(''),
-      customer: useField(''),
-      minPurchasableItems: useField('')
+      bundleName: useField(bundleResult.title || ''),
+      description: useField(bundleResult.description || ''),
+      customer: useField(bundleResult.metafield.value ? JSON.parse(bundleResult.metafield.value).expand.conditions.customer : ''),
+      minPurchasableItems: useField(bundleResult.metafield.value ? JSON.parse(bundleResult.metafield.value).expand.conditions.minPurchasableItem : '')
     },
     dynamicLists: {
-      expandedCartItems: useDynamicList([], emptyExpandedCartItemsFactory),
-      globalPriceRules: useDynamicList([{
-        value: '',
-        type: '',
-        startAt: '',
-        endAt: ''
-      }], emptyGlobalPriceRulesFactory)
+      expandedCartItems: useDynamicList(bundleResult.metafield.value ? JSON.parse(bundleResult.metafield.value).expand.expandedCartItems : [], emptyExpandedCartItemsFactory),
+      globalPriceRules: useDynamicList(bundleResult.metafield.value ? JSON.parse(bundleResult.metafield.value).expand.globalPriceRules : defaultGlobalPriceRules, emptyGlobalPriceRulesFactory)
     },
     onSubmit: async (data) => {
       return submitForm({ bundleData: JSON.stringify(data) }, { method: "post" });
