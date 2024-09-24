@@ -25,5 +25,10 @@ export const settings = {
     checkTheme: async function (ids, request) {
         const theme = await modelShopSettings.requestOperation(ids, request);
         return theme;
+    },
+
+    setBundleSearchableDefination: async function (admin) {
+        const def = await modelShopSettings.setBundleSearchableDefination(admin);
+        return def;
     }
 }

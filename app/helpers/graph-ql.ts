@@ -53,13 +53,8 @@ export const QL = {
 	APP_SETTING_GET_MUTATION: `query {
 		currentAppInstallation{
 			id
-			metafields(first: 100) {
-				nodes{
-					namespace
-					key
-					type
-					value
-				}
+			metafield(namespace: "app_settings", key: "app_enabled") {
+				value
 			}
 		}
 	}`,
@@ -99,4 +94,34 @@ export const QL = {
 			}
 		}
 	}`,
+	SET_BUNDLE_SEARCHABLE_MUTATION: `mutation CreateMetafieldDefinition($definition: MetafieldDefinitionInput!) {
+  metafieldDefinitionCreate(definition: $definition) {
+    createdDefinition {
+      id
+      name
+	  namespace
+	  key
+    }
+    userErrors {
+      field
+      message
+      code
+    }
+  }
+}`,
+GET_BUNDLE_MUTATION: `query {
+  products(first: 25, query: "metafields.oscp.fbtSearchable:searchable") {
+    edges {
+      node {
+        id
+        title
+        handle
+		metafield(namespace: "oscp", key: "fbtBundle") {
+			value
+		}
+      }
+    }
+  	
+  }
+}`
 };
