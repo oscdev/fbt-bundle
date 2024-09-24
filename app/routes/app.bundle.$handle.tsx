@@ -64,14 +64,15 @@ export default function Bubdle() {
     fields: { bundleName, description, customer, minPurchasableItem },
   } = useForm({
     fields: {
+      bundleId: useField(bundleResult.id || ''),
       bundleName: useField(bundleResult.title || ''),
       description: useField(bundleResult.description || ''),
-      customer: useField(bundleResult.metafield.value ? JSON.parse(bundleResult.metafield.value).expand.conditions.customer : ''),
-      minPurchasableItems: useField(bundleResult.metafield.value ? JSON.parse(bundleResult.metafield.value).expand.conditions.minPurchasableItem : '')
+      customer: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.customer : ''),
+      minPurchasableItems: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.minPurchasableItem : '')
     },
     dynamicLists: {
-      expandedCartItems: useDynamicList(bundleResult.metafield.value ? JSON.parse(bundleResult.metafield.value).expand.expandedCartItems : [], emptyExpandedCartItemsFactory),
-      globalPriceRules: useDynamicList(bundleResult.metafield.value ? JSON.parse(bundleResult.metafield.value).expand.globalPriceRules : defaultGlobalPriceRules, emptyGlobalPriceRulesFactory)
+      expandedCartItems: useDynamicList(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.expandedCartItems : [], emptyExpandedCartItemsFactory),
+      globalPriceRules: useDynamicList(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.globalPriceRules : defaultGlobalPriceRules, emptyGlobalPriceRulesFactory)
     },
     onSubmit: async (data) => {
       return submitForm({ bundleData: JSON.stringify(data) }, { method: "post" });
