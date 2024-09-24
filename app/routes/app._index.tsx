@@ -150,7 +150,7 @@ export default function Index() {
                     <BlockStack gap="200">
                     <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">Frequently Bought Together</Text>
-                    <Button variant="primary" onClick={() => navigate("/app/bundle/new")} icon={ExternalIcon}>Create FBT</Button>
+                    <Button variant="primary" onClick={() => navigate("/app/assign")} icon={ExternalIcon}>Create FBT</Button>
                   </InlineGrid>
                    <Text  variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text> 
                     </BlockStack>
@@ -159,7 +159,7 @@ export default function Index() {
                     <BlockStack gap="200">
                     <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">Simple Bundle</Text>
-                    <Button variant="primary" onClick={() => navigate("/app/bundle/new")} icon={ExternalIcon}>Create FBT Bundle</Button>
+                    <Button variant="primary" onClick={() => navigate("/app/bundle/list")} icon={ExternalIcon}>Create FBT Bundle</Button>
                   </InlineGrid>
                   <Text  variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text>   
                     </BlockStack>

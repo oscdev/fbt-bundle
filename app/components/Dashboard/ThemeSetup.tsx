@@ -65,7 +65,7 @@ export function ThemeSetup(props) {
                                         </Text>
                                     )
                                 ) : (
-                                    <Banner status="critical">
+                                    <Banner tone="critical">
                                         <Text variant="bodyLg" as="p">
                                             This Theme <i><u>{settingsData.themeStatus.activeTheme.name}</u></i> is NOT Supported. {' '}
                                         </Text>
@@ -100,7 +100,7 @@ export function ThemeSetup(props) {
                                         </Text>
                                     )
                                 ) : (
-                                    <Banner status="critical">
+                                    <Banner tone="critical">
                                         <Text variant="bodyLg" as="p">
                                             This Theme <i><u>{settingsData.themeStatus.activeTheme.name}</u></i> is NOT Supported. {' '}
                                         </Text>
