@@ -10,7 +10,6 @@ import { bundle } from "../services/index";
 
 export const loader = async ({ params, request }) => {
   const bundleList = await bundle.getProducts(request);
-  console.log("bundleList", JSON.stringify(bundleList));
   return json(bundleList);
 };
 
