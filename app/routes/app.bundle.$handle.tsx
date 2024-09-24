@@ -11,7 +11,7 @@ import { bundle } from "../services/index";
 export const action = async ({ params, request }) => {
   const formData = await request.formData();
   await bundle.setProduct(request, JSON.parse(formData.get("bundleData")));
-  //return { success: true, }
+  // return { success: true, }
   return redirect("/app/bundle/list");
   // return setTimeout(() => {
   //   redirect("/app/bundle/list");
@@ -70,7 +70,7 @@ export default function Bubdle() {
       bundleId: useField(bundleResult.id || ''),
       metaId: useField(bundleResult.metafield?.id || ''),
       bundleName: useField(bundleResult.title || ''),
-      description: useField(bundleResult.description || ''),
+      description: useField(bundleResult.bodyHtml || ''),
       customer: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.customer : ''),
       minPurchasableItems: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.minPurchasableItem : '')
     },

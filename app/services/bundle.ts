@@ -19,7 +19,8 @@ export const bundle = {
         const { admin } = await authenticate.admin(request);
         const GET_BUNDLE_MUTATION = QL.GET_BUNDLE_MUTATION.replace("$ID", "gid://shopify/Product/" + id);
         const product = await admin.graphql(GET_BUNDLE_MUTATION);
-        const productJson = await product.json();
+        //const productJson = await product.json();
+        const productJson = await product.json();      
         return productJson.data.product
     },
     createBundle: async function (request, data) {
@@ -31,6 +32,7 @@ export const bundle = {
                 variables: {
                     "input": {
                         "title": data.bundleName,
+                        "bodyHtml": data.description,
                         "metafields": [{
                             "namespace": "oscp",
                             "key": "fbtBundle",
