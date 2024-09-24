@@ -13,6 +13,9 @@ export const action = async ({ params, request }) => {
   await bundle.setProduct(request, JSON.parse(formData.get("bundleData")));
   //return { success: true, }
   return redirect("/app/bundle/list");
+  // return setTimeout(() => {
+  //   redirect("/app/bundle/list");
+  // }, 300)
 };
 
 export const loader = async ({ params, request }) => {
@@ -65,6 +68,7 @@ export default function Bubdle() {
   } = useForm({
     fields: {
       bundleId: useField(bundleResult.id || ''),
+      metaId: useField(bundleResult.metafield?.id || ''),
       bundleName: useField(bundleResult.title || ''),
       description: useField(bundleResult.description || ''),
       customer: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.customer : ''),

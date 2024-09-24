@@ -109,7 +109,7 @@ export const QL = {
     }
   }
 }`,
-GET_BUNDLES_MUTATION: `query {
+	GET_BUNDLES_MUTATION: `query {
   products(first: 25, query: "metafields.oscp.fbtSearchable:searchable") {
     edges {
       node {
@@ -118,20 +118,38 @@ GET_BUNDLES_MUTATION: `query {
         handle
 		metafield(namespace: "oscp", key: "fbtBundle") {
 			value
+			id
 		}
       }
     }
   	
   }
 }`,
-GET_BUNDLE_MUTATION: `query {
+	GET_BUNDLE_MUTATION: `query {
   product(id: "$ID") {
 	id
     title
 	description
     metafield(namespace: "oscp", key: "fbtBundle") {
 	  value
+	  id
 	}
+  }
+}`,
+	UPDATE_BUNDLE_MUTATION: `mutation UpdateProductWithNewMedia($input: ProductInput!) {
+  productUpdate(input: $input) {
+    product {
+      id
+	  title
+	description
+		metafield(namespace: "oscp", key: "fbtBundle") {
+		value
+		}
+    }
+    userErrors {
+      field
+      message
+    }
   }
 }`
 };
