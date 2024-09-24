@@ -128,7 +128,8 @@ GET_BUNDLE_MUTATION: `query {
   product(id: "$ID") {
 	id
     title
-	description
+	status
+	bodyHtml
     metafield(namespace: "oscp", key: "fbtBundle") {
 	  value
 	}

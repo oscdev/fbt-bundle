@@ -40,7 +40,7 @@ export function BundleProductList(props) {
                             <Button
                                 variant="primary"
                                 onClick={() => {
-                                    navigate('/app/bundle/' + node.id);
+                                    navigate('/app/bundle/' + node.id.replace('gid://shopify/Product/', ''));
                                 }}
                             >
                                 Edit
