@@ -98,7 +98,7 @@ export const bundle = {
         }
         
     },
-    setProduct: async function (request, data) {
+    setProduct: async function (request, data, cartItemsMedia) {
         if (data.bundleId == '') {
             return this.createBundle(request, data)
         } else {
