@@ -12,8 +12,8 @@
     background: transparent;
     margin-bottom: 10px;
     border-radius: 4px;
-    border: 2px solid rgb(238, 77, 45);
-    color: rgb(0, 0, 0);
+    /* border: 2px solid rgb(238, 77, 45);
+    color: rgb(0, 0, 0); */
 }
 
 .fbt_title {
@@ -160,14 +160,14 @@
 
 .fbt_addcart {
     width: 100%;
-    color: #fff;
+    /* color: #fff; */
     font-size: 1.4rem;
     letter-spacing: .07rem;
     padding: 1em 2em;
     outline: none;
     border: none;
     border-radius: 4px;
-    background-color: #ee4d2d;
+    /* background-color: #ee4d2d; */
 }
 
 .fbt_addcart:hover {
@@ -175,11 +175,12 @@
 }
 
 .fbt_description {
-    color: rgb(0, 0, 0);
+    /* color: rgb(0, 0, 0); */
     font-size: 14px;
     margin: 0;
     margin-bottom: 8px;
-    background: cornsilk;
+    padding-left: 6px;
+    /* background: cornsilk; */
 }
 
 .money,
@@ -198,5 +199,5 @@
 .money.discounted {
     font-weight: bold;
     font-size: 16px;
-    color: #ee4d2d;
+    /* color: #ee4d2d; */
 }

@@ -88,7 +88,7 @@
           <button type="submit" name="add" class="fbt_addcart">
             <span>
               {%- if product.selected_or_first_available_variant.available -%}
-                Add to Bundle
+                {{ block.settings.fbt_cart_text }}
                 {% comment %} Button text when the product is available {% endcomment %}
               {%- else -%}
                 Sold Out
@@ -106,16 +106,84 @@
   </div>
 </div>
 
+<style>
+  .fbt_container-inner {
+    border: 2px solid {{ block.settings.border_color }} !important;
+    background: {{ block.settings.container_background_color }} !important;
+  }
+
+  .fbt_description {
+    background: {{ block.settings.description_background_color }} !important;
+    color: {{ block.settings.description_text_color }} !important;
+  }
+
+  .fbt_addcart {
+    background-color: {{ block.settings.button_background_color }} !important;
+    color: {{ block.settings.button_text_color }} !important;
+  }
+
+  .money.discounted {
+    color: {{ block.settings.discount_text_color }} !important;
+  }
+</style>
+
 {% schema %}
-    {
-      "name": "FBT Bundle",
-      "target": "section",
-      "templates": ["product"],
-      "stylesheet": "fbt-bundle.css",
-      "available_if": "{{ app.metafields.app_settings.app_enabled }}",
-      "settings": [
-        
-      ]
-    }
-    {% endschema %}
-    
+  {
+    "name": "FBT Bundle",
+    "target": "section",
+    "templates": ["product"],
+    "stylesheet": "fbt-bundle.css",
+    "available_if": "{{ app.metafields.app_settings.app_enabled }}",
+    "settings": [
+      {
+          "type": "color",
+          "id": "border_color",
+          "label": "Container Border Color",
+          "default": "#000000"
+      },
+      {
+          "type": "color",
+          "id": "container_background_color",
+          "label": "Container Background Color",
+          "default": "#f0f0f0"
+      },
+      {
+          "type": "color",
+          "id": "description_background_color",
+          "label": "Description Background Color",
+          "default": "#f0f0f0"
+      },
+      {
+          "type": "color",
+          "id": "description_text_color",
+          "label": "Description Text Color",
+          "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "button_background_color",
+        "label": "Add to Cart Button Background Color",
+        "default": "#000000"
+      },
+      {
+        "type": "color",
+        "id": "discount_text_color",
+        "label": "Discounted Price Text Color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "button_text_color",
+        "label": "Add to Cart Button Text Color",
+        "default": "#000"
+      }
+      ,
+      {
+        "type": "text",
+        "id": "fbt_cart_text",
+        "label": "Add to Cart Button Text",
+        "default": "Add to Bundle"
+      }
+    ]
+  }
+{% endschema %}
