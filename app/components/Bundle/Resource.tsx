@@ -4,7 +4,7 @@ import { Confirm } from "../Confirm";
 import { XIcon, ArrowDownIcon, ArrowUpIcon } from '@shopify/polaris-icons';
 import { it } from "node:test";
 export function Resource(props) {
-    const { cartItems, onAddCartItems, onEditCartItems, onRemoveCartItems, onMoveCartItems, cartItemsMedia, setCartItemsMedia } = props;
+    const { cartItems, onAddCartItems, onEditCartItems, onRemoveCartItems, onMoveCartItems, onSetRemovableCartItems, cartItemsMedia, setCartItemsMedia } = props;
     const [loading, setLoading] = useState(true);
     const [isProductRemove, setIsProductRemove] = useState(false);
     const [productIndex, setProductIndex] = useState(null);
@@ -36,6 +36,10 @@ export function Resource(props) {
                             }
                             featuredImage {
                                 url
+                            }
+                            metafield(namespace: "oscp", key: "fbtBundleAssociated") {
+                                id
+                                value
                             }    
                         }
                         }
@@ -157,10 +161,11 @@ export function Resource(props) {
                                         ({ merchandiseId }, index) => (
                                             <>
                                                 {cartItemsMedia.map(
-                                                    ({ node: { id, title, featuredImage } }) => (
+                                                    ({ node: { id, title, featuredImage, metafield } }) => (
                                                         (merchandiseId.value == id.split("/").pop()) && (
                                                             <InlineGrid columns="1fr auto" key={index}>
                                                                 <InlineStack gap="200" blockAlign="center" wrap={false}>
+                                                                    {/* {id} */}
                                                                     <Tooltip content="Move Up">
                                                                         <Button variant="plain"
                                                                             icon={ArrowUpIcon}
@@ -183,8 +188,16 @@ export function Resource(props) {
 
                                                                 </InlineStack>
                                                                 <InlineStack gap="200" key={index} blockAlign="center">
-                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold"> <TextField label="Quantity" labelHidden type="number" value="1" autoComplete="off" /></Text>
-                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold"><Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => removeResource(index)}></Button></Text>
+                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
+                                                                        <TextField label="Quantity" labelHidden type="number" value="1" autoComplete="off" /></Text>
+                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
+                                                                        <Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => {
+                                                                            if(metafield !== null && metafield.value !== null) {
+                                                                                onSetRemovableCartItems(metafield, merchandiseId.value);
+                                                                            }                                                                                
+                                                                            removeResource(index)
+                                                                        }}></Button>
+                                                                    </Text>
                                                                 </InlineStack>
                                                             </InlineGrid>
                                                         )

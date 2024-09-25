@@ -77,6 +77,8 @@ export const QL = {
 		productCreate(input: $input) {
 			product {
 			id
+			handle
+			title
 			metafields(first: 3) {
 				edges {
 				node {
@@ -129,6 +131,7 @@ export const QL = {
   product(id: "$ID") {
 	id
     title
+	handle
 	status
 	bodyHtml
     metafield(namespace: "oscp", key: "fbtBundle") {
@@ -141,11 +144,23 @@ export const QL = {
   productUpdate(input: $input) {
     product {
 		id
+		handle
 		title	
 		bodyHtml
 		metafield(namespace: "oscp", key: "fbtBundle") {
 		value
 		}
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}`,
+UNSET_BUNDLE_ASSOCIATED_MUTATION: `mutation metafieldsDelete($metafields: [MetafieldIdentifierInput!]!) {
+  metafieldsDelete(metafields: $metafields) {
+    deletedMetafields {
+      ownerId
     }
     userErrors {
       field

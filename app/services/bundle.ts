@@ -20,7 +20,7 @@ export const bundle = {
         const GET_BUNDLE_MUTATION = QL.GET_BUNDLE_MUTATION.replace("$ID", "gid://shopify/Product/" + id);
         const product = await admin.graphql(GET_BUNDLE_MUTATION);
         //const productJson = await product.json();
-        const productJson = await product.json();      
+        const productJson = await product.json();
         return productJson.data.product
     },
     createBundle: async function (request, data) {
@@ -58,21 +58,22 @@ export const bundle = {
                 },
             }
         );
-        return productData
+        const productJson = await productData.json();
+        return productJson.data.productCreate.product
     },
 
     updateBundle: async function (request, data) {
         try {
             console.log('updateBundle --------------------------------------------', data)
-        const { admin } = await authenticate.admin(request);
-        const productData = await admin.graphql(
-            QL.UPDATE_BUNDLE_MUTATION, {
-            "variables": {
-                "input": {
-                    "id": data.bundleId,
-                    "title": data.bundleName,
-                    "bodyHtml": data.description,
-                    "metafields": [{
+            const { admin } = await authenticate.admin(request);
+            const productData = await admin.graphql(
+                QL.UPDATE_BUNDLE_MUTATION, {
+                "variables": {
+                    "input": {
+                        "id": data.bundleId,
+                        "title": data.bundleName,
+                        "bodyHtml": data.description,
+                        "metafields": [{
                             "namespace": "oscp",
                             "key": "fbtBundle",
                             "id": data.metaId,
@@ -88,16 +89,19 @@ export const bundle = {
                                 "merge": null
                             })
                         }]
+                    }
                 }
             }
-        }
-        );
-        console.log('updateBundle --------------------------------------------', JSON.stringify(productData))
-        return productData   
+            );
+
+            const productJson = await productData.json();
+
+            console.log('updateBundle --------------------------------------------', JSON.stringify(productJson))
+            return productJson.data.productUpdate.product
         } catch (error) {
             console.log('updateBundle --------------------------------------------', error)
         }
-        
+
     },
     setProduct: async function (request, data, cartItemsMedia) {
         if (data.bundleId == '') {
@@ -105,5 +109,31 @@ export const bundle = {
         } else {
             return this.updateBundle(request, data)
         }
+    },
+    unsetBundleAssociated: async function (request, removableItems) {
+        const { admin } = await authenticate.admin(request);
+        const unsetableObjects = [];
+        for (let i = 0; i < removableItems.length; i++) {
+            unsetableObjects.push({
+                "key": "fbtBundleAssociated",
+                "namespace": "oscp",
+                "ownerId": removableItems[i]
+            });
+        }
+
+        console.log('unsetableObjects =========', unsetableObjects)
+
+        const unsetProductData = await admin.graphql(
+            QL.UNSET_BUNDLE_ASSOCIATED_MUTATION, {
+            "variables": {
+                "metafields": unsetableObjects
+            }
+        }
+        );
+        console.log('unsetableObjects =========', unsetProductData)
+        return unsetProductData
+    },
+    setBundleAssociated : async function (request, data) {
+        const { admin } = await authenticate.admin(request);
     }
 }
