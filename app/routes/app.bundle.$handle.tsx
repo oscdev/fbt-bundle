@@ -10,8 +10,20 @@ import { bundle } from "../services/index";
 
 export const action = async ({ params, request }) => {
   const formData = await request.formData();
-  await bundle.setProduct(request, JSON.parse(formData.get("bundleData")), JSON.parse(formData.get("cartItemsMedia")));
-  // return { success: true, }
+  const bundleData = JSON.parse(formData.get("bundleData"));
+  const cartItemsMedia = JSON.parse(formData.get("cartItemsMedia"));
+  const removableCartItems = JSON.parse(formData.get("removableCartItems"));
+
+  const savedResult = await bundle.setProduct(request, bundleData, cartItemsMedia);
+
+  const setBundleAssociatedResult = await bundle.setBundleAssociated(request, bundleData, savedResult);
+  
+
+  if(removableCartItems.length){
+    const unsetBundleAssociatedResult = await bundle.unsetBundleAssociated(request, removableCartItems);
+  }
+  console.log('saveResult = ', savedResult)
+  //return { success: true, }
   return redirect("/app/bundle/list");
 };
 
@@ -32,6 +44,9 @@ export default function Bubdle() {
   const [isConfirmExit, setIsConfirmExit] = useState(false);
   const [confirmMsg, setConfirmMsg] = useState(false);
   const [cartItemsMedia, setCartItemsMedia] = useState([]);
+
+  const [removableCartItems, setRemovableCartItems] = useState([]);
+
   const navigate = useNavigate();
   const emptyExpandedCartItemsFactory = (formArg) => ({
     merchandiseId: formArg.merchandiseId,
@@ -61,12 +76,13 @@ export default function Bubdle() {
     submitErrors,
     dirty,
     dynamicLists,
-    fields: { bundleName, description, customer, minPurchasableItem },
+    fields: { bundleName, description, bundleHandle },
   } = useForm({
     fields: {
       bundleId: useField(bundleResult.id || ''),
       metaId: useField(bundleResult.metafield?.id || ''),
       bundleName: useField(bundleResult.title || ''),
+      bundleHandle: useField(bundleResult.handle || ''),
       description: useField(bundleResult.bodyHtml || ''),
       customer: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.customer : ''),
       minPurchasableItems: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.minPurchasableItem : '')
@@ -76,7 +92,11 @@ export default function Bubdle() {
       globalPriceRules: useDynamicList(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.globalPriceRules : defaultGlobalPriceRules, emptyGlobalPriceRulesFactory)
     },
     onSubmit: async (data) => {
-      return submitForm({ bundleData: JSON.stringify(data), cartItemsMedia: JSON.stringify(cartItemsMedia) }, { method: "post" });
+      return submitForm({ 
+        bundleData: JSON.stringify(data),
+        cartItemsMedia: JSON.stringify(cartItemsMedia),
+        removableCartItems: JSON.stringify(removableCartItems)
+      }, { method: "post" });
     }
   });
 
@@ -95,6 +115,14 @@ export default function Bubdle() {
       fields: globalPriceRules,
     }
   } = dynamicLists;
+
+  const onSetRemovableCartItems = (meta, merchandiseId) => {
+    console.log('bundleHandle', bundleHandle.value);
+    console.log('meta', meta);
+    if(bundleHandle.value == meta.value) {
+      setRemovableCartItems(removableCartItems => [...removableCartItems, "gid://shopify/Product/" + merchandiseId]);
+    }   
+  }
 
   function onShowForm() {
     navigate("/app");
@@ -131,6 +159,7 @@ function onCancelExit() {
       <Layout>
         <Layout.Section>
           <BlockStack gap="300">
+            {removableCartItems.toString()}
             <BundleInfo
               bundleName={bundleName}
               description={description}
@@ -141,8 +170,9 @@ function onCancelExit() {
               onEditCartItems={editCartItems}
               onRemoveCartItems={removeCartItems}
               onMoveCartItems={moveCartItems}
+              onSetRemovableCartItems={onSetRemovableCartItems}
               cartItemsMedia={cartItemsMedia}
-              setCartItemsMedia={setCartItemsMedia}
+              setCartItemsMedia={setCartItemsMedia}              
             />
             <BundleDiscountInfo
               globalPriceRules={globalPriceRules}
