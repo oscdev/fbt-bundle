@@ -44,10 +44,10 @@ export default function Bubdle() {
   });
 
   const emptyGlobalPriceRulesFactory = (formArg) => ({
-    value: formArg.merchandiseId,
-    type: formArg.price,
-    startAt: formArg.handle,
-    endAt: formArg.quantity
+    value: formArg.value,
+    type: formArg.type,
+    startAt: formArg.startAt,
+    endAt: formArg.endAt
   });
 
   const defaultGlobalPriceRules = [{

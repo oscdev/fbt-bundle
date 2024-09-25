@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TextField, Card, Form, FormLayout, Layout, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker } from "@shopify/polaris";
+import { TextField, Card, Form, FormLayout, Select, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker } from "@shopify/polaris";
 export function BundleDiscountInfo(pros) {
   const { globalPriceRules } = pros;
   const [endDateEnable, setEndDateEnable] = useState(false);
@@ -9,6 +9,12 @@ export function BundleDiscountInfo(pros) {
     start: new Date('Wed Feb 07 2018 00:00:00 GMT-0500 (EST)'),
     end: new Date('Wed Feb 07 2018 00:00:00 GMT-0500 (EST)'),
   });
+
+  const options = [
+    {label: 'Percent', value: 'percent'},
+    {label: 'Fixed', value: 'fixed'},
+  ];
+
   return (
     <Card>
       <BlockStack gap="200">
@@ -18,29 +24,35 @@ export function BundleDiscountInfo(pros) {
             {globalPriceRules.map(({ type, value, startAt, endAt }, index) => (
               <>
                 <InlineStack align="start" wrap={false} gap="300">
-                  <TextField
+                  {/* <TextField
                     label={<Text variant="headingMd" as="h6">Discount type</Text>}
                     value={type.value}
                     onChange={(e) => type.onChange(e)}
                     autoComplete="off"
+                  /> */}
+                  <Select
+                    label={<Text variant="headingMd" as="h6">Dicount Type</Text>}
+                    options={options}
+                    onChange={(e) => type.onChange(e)}
+                    value={type.value}
                   />
                   <TextField
-                    label={<Text variant="headingMd" as="h6">Discount value</Text>}
+                    label={<Text variant="headingMd" as="h6">Dicount Value</Text>}
                     value={value.value}
                     onChange={(e) => value.onChange(e)}
                     autoComplete="off"
                   />
-                   <Popover
+                  {/* <Popover
                     active={startVisible}
-                    activator={  <TextField
+                    activator={<TextField
                       label={<Text variant="headingMd" as="h6">Start At</Text>}
-                      value={value.value} 
+                      value={value.value}
                       onChange={(e) => value.onChange(e)}
                       autoComplete="off"
                       onFocus={() => setStartVisible(true)}
                     />}
                     autofocusTarget="first-node"
-                    onClose={() => setStartVisible(false)}  
+                    onClose={() => setStartVisible(false)}
                   >
                     <DatePicker
                       month={9}
@@ -52,7 +64,7 @@ export function BundleDiscountInfo(pros) {
                   </Popover>
                   <Popover
                     active={endVisible}
-                    activator={ <TextField
+                    activator={<TextField
                       label={<Text variant="headingMd" as="h6">End At</Text>}
                       value={value.value}
                       onChange={(e) => value.onChange(e)}
@@ -76,7 +88,7 @@ export function BundleDiscountInfo(pros) {
                       // onMonthChange={handleMonthChange}
                       selected={selectedDates}
                     />
-                  </Popover>
+                  </Popover> */}
                 </InlineStack>
               </>
             )

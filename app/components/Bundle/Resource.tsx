@@ -5,7 +5,6 @@ import { XIcon, ArrowDownIcon, ArrowUpIcon } from '@shopify/polaris-icons';
 import { it } from "node:test";
 export function Resource(props) {
     const { cartItems, onAddCartItems, onEditCartItems, onRemoveCartItems, onMoveCartItems, cartItemsMedia, setCartItemsMedia } = props;
-    //const [productsMedia, setProductsMedia] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isProductRemove, setIsProductRemove] = useState(false);
     const [productIndex, setProductIndex] = useState(null);
@@ -15,7 +14,6 @@ export function Resource(props) {
         //Get ids of products in array format
         setLoading(true);
         const productsId = cartItems.map((item) => item.merchandiseId.value).join(",");
-        console.log("productsId123", productsId);
 
         const res = await fetch("shopify:admin/api/graphql.json", {
             method: "POST",
@@ -28,7 +26,7 @@ export function Resource(props) {
                             title
                             featuredImage {
                                 url
-                            }        
+                            }    
                         }
                         }
                     }
@@ -110,7 +108,7 @@ export function Resource(props) {
         setIsProductRemove(false);
         setProductIndex(null); // Reset the index
     }
-
+    console.log("cartItems", cartItems)
 
 
     return (
@@ -178,7 +176,6 @@ export function Resource(props) {
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold"> <TextField label="Quantity" labelHidden type="number" value="1" autoComplete="off" /></Text>
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold"><Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => removeResource(index)}></Button></Text>
                                                                 </InlineStack>
-                                                                {/* <Divider borderColor="border-inverse" /> */}
                                                             </InlineGrid>
                                                         )
                                                     ),
