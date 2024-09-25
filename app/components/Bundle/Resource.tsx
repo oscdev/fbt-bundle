@@ -26,6 +26,15 @@ export function Resource(props) {
                         node {
                             id
                             title
+                            variants(first: 3) {
+                            edges {
+                                node {
+                                id 
+                                title
+                                price
+                                }
+                            }
+                            }
                             featuredImage {
                                 url
                             }        

@@ -10,12 +10,9 @@ import { bundle } from "../services/index";
 
 export const action = async ({ params, request }) => {
   const formData = await request.formData();
-  await bundle.setProduct(request, JSON.parse(formData.get("bundleData")));
+  await bundle.setProduct(request, JSON.parse(formData.get("bundleData")), JSON.parse(formData.get("cartItemsMedia")));
   // return { success: true, }
   return redirect("/app/bundle/list");
-  // return setTimeout(() => {
-  //   redirect("/app/bundle/list");
-  // }, 300)
 };
 
 export const loader = async ({ params, request }) => {
@@ -79,7 +76,7 @@ export default function Bubdle() {
       globalPriceRules: useDynamicList(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.globalPriceRules : defaultGlobalPriceRules, emptyGlobalPriceRulesFactory)
     },
     onSubmit: async (data) => {
-      return submitForm({ bundleData: JSON.stringify(data) }, { method: "post" });
+      return submitForm({ bundleData: JSON.stringify(data), cartItemsMedia: JSON.stringify(cartItemsMedia) }, { method: "post" });
     }
   });
 
