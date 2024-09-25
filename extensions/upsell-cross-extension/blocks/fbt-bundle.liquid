@@ -1,6 +1,6 @@
-{% assign item = product.metafields.oscp.bundle.value.expand.expandedCartItems[0] %}
-{% assign cart_items = product.metafields.oscp.bundle.value.expand.expandedCartItems %}
-{% assign cart_discount = product.metafields.oscp.bundle.value.expand.globalPriceRules[0].value %}
+{% assign item = product.metafields.oscp.fbtBundle.value.expand.expandedCartItems[0] %}
+{% assign cart_items = product.metafields.oscp.fbtBundle.value.expand.expandedCartItems %}
+{% assign cart_discount = product.metafields.oscp.fbtBundle.value.expand.globalPriceRules[0].value %}
 {% comment %} 
    First product in the bundle is assigned to 'item'. 
    'cart_items' holds all bundled products. 
@@ -151,7 +151,7 @@
           "type": "color",
           "id": "description_background_color",
           "label": "Description Background Color",
-          "default": "#f0f0f0"
+          "default": "#EDEDED"
       },
       {
           "type": "color",
@@ -169,20 +169,20 @@
         "type": "color",
         "id": "discount_text_color",
         "label": "Discounted Price Text Color",
-        "default": "#ffffff"
+        "default": "#9D2A2A"
       },
       {
         "type": "color",
         "id": "button_text_color",
         "label": "Add to Cart Button Text Color",
-        "default": "#000"
+        "default": "#ffffff"
       }
       ,
       {
         "type": "text",
         "id": "fbt_cart_text",
         "label": "Add to Cart Button Text",
-        "default": "Add to Bundle"
+        "default": "Get the Bundle"
       }
     ]
   }

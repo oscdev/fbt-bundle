@@ -140,9 +140,9 @@ export const QL = {
 	UPDATE_BUNDLE_MUTATION: `mutation UpdateProductWithNewMedia($input: ProductInput!) {
   productUpdate(input: $input) {
     product {
-      id
-	  title
-	description
+		id
+		title	
+		bodyHtml
 		metafield(namespace: "oscp", key: "fbtBundle") {
 		value
 		}

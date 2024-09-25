@@ -3,6 +3,8 @@ import { LegacyCard, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonB
 
 export function Preview(pros) {
   const { bundleName, description, cartItems, cartItemsMedia } = pros;
+
+  console.log("cartItemsMedia", JSON.stringify(cartItemsMedia))
   return (
     <LegacyCard>
       <LegacyCard.Section>
@@ -17,15 +19,16 @@ export function Preview(pros) {
                 ({ merchandiseId }, index) => (
                   <>
                     {cartItemsMedia.map(
-                      ({ node: { id, title, featuredImage } }) => (
+                      ({ node: { id, title, featuredImage, priceV2 } }) => (
                         (merchandiseId.value == id.split("/").pop()) && (
                           <>
-                            <InlineStack align="start" wrap={false} gap="300">
+                            <InlineStack align="start" blockAlign="center" wrap={false} gap="300">
                               <Thumbnail
                                 source={featuredImage.url}
                                 alt={title}
                               />
-                              {title}
+                             <Text variant="bodyLg" as="p">{title}</Text>
+                             <Text variant="bodyLg" as="p">{priceV2}</Text>
                             </InlineStack>
                             {(index !== cartItemsMedia.length - 1) ? <Text variant="bodyMd" alignment='center' as="h3"> ------------ + ------------</Text> : ''}
                           </>

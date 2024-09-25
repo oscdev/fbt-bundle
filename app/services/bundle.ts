@@ -71,6 +71,7 @@ export const bundle = {
                 "input": {
                     "id": data.bundleId,
                     "title": data.bundleName,
+                    "bodyHtml": data.description,
                     "metafields": [{
                             "namespace": "oscp",
                             "key": "fbtBundle",
