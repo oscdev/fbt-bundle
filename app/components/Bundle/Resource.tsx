@@ -24,6 +24,7 @@ export function Resource(props) {
                         node {
                             id
                             title
+                            handle
                             variants(first: 3) {
                             edges {
                                 node {
@@ -89,7 +90,7 @@ export function Resource(props) {
             const gqId = item.id.split("/").pop();
             onAddCartItems({
                 merchandiseId: gqId,
-                handle: item.title,
+                handle: item.handle,
                 defaultQuantity: 1,
                 priceRules: null,
             });
