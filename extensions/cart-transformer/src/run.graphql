@@ -1,8 +1,20 @@
 query RunInput {
-  cart {
-    lines {
-      id
-      quantity
+    cart {
+      lines {
+        id
+        quantity
+        merchandise {
+          __typename
+          ... on ProductVariant {
+            id
+            componentParents: metafield(
+              namespace: "custom"
+              key: "component_parents"
+            ) {
+              value
+            }
+          }
+        }
+      }
     }
   }
-}

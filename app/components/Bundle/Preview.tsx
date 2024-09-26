@@ -33,14 +33,18 @@ export function Preview(pros) {
                       ({ node: { id, title, featuredImage, variants } }) => (
                         (merchandiseId.value === id.split("/").pop()) && (
                           <>
+                           <InlineStack align="start" blockAlign="center" wrap={false} gap="300">
                             <InlineStack align="start" blockAlign="center" wrap={false} gap="300">
                               <Thumbnail
                                 source={featuredImage.url}
                                 alt={title}
                               />
                               {/* Display title and price */}
-                              <Text variant="bodyLg" as="p">{title} - Rs.{variants.edges[0].node.price}</Text>
+                              <Text variant="bodyLg" as="p">{title}</Text>
                             </InlineStack>
+                            <InlineStack align="end"  wrap={false} gap="300">
+                              <Text alignment="end" variant="bodyLg" as="p" fontWeight="semibold">{variants.edges[0].node.price}</Text></InlineStack>
+                              </InlineStack>
                             {(index !== cartItemsMedia.length - 1) ? <Text variant="bodyMd" alignment='center' as="h3"> ------------ + ------------</Text> : ''}
                           </>
                         )
@@ -70,10 +74,10 @@ export function Preview(pros) {
               ) : null}
 
               {/* Display the total price */}
-              <InlineStack align="start" wrap={false} gap="300">
-                <Text variant="bodyMd" as="p">Total: </Text>
-                <Text variant="bodyMd" as="p">Rs.{totalPrice.toFixed(2)}</Text>
-                <Text variant="bodyMd" as="p" textDecorationLine="line-through">Rs.{(totalPrice * 1.10).toFixed(2)}</Text>
+              <InlineStack wrap={false} gap="300" align="end">
+                <Text variant="bodyLg" as="p" fontWeight="semibold">Total: </Text>
+                <Text variant="bodyLg" as="p" fontWeight="semibold">{totalPrice.toFixed(2)}</Text>
+                <Text variant="bodyLg" as="p" fontWeight="semibold" textDecorationLine="line-through">{(totalPrice * 1.10).toFixed(2)}</Text>
               </InlineStack>
 
               <Button disabled>Add to cart | Save 10%</Button>
