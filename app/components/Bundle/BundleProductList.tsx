@@ -1,4 +1,4 @@
-import { Card, Box, Text, Layout, IndexTable, ButtonGroup, Button, EmptyState, Spinner } from "@shopify/polaris";
+import { Card, Box, Text, Layout, IndexTable, ButtonGroup, Button, EmptyState } from "@shopify/polaris";
 import { useNavigate } from "@remix-run/react";
 import { PlusIcon } from '@shopify/polaris-icons';
 export function BundleProductList(props) {
@@ -88,8 +88,8 @@ export function BundleProductList(props) {
                       { title: "Products" },
                       { title: "Disc Type" },
                       { title: "Disc Value" },
-                      { title: "StartAt" },
-                      { title: "EndAt" },
+                    //   { title: "StartAt" },
+                    //   { title: "EndAt" },
                       { title: "Actions" }
                   ]}
                   selectable={false}
