@@ -133,7 +133,29 @@ export const bundle = {
         console.log('unsetableObjects =========', unsetProductData)
         return unsetProductData
     },
-    setBundleAssociated : async function (request, data) {
+    setBundleAssociated : async function (request, bundleData, savedResult) {
         const { admin } = await authenticate.admin(request);
+        const setableObjects = [];
+        for (let i = 0; i < bundleData.expandedCartItems.length; i++) {
+            setableObjects.push({
+                "key": "fbtBundleAssociated",
+                "namespace": "oscp",
+                "value": savedResult.handle,
+                "type": "single_line_text_field",
+                "ownerId": 'gid://shopify/Product/'+bundleData.expandedCartItems[i].merchandiseId
+            });
+        }
+
+        const setProductData = await admin.graphql(
+            QL.SET_BUNDLE_ASSOCIATED_MUTATION, {
+            "variables": {
+                "metafields": setableObjects
+            }
+        }
+        );
+       
+        const setProductDataJson = await setProductData.json();
+        console.log('setBundleAssociated ================', JSON.stringify(setProductDataJson))
+        //return setProductData;
     }
 }
