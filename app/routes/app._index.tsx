@@ -9,6 +9,7 @@ import { useLoaderData, json, useNavigation,useNavigate, useSubmit } from "@remi
 import { Footer } from "../components/Footer.jsx";
 import support from "../assets/images/support.png";
 import FBT from "../assets/images/fbt.jpg";
+import Bundle from "../assets/images/bundle.jpg";
 
 // get loader data for app settings and theme settings (Enable/Disable) 
 async function getLoaderData(request) {
@@ -56,10 +57,6 @@ export default function Index() {
     setAppSettings(settingsData)
   }, [settingsData]);
 
-  const productBlock = settingsData.themeStatus.blocks.find(
-    (block) => block.key === "templates/product.json",
-  );
-
   // handle save button
   const handleSave = async () => {
     submitForm({ settingsData: JSON.stringify(appSettings) }, { method: "post" });
@@ -80,7 +77,6 @@ export default function Index() {
       ? "success"
       : "attention";
 
-      const liveThemeId = settingsData.themeStatus.activeTheme.id;
   // redirect chat button on click
   const handleClick = () => {
     window.tidioChatApi.open();
@@ -130,7 +126,7 @@ export default function Index() {
               </InlineGrid>
             </Card>
           </Layout.Section>
-          {((!settingsData.themeStatus.embedBlock.is_configured) || (!productBlock.is_configured)) && (
+          {((!settingsData.themeStatus.embedBlock.is_configured) || (!settingsData.themeStatus.blocks.is_configured)) && (
             <Layout.Section>
               <Banner
                 title={'Activate our app on your theme'}
@@ -161,7 +157,7 @@ export default function Index() {
                     <Text variant="headingMd" as="h6" fontWeight="bold">Simple Bundle</Text>
                     <Button variant="primary" onClick={() => navigate("/app/bundle/list")} icon={ExternalIcon}>Create FBT Bundle</Button>
                   </InlineGrid>
-                  <Text  variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text>   
+                  <Text  variant="headingMd" as="h6" alignment="center"><img src={Bundle} alt="Theme Setup" width="300px" /></Text>   
                     </BlockStack>
                 </Card>
             </InlineGrid>

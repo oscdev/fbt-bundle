@@ -97,21 +97,21 @@ function App() {
     getProductsMetaData();
   }, [productId]);
 
-  // const handleInputChange = (id, val) => {
-  //   const updatedData = crossProducts.map(item => {
-  //     if (item.id === id) {
-  //       return { ...item, rowAction: (val == true) ? 'delete' : '' };
-  //     }
-  //     return item;
-  //   });
-  //   setCrossProducts(updatedData);
-  // };
-
   const handleInputChange = (id, val) => {
-    if (val === true) {
-      setCrossProducts((prev) => prev.filter((item) => item.id !== id));
-    }
+    const updatedData = crossProducts.map(item => {
+      if (item.id === id) {
+        return { ...item, rowAction: (val == true) ? 'delete' : '' };
+      }
+      return item;
+    });
+    setCrossProducts(updatedData);
   };
+
+  // const handleInputChange = (id, val) => {
+  //   if (val === true) {
+  //     setCrossProducts((prev) => prev.filter((item) => item.id !== id));
+  //   }
+  // };
 
   const onSubmit = useCallback(async () => {
     const filterObj = []
@@ -154,15 +154,15 @@ function App() {
                       </Box>
                     )}
                     <Text fontWeight="bold">{product.title}</Text></InlineStack>
-                  {/* <InlineStack gap={'large'} inlineAlignment="end"><Checkbox id="checkbox" name="checkbox" onChange={(val) => {
+                  <InlineStack gap={'large'} inlineAlignment="end"><Checkbox id="checkbox" name="checkbox" onChange={(val) => {
                     handleInputChange(product.id, val);
-                  }} /></InlineStack> */}
-                  <Button
+                  }} /></InlineStack>
+                  {/* <Button
                       variant="tertiary"
                       onClick={() => handleInputChange(product.id, true)}
                     >
                       <Icon tone='critical' name="DeleteMajor" />
-                    </Button>
+                    </Button> */}
                 </InlineStack>
               ))}
             </>

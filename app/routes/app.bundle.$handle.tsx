@@ -64,7 +64,7 @@ export default function Bubdle() {
 
   const defaultGlobalPriceRules = [{
     value: '',
-    type: '',
+    type: 'percent',
     startAt: '',
     endAt: ''
   }]
