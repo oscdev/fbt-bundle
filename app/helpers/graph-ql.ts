@@ -157,6 +157,20 @@ export const QL = {
     }
   }
 }`,
+SET_BUNDLE_ASSOCIATED_MUTATION: `mutation MetafieldsSet($metafields: [MetafieldsSetInput!]!) {
+  metafieldsSet(metafields: $metafields) {
+    metafields {
+      key
+      namespace
+      value
+    }
+    userErrors {
+      field
+      message
+      code
+    }
+  }
+}`,
 UNSET_BUNDLE_ASSOCIATED_MUTATION: `mutation metafieldsDelete($metafields: [MetafieldIdentifierInput!]!) {
   metafieldsDelete(metafields: $metafields) {
     deletedMetafields {
