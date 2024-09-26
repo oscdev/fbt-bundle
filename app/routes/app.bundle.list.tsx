@@ -27,7 +27,7 @@ export default function BundleList() {
   return (
     <Page
       title="Bundle List"
-      backAction={{ content: "Settings", onAction: () => { } }}
+      backAction={{ content: "Settings", url: "/app" }}
     >
       <Layout>
         <Layout.Section>

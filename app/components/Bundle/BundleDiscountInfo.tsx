@@ -2,18 +2,18 @@ import { useState } from 'react'
 import { TextField, Card, Form, FormLayout, Select, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker } from "@shopify/polaris";
 export function BundleDiscountInfo(pros) {
   const { globalPriceRules } = pros;
-  const [endDateEnable, setEndDateEnable] = useState(false);
-  const [startVisible, setStartVisible] = useState(false);
-  const [endVisible, setEndVisible] = useState(false);
-  const [selectedDates, setSelectedDates] = useState({
-    start: new Date('Wed Feb 07 2018 00:00:00 GMT-0500 (EST)'),
-    end: new Date('Wed Feb 07 2018 00:00:00 GMT-0500 (EST)'),
-  });
+  // const [endDateEnable, setEndDateEnable] = useState(false);
+  // const [startVisible, setStartVisible] = useState(false);
+  // const [endVisible, setEndVisible] = useState(false);
+  // const [selectedDates, setSelectedDates] = useState({
+  //   start: new Date('Wed Feb 07 2018 00:00:00 GMT-0500 (EST)'),
+  //   end: new Date('Wed Feb 07 2018 00:00:00 GMT-0500 (EST)'),
+  // });
 
-  const options = [
-    {label: 'Percent', value: 'percent'},
-    {label: 'Fixed', value: 'fixed'},
-  ];
+  // const options = [
+  //   {label: 'Percent', value: 'percent'},
+  //   {label: 'Fixed', value: 'fixed'},
+  // ];
 
   return (
     <Card>
@@ -24,20 +24,20 @@ export function BundleDiscountInfo(pros) {
             {globalPriceRules.map(({ type, value, startAt, endAt }, index) => (
               <>
                 <InlineStack align="start" wrap={false} gap="300">
-                  {/* <TextField
+                  <TextField
                     label={<Text variant="headingMd" as="h6">Discount type</Text>}
                     value={type.value}
-                    onChange={(e) => type.onChange(e)}
+                    // onChange={(e) => type.onChange(e)}
                     autoComplete="off"
-                  /> */}
-                  <Select
-                    label={<Text variant="headingMd" as="h6">Dicount Type</Text>}
+                  />
+                  {/* <Select
+                    label={<Text variant="headingMd" as="h6">Discount Type</Text>}
                     options={options}
                     onChange={(e) => type.onChange(e)}
                     value={type.value}
-                  />
+                  /> */}
                   <TextField
-                    label={<Text variant="headingMd" as="h6">Dicount Value</Text>}
+                    label={<Text variant="headingMd" as="h6">Discount Value</Text>}
                     value={value.value}
                     onChange={(e) => value.onChange(e)}
                     autoComplete="off"

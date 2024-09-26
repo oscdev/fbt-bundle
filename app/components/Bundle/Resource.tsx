@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Form, Text, Button, BlockStack, TextField, FormLayout, Thumbnail, EmptyState, Spinner, Divider, Card, Tooltip, InlineGrid, Badge, InlineStack } from "@shopify/polaris";
 import { Confirm } from "../Confirm";
 import { XIcon, ArrowDownIcon, ArrowUpIcon } from '@shopify/polaris-icons';
-import { it } from "node:test";
 export function Resource(props) {
     const { cartItems, onAddCartItems, onEditCartItems, onRemoveCartItems, onMoveCartItems, onSetRemovableCartItems, cartItemsMedia, setCartItemsMedia } = props;
     const [loading, setLoading] = useState(true);

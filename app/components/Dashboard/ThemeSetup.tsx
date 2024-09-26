@@ -82,7 +82,7 @@ export function ThemeSetup(props) {
                                         Bundle Widget
                                     </Text>
                                     <Button icon={ExternalIcon} target="_blank" disabled={settingsData.themeStatus.blocks[0].is_configured === true}
-                                        url={"https://" + settingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?template=product&addAppBlockId=7f58f248-eb9e-4678-860e-39566c950875/frequently&target=mainSection"}>{(
+                                        url={"https://" + settingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?template=product&addAppBlockId=7f58f248-eb9e-4678-860e-39566c950875/fbt-bundle&target=mainSection"}>{(
                                             settingsData.themeStatus.blocks.length !== 0
                                                 ? (settingsData.themeStatus.blocks[0].is_configured === true ? "Bundle block Enabled" : "Enable Bundle block")
                                                 : "Theme not Supported"
