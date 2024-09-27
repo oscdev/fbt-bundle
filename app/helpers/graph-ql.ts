@@ -181,5 +181,21 @@ UNSET_BUNDLE_ASSOCIATED_MUTATION: `mutation metafieldsDelete($metafields: [Metaf
       message
     }
   }
-}`
+}`,
+APP_CARTTRANSFORM_SET_MUTATION: `mutation {
+  cartTransformCreate(
+    functionId: "$FUNCTION_ID",
+    blockOnFailure: true 
+  ) {
+    cartTransform {
+      id
+      functionId
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
+`
 };
