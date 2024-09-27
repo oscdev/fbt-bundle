@@ -157,7 +157,7 @@ export function Resource(props) {
                                             /></Text>
                                     ) : null}
                                     {cartItems.map(
-                                        ({ merchandiseId }, index) => (
+                                        ({ merchandiseId, defaultQuantity }, index) => (
                                             <>
                                                 {cartItemsMedia.map(
                                                     ({ node: { id, title, featuredImage, metafield } }) => (
@@ -187,8 +187,14 @@ export function Resource(props) {
 
                                                                 </InlineStack>
                                                                 <InlineStack gap="200" key={index} blockAlign="center">
-                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
-                                                                        <TextField label="Quantity" labelHidden type="number" value="1" autoComplete="off" /></Text>
+                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">                                                                        
+                                                                        <TextField
+                                                                            label="Quantity"
+                                                                            labelHidden 
+                                                                            type="number"
+                                                                            value={defaultQuantity.value}
+                                                                            onChange={(e) => defaultQuantity.onChange(e)} 
+                                                                            autoComplete="off" /></Text>
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
                                                                         <Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => {
                                                                             if(metafield !== null && metafield.value !== null) {

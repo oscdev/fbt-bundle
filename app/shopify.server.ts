@@ -24,7 +24,8 @@ const shopify = shopifyApp({
       shopify.registerWebhooks({ session });
       console.log("------------------------afterAuth--------------------------");
       await settings.setAppStatus(admin, '1'); 
-      await settings.setBundleSearchableDefination(admin);     
+      await settings.setBundleSearchableDefination(admin);   
+      await settings.cartTransformCreate(admin);    
     },
   },
   future: {

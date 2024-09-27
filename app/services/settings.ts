@@ -30,5 +30,9 @@ export const settings = {
     setBundleSearchableDefination: async function (admin) {
         const def = await modelShopSettings.setBundleSearchableDefination(admin);
         return def;
+    },
+    cartTransformCreate: async function (admin) {
+        const trans = await modelShopSettings.cartTransformCreate(admin);
+        return trans;
     }
 }

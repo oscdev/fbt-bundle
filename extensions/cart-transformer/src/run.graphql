@@ -2,17 +2,16 @@ query RunInput {
     cart {
       lines {
         id
-        quantity
+        quantity        
         merchandise {
           __typename
           ... on ProductVariant {
-            id
-            componentParents: metafield(
-              namespace: "custom"
-              key: "component_parents"
-            ) {
-              value
+            product {
+              metafield(namespace: "oscp", key: "fbtBundle"){
+                value
+              }
             }
+            id
           }
         }
       }
