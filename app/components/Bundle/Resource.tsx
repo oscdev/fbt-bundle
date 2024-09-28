@@ -24,7 +24,7 @@ export function Resource(props) {
                             id
                             title
                             handle
-                            variants(first: 3) {
+                            variants(first: 100) {
                             edges {
                                 node {
                                 id 
@@ -37,6 +37,10 @@ export function Resource(props) {
                                 url
                             }
                             metafield(namespace: "oscp", key: "fbtBundleAssociated") {
+                                id
+                                value
+                            }
+                            components: metafield(namespace: "oscp", key: "fbtBundleComponentReference") {
                                 id
                                 value
                             }    
@@ -192,7 +196,7 @@ export function Resource(props) {
                                                                             label="Quantity"
                                                                             labelHidden 
                                                                             type="number"
-                                                                            value={defaultQuantity.value}
+                                                                            //value={defaultQuantity.value}
                                                                             onChange={(e) => defaultQuantity.onChange(e)} 
                                                                             autoComplete="off" /></Text>
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
