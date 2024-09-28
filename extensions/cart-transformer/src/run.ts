@@ -1,6 +1,7 @@
 import type {
   RunInput,
   FunctionRunResult,
+  ExpandOperation,
 } from "../generated/api";
 
 const NO_CHANGES: FunctionRunResult = {
@@ -8,72 +9,44 @@ const NO_CHANGES: FunctionRunResult = {
 };
 
 export function run(input: RunInput): FunctionRunResult {
-  const operations = input.cart.lines.reduce(
-    /** @param {CartOperation[]} acc */
-    (acc, cartLine) => {
-      const expandOperation = optionallyBuildExpandOperation(cartLine);
+  const expandInput = {};
+  input.cart.lines.forEach((cartLine) => {
+    if (cartLine.merchandise.__typename === "ProductVariant" && cartLine.merchandise.product.bundleConfig) {
+      const componentReferences = JSON.parse(cartLine.merchandise.product.bundleComponents?.value || "[]");
+      const bundleConfig = JSON.parse(cartLine.merchandise.product.bundleConfig?.value || "{}");
 
-      if (expandOperation) {
-        return [...acc, { expand: expandOperation }];
-      }
-      console.log("cartLine",cartLine)
-      console.log("expandOperation",expandOperation)
-      console.log("acc",acc)
-      return acc;
-    },
-    []
-  );
+      console.log('componentReferences', componentReferences[0])
 
-  return operations.length > 0 ? { operations } : NO_CHANGES;
-};
+      if (componentReferences.length) {
+        const expandedCartItems = componentReferences.map((reference, index) => ({
+          merchandiseId: reference,
+          quantity: bundleConfig.expand.expandedCartItems[index].defaultQuantity || 1
+        }));
 
-function optionallyBuildExpandOperation({ id: cartLineId, merchandise }) {
-  if (merchandise.__typename === "ProductVariant" && merchandise.componentParents) {
-    const componentParents = JSON.parse(merchandise.componentParents.value);
+        expandInput.cartLineId = cartLine.id;
+        expandInput.title = cartLine.merchandise.product.title;
+        expandInput.image = null;
+        expandInput.expandedCartItems = expandedCartItems;
 
-    // Ensure that componentParents is an array of objects with the expected structure
-    if (!Array.isArray(componentParents) || componentParents.length === 0) {
-      throw new Error("Invalid bundle composition");
-    }
-
-    let fixedPrice;
-    let percentPrice;
-    // Flatten the expanded cart items
-    const expandedCartItems = componentParents.flatMap((parent) => {
-      return parent.offerVariants.map((variant) => {
-       
-        // Handle different discount types
-        if (parent.discountType === "fixed") {
-          fixedPrice = {
-            adjustment: {
-            fixedPricePerUnit: {
-              amount: parent.amount
-            }
-          }
-          };
-        } else if (parent.discountType === "percent") {
-          percentPrice = {
-            percentageDecrease: {
-              value: parent.amount
-            }
-          };
-        } else {
-          throw new Error(`Unsupported discount type: ${parent.discountType}`);
-        }
-        return {
-          merchandiseId: variant.variantId,
-          quantity: variant.quantity,
-          price: fixedPrice
+        /*
+        const expandInput: ExpandOperation = {
+          cartLineId: cartLine.id,
+          title: cartLine.merchandise.product.title,
+          image: null,
+          price: null,
+          expandedCartItems: expandedCartItems
         };
-      });
-    });
+        */
 
-    const title = componentParents[0]?.name || "Default Title";
+        console.log('expandedCartItems = ', JSON.stringify(expandedCartItems))
+      }
 
-    console.log("expandedCartItems", JSON.stringify(expandedCartItems));
-    if (expandedCartItems.length > 0) {
-      return { cartLineId, expandedCartItems, title, price: percentPrice};
     }
-  }
-  return null;
-}
+  })
+
+  console.log('expandInput = ', JSON.stringify(expandInput))
+  
+  //return NO_CHANGES;
+  
+  return (Object.keys(expandInput).length) ? { operations: { expand: expandInput } } : NO_CHANGES;
+};
