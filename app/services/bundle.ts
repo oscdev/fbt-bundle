@@ -23,9 +23,20 @@ export const bundle = {
         const productJson = await product.json();
         return productJson.data.product
     },
-    createBundle: async function (request, data) {
-        console.log('createBundle--------------------------------------------')
+    createBundle: async function (request, data, cartItemsMedia) {
+        //console.log('createBundle--------------------------------------------', JSON.stringify(data))
         const { admin } = await authenticate.admin(request);
+        const defaultVariants = [];
+        for (let i = 0; i < data.expandedCartItems.length; i++) {
+            for (let j = 0; j < cartItemsMedia.length; j++) {
+                if (data.expandedCartItems[i].merchandiseId == cartItemsMedia[j].node.id.split('/').pop()) {
+                    defaultVariants.push(cartItemsMedia[j].node.variants.edges[0].node.id)
+                }
+            }
+            
+        }
+        console.log('defaultVariants--------------------------------------------', defaultVariants)
+
         const productData = await admin.graphql(
             QL.CREATE_BUNDLE_MUTATION,
             {
@@ -34,6 +45,11 @@ export const bundle = {
                         "title": data.bundleName,
                         "bodyHtml": data.description,
                         "metafields": [{
+                            "namespace": "oscp",
+                            "key": "fbtBundleComponentReference",
+                            "type": "list.variant_reference",
+                            "value": JSON.stringify(defaultVariants)
+                        },{
                             "namespace": "oscp",
                             "key": "fbtBundle",
                             "type": "json",
@@ -105,7 +121,7 @@ export const bundle = {
     },
     setProduct: async function (request, data, cartItemsMedia) {
         if (data.bundleId == '') {
-            return this.createBundle(request, data)
+            return this.createBundle(request, data, cartItemsMedia)
         } else {
             return this.updateBundle(request, data)
         }
