@@ -9,44 +9,39 @@ const NO_CHANGES: FunctionRunResult = {
 };
 
 export function run(input: RunInput): FunctionRunResult {
-  const expandInput = {};
+  const operations = [];
+
   input.cart.lines.forEach((cartLine) => {
     if (cartLine.merchandise.__typename === "ProductVariant" && cartLine.merchandise.product.bundleConfig) {
       const componentReferences = JSON.parse(cartLine.merchandise.product.bundleComponents?.value || "[]");
       const bundleConfig = JSON.parse(cartLine.merchandise.product.bundleConfig?.value || "{}");
 
-      console.log('componentReferences', componentReferences[0])
+      console.log(JSON.stringify(bundleConfig));
 
       if (componentReferences.length) {
         const expandedCartItems = componentReferences.map((reference, index) => ({
           merchandiseId: reference,
           quantity: bundleConfig.expand.expandedCartItems[index].defaultQuantity || 1
+          //quantity: index+1
         }));
 
-        expandInput.cartLineId = cartLine.id;
-        expandInput.title = cartLine.merchandise.product.title;
-        expandInput.image = null;
-        expandInput.expandedCartItems = expandedCartItems;
+        const priceInput = (bundleConfig.expand.globalPriceRules[0].value) ? {
+          percentageDecrease:{
+            value: bundleConfig.expand.globalPriceRules[0].value
+          }
+        } : null
 
-        /*
-        const expandInput: ExpandOperation = {
-          cartLineId: cartLine.id,
-          title: cartLine.merchandise.product.title,
-          image: null,
-          price: null,
-          expandedCartItems: expandedCartItems
-        };
-        */
-
-        console.log('expandedCartItems = ', JSON.stringify(expandedCartItems))
+        operations.push({
+          expand: {
+            cartLineId: cartLine.id,
+            title: cartLine.merchandise.product.title,
+            image: null,
+            expandedCartItems,
+            price: priceInput
+          }
+        });
       }
-
     }
   })
-
-  console.log('expandInput = ', JSON.stringify(expandInput))
-  
-  //return NO_CHANGES;
-  
-  return (Object.keys(expandInput).length) ? { operations: { expand: expandInput } } : NO_CHANGES;
+  return (operations.length) ? { operations: operations} : NO_CHANGES;
 };
