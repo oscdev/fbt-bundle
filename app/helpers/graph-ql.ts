@@ -138,6 +138,10 @@ export const QL = {
 	  value
 	  id
 	}
+	components: metafield(namespace: "oscp", key: "fbtBundleComponentReference") {
+		id
+		value
+	}
   }
 }`,
 	UPDATE_BUNDLE_MUTATION: `mutation UpdateProductWithNewMedia($input: ProductInput!) {
@@ -196,6 +200,20 @@ APP_CARTTRANSFORM_SET_MUTATION: `mutation {
       message
     }
   }
-}
-`
+}`,
+UPDATE_BUNDLE_PRODUCT_PRICE:`mutation productVariantsBulkUpdate($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
+	productVariantsBulkUpdate(productId: $productId, variants: $variants) {
+	  product {
+		id
+	  }
+	  productVariants {
+		id
+		price
+	  }
+	  userErrors {
+		field
+		message
+	  }
+	}
+  }`
 };

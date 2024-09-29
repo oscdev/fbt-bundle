@@ -76,11 +76,12 @@ export default function Bubdle() {
     submitErrors,
     dirty,
     dynamicLists,
-    fields: { bundleName, description, bundleHandle },
+    fields: { bundleName, description, bundleHandle, componentMetaId },
   } = useForm({
     fields: {
       bundleId: useField(bundleResult.id || ''),
       metaId: useField(bundleResult.metafield?.id || ''),
+      componentMetaId: useField(bundleResult.components?.id || ''),
       bundleName: useField(bundleResult.title || ''),
       bundleHandle: useField(bundleResult.handle || ''),
       description: useField(bundleResult.bodyHtml || ''),
@@ -159,7 +160,8 @@ function onCancelExit() {
       <Layout>
         <Layout.Section>
           <BlockStack gap="300">
-            {removableCartItems.toString()}
+            {removableCartItems.toString()} <br />
+            {componentMetaId.value}
             <BundleInfo
               bundleName={bundleName}
               description={description}
