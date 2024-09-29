@@ -2,12 +2,21 @@ query RunInput {
     cart {
       lines {
         id
+        cost{
+          amountPerQuantity{
+            amount
+          }
+        }
         quantity        
         merchandise {
           __typename
           ... on ProductVariant {
             product {
-              metafield(namespace: "oscp", key: "fbtBundle"){
+              title              
+              bundleConfig: metafield(namespace: "oscp", key: "fbtBundle"){
+                value
+              }
+              bundleComponents: metafield(namespace: "oscp", key: "fbtBundleComponentReference"){
                 value
               }
             }
@@ -16,4 +25,4 @@ query RunInput {
         }
       }
     }
-  }
+  } 
