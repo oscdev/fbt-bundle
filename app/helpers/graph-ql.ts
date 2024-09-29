@@ -79,6 +79,14 @@ export const QL = {
 			id
 			handle
 			title
+			variants(first: 100) {
+                edges {
+                    node {
+                        id 
+                        price
+                    }
+                }
+            }
 			metafields(first: 3) {
 				edges {
 				node {
