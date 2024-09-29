@@ -6,7 +6,7 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useSubmit, useNavigate } from "@remix-run/react";
 import { Confirm } from "~/components/Confirm";
 import { Footer } from "../components/Footer";
-import { bundle } from "../services/index";
+import { bundle, settings } from "../services/index";
 
 export const action = async ({ params, request }) => {
   const formData = await request.formData();
@@ -30,12 +30,13 @@ export const action = async ({ params, request }) => {
 export const loader = async ({ params, request }) => {
   const handle = params.handle;
   const bundleResult = (handle == "new") ? {} : await bundle.getProduct(request, handle);
-  return json({ bundleResult, handle });
+  const shopData = await settings.shopDetail(request);
+  return json({ bundleResult, handle, shopData });
 };
 
 
 export default function Bubdle() {
-  const { bundleResult, handle } = useLoaderData();
+  const { bundleResult, handle, shopData } = useLoaderData();
 
   console.log("bundleResult", JSON.stringify(bundleResult));
   console.log("handle", handle);
@@ -191,6 +192,8 @@ function onCancelExit() {
             description={description}
             cartItems={cartItems}
             cartItemsMedia={cartItemsMedia}
+            globalPriceRules={globalPriceRules}
+            currencyCodes={shopData}
           />
         </Layout.Section>
         <Footer />

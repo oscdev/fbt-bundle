@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Page, Layout, Card, BlockStack, Text, Button, Badge, Spinner, InlineStack, InlineGrid, Banner, ButtonGroup, Checkbox, LegacyCard, SkeletonThumbnail, SkeletonBodyText,Box } from "@shopify/polaris";
+import { Page, Layout, Card, BlockStack, Text, Button, Badge, Spinner, InlineStack, InlineGrid, Banner, ButtonGroup, Checkbox, SkeletonThumbnail, SkeletonBodyText,Box } from "@shopify/polaris";
 import { authenticate } from "~/shopify.server";
 import logo from "../assets/images/oscLogo.png";
 import { ExternalIcon, ChatIcon } from "@shopify/polaris-icons";

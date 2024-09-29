@@ -64,6 +64,21 @@ export const modelShopSettings = {
         }
     },
 
+    shopDetail: async function (request) {
+		try {
+			const { admin } = await authenticate.admin(request);
+
+			const shopData = await admin.graphql(
+				QL.SHOP_CURRENCY
+			);
+
+			const responseJson = await shopData.json();
+			return responseJson.data.shop;
+		} catch (error) {
+			console.warn("Error : " + error);
+		}
+	},
+
     getThemeStatus: async function (request) {
         try {
             // Initialize an empty object to store the active theme

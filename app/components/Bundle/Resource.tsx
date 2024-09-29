@@ -196,7 +196,7 @@ export function Resource(props) {
                                                                             label="Quantity"
                                                                             labelHidden 
                                                                             type="number"
-                                                                            //value={defaultQuantity.value}
+                                                                            value={defaultQuantity.value}
                                                                             onChange={(e) => defaultQuantity.onChange(e)} 
                                                                             autoComplete="off" /></Text>
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">

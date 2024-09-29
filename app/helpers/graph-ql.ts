@@ -215,5 +215,15 @@ UPDATE_BUNDLE_PRODUCT_PRICE:`mutation productVariantsBulkUpdate($productId: ID!,
 		message
 	  }
 	}
-  }`
+  }`,
+  SHOP_CURRENCY: `query {
+	shop {
+		name
+		currencyCode
+		currencyFormats {
+			moneyInEmailsFormat
+			moneyWithCurrencyInEmailsFormat
+		}
+	}
+}`
 };
