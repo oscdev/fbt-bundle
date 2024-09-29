@@ -79,9 +79,43 @@ export const bundle = {
         const productJson = await productData.json();
         console.log("productJson",JSON.stringify(productJson));
 
+        // Calculate total price
+        let totalPrice = 0;
+        // Loop through each product to sum up the prices
+    
+
+        cartItemsMedia.forEach(product => {
+            const price = parseFloat(product.node.variants.edges[0].node.price); // Convert price to a number
+            totalPrice += price; // Add the price to the total
+        });
+        console.log("Total Price: $" + totalPrice.toFixed(2));
+
+        const productId = productJson.data.productCreate.product.id;
+        const variantId = productJson.data.productCreate.product.variants.edges[0].node.id;
+
+        // Call the updateProductPrice function to update the price
+        await this.updateProductPrice(admin, productId, variantId, totalPrice);
 
         return productJson.data.productCreate.product
     },
+
+    //Separate function to update product price
+    updateProductPrice : async function (admin, productId, variantId, totalPrice) {
+        return await admin.graphql(
+            QL.UPDATE_BUNDLE_PRODUCT_PRICE,
+            {
+            variables: {
+                "productId": productId,
+                "variants": [
+                {
+                    "id": variantId,
+                    "price": totalPrice
+                }
+                ]
+            }    
+            });
+    },
+
     updateBundle: async function (request, data, cartItemsMedia) {
         try {
             console.log('cartItemsMedia --------------------------------------------', JSON.stringify(cartItemsMedia))
