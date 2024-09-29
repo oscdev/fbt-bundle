@@ -1,4 +1,6 @@
+import { RestResources } from "@shopify/shopify-api/rest/admin/2024-07";
 import { create } from "domain";
+import { AdminApiContext } from "node_modules/@shopify/shopify-app-remix/dist/ts/server/clients";
 import { json } from "stream/consumers";
 import { QL } from "~/helpers/graph-ql";
 import { authenticate } from "~/shopify.server";
@@ -24,7 +26,7 @@ export const bundle = {
         return productJson.data.product
     },
     createBundle: async function (request, data, cartItemsMedia) {
-        //console.log('createBundle--------------------------------------------', JSON.stringify(data))
+        console.log('createBundle--------------------------------------------', JSON.stringify(cartItemsMedia))
         const { admin } = await authenticate.admin(request);
         const defaultVariants = [];
         for (let i = 0; i < data.expandedCartItems.length; i++) {
@@ -75,12 +77,26 @@ export const bundle = {
             }
         );
         const productJson = await productData.json();
+        console.log("productJson",JSON.stringify(productJson));
+
+
         return productJson.data.productCreate.product
     },
-
-    updateBundle: async function (request, data) {
+    updateBundle: async function (request, data, cartItemsMedia) {
         try {
-            console.log('updateBundle --------------------------------------------', data)
+            console.log('cartItemsMedia --------------------------------------------', JSON.stringify(cartItemsMedia))
+            console.log('updateBundleData --------------------------------------------', JSON.stringify(data))
+            const defaultVariantsUpdate = [];
+            for (let i = 0; i < data.expandedCartItems.length; i++) {
+                for (let j = 0; j < cartItemsMedia.length; j++) {
+                    if (data.expandedCartItems[i].merchandiseId == cartItemsMedia[j].node.id.split('/').pop()) {
+                        defaultVariantsUpdate.push(cartItemsMedia[j].node.variants.edges[0].node.id)
+                    }
+                }
+            
+            }
+            console.log('defaultVariantsUpdate--------------------------------------------', defaultVariantsUpdate)
+
             const { admin } = await authenticate.admin(request);
             const productData = await admin.graphql(
                 QL.UPDATE_BUNDLE_MUTATION, {
@@ -89,7 +105,14 @@ export const bundle = {
                         "id": data.bundleId,
                         "title": data.bundleName,
                         "bodyHtml": data.description,
-                        "metafields": [{
+                        "metafields": [
+                            {
+                                "namespace": "oscp",
+                                "key": "fbtBundleComponentReference",
+                                "id": data.componentMetaId,
+                                "type": "list.variant_reference",
+                                "value": JSON.stringify(defaultVariantsUpdate)
+                            },{
                             "namespace": "oscp",
                             "key": "fbtBundle",
                             "id": data.metaId,
@@ -112,7 +135,7 @@ export const bundle = {
 
             const productJson = await productData.json();
 
-            console.log('updateBundle --------------------------------------------', JSON.stringify(productJson))
+            console.log('productJson --------------------------------------------', JSON.stringify(productJson))
             return productJson.data.productUpdate.product
         } catch (error) {
             console.log('updateBundle --------------------------------------------', error)
@@ -123,7 +146,7 @@ export const bundle = {
         if (data.bundleId == '') {
             return this.createBundle(request, data, cartItemsMedia)
         } else {
-            return this.updateBundle(request, data)
+            return this.updateBundle(request, data, cartItemsMedia)
         }
     },
     unsetBundleAssociated: async function (request, removableItems) {
@@ -150,6 +173,7 @@ export const bundle = {
         return unsetProductData
     },
     setBundleAssociated : async function (request, bundleData, savedResult) {
+        //console.log("testing111",savedResult)
         const { admin } = await authenticate.admin(request);
         const setableObjects = [];
         for (let i = 0; i < bundleData.expandedCartItems.length; i++) {
@@ -175,3 +199,6 @@ export const bundle = {
         //return setProductData;
     }
 }
+
+
+
