@@ -82,6 +82,7 @@ export function Resource(props) {
             const gqId = cartItems[i].merchandiseId.value.split("/").pop();
             filterObj.push("NOT " + gqId);
         }
+        filterObj.push("NOT metafields.oscp.fbtSearchable:searchable");
 
         const pickedResource = await window.shopify.resourcePicker({
             type: 'product',
@@ -194,6 +195,7 @@ export function Resource(props) {
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
                                                                         <TextField
                                                                             placeholder="Default Quantity: e.g. 1"
+                                                                            min={1}
                                                                             label="Quantity"
                                                                             labelHidden
                                                                             type="number"
