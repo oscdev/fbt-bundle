@@ -24,6 +24,7 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
+        <script src="//code.tidio.co/q0squwybsexugfdrwpuxt4cvrtsaxkzo.js" />
       </body>
     </html>
   );
