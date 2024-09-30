@@ -16,7 +16,7 @@ export function BundleInfo(pros) {
                         />
 
                         <TextField
-                            label={<Text variant="headingXs" as="h6">Description</Text>}
+                            label={<Text variant="headingXs" as="h6">Short Description</Text>}
                             value={description.value}
                             onChange={(e) => description.onChange(e)}
                             placeholder="Short Description: e.g. Buy this combo and save 10% OFF"
