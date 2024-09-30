@@ -12,6 +12,11 @@ export const settings = {
         return (appStatus == 'true') ? true : false
     },
 
+    shopDetail : async function (request) {
+       const shopdata = await modelShopSettings.shopDetail(request);
+       return shopdata;
+   },
+
     getThemeStatus: async function (request) {
         const theme = await modelShopSettings.getThemeStatus(request);
         return theme;

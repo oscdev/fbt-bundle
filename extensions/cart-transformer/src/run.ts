@@ -21,7 +21,7 @@ export function run(input: RunInput): FunctionRunResult {
       if (componentReferences.length) {
         const expandedCartItems = componentReferences.map((reference, index) => ({
           merchandiseId: reference,
-          quantity: bundleConfig.expand.expandedCartItems[index].defaultQuantity || 1
+          quantity: parseInt(bundleConfig.expand.expandedCartItems[index].defaultQuantity) || 1
           //quantity: index+1
         }));
 

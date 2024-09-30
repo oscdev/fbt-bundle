@@ -41,7 +41,7 @@ export default function App() {
     <AppProvider isEmbeddedApp apiKey={apiKey}>
       <NavMenu>
         <Link to="/app" rel="home">Home</Link>
-        <Link to="/app/bundle/new">Bundle</Link>
+        <Link to="/app/bundle/list">Bundle</Link>
         <Link to="/app/help">Help</Link>
       </NavMenu>
       {navigation.state === "loading" && (
