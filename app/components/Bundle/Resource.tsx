@@ -211,7 +211,8 @@ export function Resource(props) {
                                                                 <InlineStack gap="200" key={index} blockAlign="center">
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
                                                                         <TextField
-                                                                            placeholder="Default Quantity: e.g. 1"
+                                                                            prefix="Quantity:"
+                                                                            placeholder="e.g. 1"
                                                                             min={1}
                                                                             label="Quantity"
                                                                             labelHidden
