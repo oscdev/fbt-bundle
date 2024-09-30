@@ -7,6 +7,9 @@ export function Resource(props) {
     const [loading, setLoading] = useState(true);
     const [isProductRemove, setIsProductRemove] = useState(false);
     const [productIndex, setProductIndex] = useState(null);
+    const [removableAssociatedMeta, setRemovableAssociatedMeta] = useState(null);
+    const [removableMerchandiseId, setRemovableMerchandiseId] = useState(null); 
+
     const [confirmMsg, setIsConfirmMsg] = useState('');
 
     async function getProducts() {
@@ -108,15 +111,25 @@ export function Resource(props) {
 
 
     // Trigger the confirmation modal before removing the item
-    function removeResource(index) {
+    function removeResource(index, metafield, merchandiseId) {
         setIsConfirmMsg(`Are you sure you want to remove this product?`);
         setIsProductRemove(true);
+        setRemovableAssociatedMeta(metafield);
+        setRemovableMerchandiseId(merchandiseId);
         setProductIndex(index); // Store the index of the item to be removed
     }
 
     // Remove the item from the cart if confirmed
     function onConfirmProductRemove() {
         onRemoveCartItems(productIndex);
+
+        if (removableAssociatedMeta !== null) {
+            onSetRemovableCartItems(removableAssociatedMeta, removableMerchandiseId);
+        }
+
+        setRemovableAssociatedMeta(null);
+        setRemovableMerchandiseId(null);
+
         setIsProductRemove(false); // Close the confirmation modal
         setProductIndex(null); // Reset the index
     }
@@ -124,6 +137,10 @@ export function Resource(props) {
     // Cancel the removal
     function onCancelRemove() {
         setIsProductRemove(false);
+
+        setRemovableAssociatedMeta(null);
+        setRemovableMerchandiseId(null)
+        
         setProductIndex(null); // Reset the index
     }
     console.log("cartItems", cartItems)
@@ -204,10 +221,10 @@ export function Resource(props) {
                                                                             autoComplete="off" /></Text>
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
                                                                         <Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => {
-                                                                            if (metafield !== null && metafield.value !== null) {
-                                                                                onSetRemovableCartItems(metafield, merchandiseId.value);
-                                                                            }
-                                                                            removeResource(index)
+                                                                            // if (metafield !== null && metafield.value !== null) {
+                                                                            //     onSetRemovableCartItems(metafield, merchandiseId.value);
+                                                                            // }
+                                                                            removeResource(index, metafield, merchandiseId.value)
                                                                         }}></Button>
                                                                     </Text>
                                                                 </InlineStack>
