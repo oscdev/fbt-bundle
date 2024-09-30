@@ -37,6 +37,8 @@ export function BundleDiscountInfo(pros) {
                     value={type.value}
                   /> */}
                   <TextField
+                    placeholder="Discount in percent: e.g. 10"
+                    suffix="%"
                     label={<Text variant="headingMd" as="h6">Discount Value</Text>}
                     value={value.value}
                     onChange={(e) => value.onChange(e)}

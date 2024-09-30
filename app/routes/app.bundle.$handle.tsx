@@ -52,7 +52,7 @@ export default function Bubdle() {
   const emptyExpandedCartItemsFactory = (formArg) => ({
     merchandiseId: formArg.merchandiseId,
     handle: formArg.handle,
-    defaultQuantity: formArg.quantity,
+    defaultQuantity: formArg.defaultQuantity,
     priceRules: formArg.price
   });
 

@@ -191,19 +191,20 @@ export function Resource(props) {
 
                                                                 </InlineStack>
                                                                 <InlineStack gap="200" key={index} blockAlign="center">
-                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">                                                                        
+                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
                                                                         <TextField
+                                                                            placeholder="Default Quantity: e.g. 1"
                                                                             label="Quantity"
-                                                                            labelHidden 
+                                                                            labelHidden
                                                                             type="number"
                                                                             value={defaultQuantity.value}
-                                                                            onChange={(e) => defaultQuantity.onChange(e)} 
+                                                                            onChange={(e) => defaultQuantity.onChange(e)}
                                                                             autoComplete="off" /></Text>
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
                                                                         <Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => {
-                                                                            if(metafield !== null && metafield.value !== null) {
+                                                                            if (metafield !== null && metafield.value !== null) {
                                                                                 onSetRemovableCartItems(metafield, merchandiseId.value);
-                                                                            }                                                                                
+                                                                            }
                                                                             removeResource(index)
                                                                         }}></Button>
                                                                     </Text>
