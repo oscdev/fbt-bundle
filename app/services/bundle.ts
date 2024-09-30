@@ -35,7 +35,6 @@ export const bundle = {
                     defaultVariants.push(cartItemsMedia[j].node.variants.edges[0].node.id)
                 }
             }
-            
         }
         console.log('defaultVariants--------------------------------------------', defaultVariants)
 
@@ -82,8 +81,6 @@ export const bundle = {
         // Calculate total price
         let totalPrice = 0;
         // Loop through each product to sum up the prices
-    
-
         cartItemsMedia.forEach(product => {
             const price = parseFloat(product.node.variants.edges[0].node.price); // Convert price to a number
             totalPrice += price; // Add the price to the total
@@ -168,13 +165,30 @@ export const bundle = {
             );
 
             const productJson = await productData.json();
+            console.log("productJson", JSON.stringify(productJson))
 
-            console.log('productJson --------------------------------------------', JSON.stringify(productJson))
+            // Calculate total price
+            let totalPrice = 0;
+            // Loop through each product to sum up the prices
+            cartItemsMedia.forEach(product => {
+                const price = parseFloat(product.node.variants.edges[0].node.price); // Convert price to a number
+                totalPrice += price; // Add the price to the total
+            });
+            console.log("Total Price: $" + totalPrice.toFixed(2));
+
+            // console.log("productId",productJson.data.productUpdate.product.id);
+            // console.log("variantId",productJson.data.productUpdate.product.variants.edges[0].node.id);
+            const productId = productJson.data.productUpdate.product.id;
+            const variantId = productJson.data.productUpdate.product.variants.edges[0].node.id;
+            
+
+            // Call the updateProductPrice function to update the price
+            await this.updateProductPrice(admin, productId, variantId, totalPrice);
+
             return productJson.data.productUpdate.product
         } catch (error) {
             console.log('updateBundle --------------------------------------------', error)
         }
-
     },
     setProduct: async function (request, data, cartItemsMedia) {
         if (data.bundleId == '') {

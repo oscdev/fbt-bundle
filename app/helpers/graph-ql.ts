@@ -159,6 +159,14 @@ export const QL = {
 		handle
 		title	
 		bodyHtml
+		variants(first: 100) {
+            edges {
+                node{
+                	id 
+                	price
+                }
+            }
+        }
 		metafield(namespace: "oscp", key: "fbtBundle") {
 		value
 		}
