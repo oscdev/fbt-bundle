@@ -71,6 +71,10 @@ export const bundle = {
                             "type": "single_line_text_field",
                             "value": "searchable"
                         }],
+
+                        "claimOwnership": {
+                            "bundles": true
+                        }
                     }
                 },
             }
