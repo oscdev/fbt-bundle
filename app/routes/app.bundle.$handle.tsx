@@ -77,7 +77,7 @@ export default function Bubdle() {
     submitErrors,
     dirty,
     dynamicLists,
-    fields: { bundleName, description, bundleHandle, componentMetaId },
+    fields: { bundleName, description, bundleHandle, componentMetaId, bundlePrice },
   } = useForm({
     fields: {
       bundleId: useField(bundleResult.id || ''),
@@ -85,6 +85,7 @@ export default function Bubdle() {
       componentMetaId: useField(bundleResult.components?.id || ''),
       bundleName: useField(bundleResult.title || ''),
       bundleHandle: useField(bundleResult.handle || ''),
+      bundlePrice: useField(bundleResult.price || ''),
       description: useField(bundleResult.bodyHtml || ''),
       customer: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.customer : ''),
       minPurchasableItems: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.minPurchasableItem : '')
@@ -161,11 +162,11 @@ function onCancelExit() {
       <Layout>
         <Layout.Section>
           <BlockStack gap="300">
-            {removableCartItems.toString()} <br />
-            {componentMetaId.value}
+            {/* {removableCartItems.toString()} <br />             */}
             <BundleInfo
               bundleName={bundleName}
               description={description}
+              bundlePrice={bundlePrice}
             />
             <Resource
               cartItems={cartItems}
