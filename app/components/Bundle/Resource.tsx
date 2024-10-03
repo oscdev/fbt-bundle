@@ -3,7 +3,7 @@ import { Form, Text, Button, BlockStack, TextField, FormLayout, Thumbnail, Empty
 import { Confirm } from "../Confirm";
 import { XIcon, ArrowDownIcon, ArrowUpIcon } from '@shopify/polaris-icons';
 export function Resource(props) {
-    const { cartItems, onAddCartItems, onEditCartItems, onRemoveCartItems, onMoveCartItems, onSetRemovableCartItems, cartItemsMedia, setCartItemsMedia } = props;
+    const { cartItems, onAddCartItems, onEditCartItems, onRemoveCartItems, onMoveCartItems, onSetRemovableCartItems, cartItemsMedia, setCartItemsMedia, bundlePrice, setPriceManually } = props;
     const [loading, setLoading] = useState(true);
     const [isProductRemove, setIsProductRemove] = useState(false);
     const [productIndex, setProductIndex] = useState(null);
@@ -71,6 +71,7 @@ export function Resource(props) {
         } else {
             setCartItemsMedia(data.products.edges);
         }
+        
 
         setLoading(false);
     }
@@ -143,7 +144,7 @@ export function Resource(props) {
         
         setProductIndex(null); // Reset the index
     }
-    console.log("cartItems", cartItems)
+    //console.log("cartItems", cartItems)
 
 
     return (
@@ -184,7 +185,7 @@ export function Resource(props) {
                                                 {cartItemsMedia.map(
                                                     ({ node: { id, title, featuredImage, metafield } }) => (
                                                         (merchandiseId.value == id.split("/").pop()) && (
-                                                            <InlineGrid columns="1fr auto" key={index}>
+                                                            <InlineGrid columns="1fr auto" key={"key-"+index}>
                                                                 <InlineStack gap="200" blockAlign="center" wrap={false}>
                                                                     {/* {id} */}
                                                                     <Tooltip content="Move Up">
