@@ -34,7 +34,7 @@ export function BundleDiscountInfo(pros) {
     cartItems.forEach((item) => {
       cartItemsMedia.forEach((media) => {
         if (item.merchandiseId.value == media.node.id.split("/").pop()) {
-          calculatedPrice = calculatedPrice + parseFloat(media.node.variants.edges[0].node.price)
+          calculatedPrice = calculatedPrice + (item.defaultQuantity.value * parseFloat(media.node.variants.edges[0].node.price))
         }
       })
     })
