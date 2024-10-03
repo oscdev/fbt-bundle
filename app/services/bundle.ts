@@ -26,9 +26,13 @@ export const bundle = {
         return productJson.data.product
     },
     createBundle: async function (request, data, cartItemsMedia) {
-        console.log('cartItemsMedia--------------------------------------------', JSON.stringify(cartItemsMedia))
+        //console.log('cartItemsMedia--------------------------------------------', JSON.stringify(cartItemsMedia))
         console.log('data--------------------------------------------', JSON.stringify(data))
+        
         const expandedCartItems = data.expandedCartItems;
+        const bundlePrice = data.bundlePrice;
+        console.log("bundlePrice", bundlePrice)
+
         const { admin } = await authenticate.admin(request);
         const defaultVariants = [];
         for (let i = 0; i < data.expandedCartItems.length; i++) {
@@ -82,31 +86,17 @@ export const bundle = {
             }
         );
         const productJson = await productData.json();
-          
-        let totalPrice = 0;
-        expandedCartItems.forEach(item => {
-        // Find the corresponding product in cartItemsMedia
-        const product = cartItemsMedia.find(bundleItem => bundleItem.node.id.split("/").pop() === item.merchandiseId);
-        if (product) {
-            // Get the price of the first variant (assuming first variant is used)
-            const price = parseFloat(product.node.variants.edges[0].node.price);
-                // Multiply price by defaultQuantity
-                totalPrice += price * item.defaultQuantity;
-            }
-            });
-        console.log("Total Price isss: $" + totalPrice.toFixed(2));
-
+    
         const productId = productJson.data.productCreate.product.id;
         const variantId = productJson.data.productCreate.product.variants.edges[0].node.id;
 
         // Call the updateProductPrice function to update the price
-        await this.updateProductPrice(admin, productId, variantId, totalPrice);
-
+        await this.updateProductPrice(admin, productId, variantId, bundlePrice);
         return productJson.data.productCreate.product
     },
 
     //Separate function to update product price
-    updateProductPrice : async function (admin, productId, variantId, totalPriceTest) {
+    updateProductPrice : async function (admin, productId, variantId, bundlePrice) {
         return await admin.graphql(
             QL.UPDATE_BUNDLE_PRODUCT_PRICE,
             {
@@ -115,7 +105,7 @@ export const bundle = {
                 "variants": [
                 {
                     "id": variantId,
-                    "price": totalPriceTest
+                    "price": bundlePrice
                 }
                 ]
             }    
@@ -124,10 +114,11 @@ export const bundle = {
 
     updateBundle: async function (request, data, cartItemsMedia) {
         try {
-            console.log('cartItemsMedia --------------------------------------------', JSON.stringify(cartItemsMedia))
+            //console.log('cartItemsMedia --------------------------------------------', JSON.stringify(cartItemsMedia))
             console.log('updateBundleData --------------------------------------------', JSON.stringify(data))
             const expandedCartItems = data.expandedCartItems;
-
+            const bundlePrice = data.bundlePrice;
+        
             const defaultVariantsUpdate = [];
             for (let i = 0; i < data.expandedCartItems.length; i++) {
                 for (let j = 0; j < cartItemsMedia.length; j++) {
@@ -176,27 +167,12 @@ export const bundle = {
             );
 
             const productJson = await productData.json();
-            
-            let totalPrice = 0;
-            expandedCartItems.forEach(item => {
-            // Find the corresponding product in cartItemsMedia
-            const product = cartItemsMedia.find(bundleItem => bundleItem.node.id.split("/").pop() === item.merchandiseId);
-            if (product) {
-                // Get the price of the first variant (assuming first variant is used)
-                const price = parseFloat(product.node.variants.edges[0].node.price);
-                    // Multiply price by defaultQuantity
-                    totalPrice += price * item.defaultQuantity;
-                }
-                });
-            console.log("Total Price isss: $" + totalPrice.toFixed(2));
-
+        
             const productId = productJson.data.productUpdate.product.id;
             const variantId = productJson.data.productUpdate.product.variants.edges[0].node.id;
             
-
-            // Call the updateProductPrice function to update the price
-            await this.updateProductPrice(admin, productId, variantId, totalPrice);
-
+            //Call the updateProductPrice function to update the price
+            await this.updateProductPrice(admin, productId, variantId, bundlePrice);
             return productJson.data.productUpdate.product
         } catch (error) {
             console.log('updateBundle --------------------------------------------', error)
