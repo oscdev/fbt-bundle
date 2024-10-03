@@ -5,8 +5,7 @@ import logo from "../assets/images/oscLogo.png";
 import { ExternalIcon, ChatIcon } from "@shopify/polaris-icons";
 // import { cnf } from "../../cnf.js";
 import { settings } from "../services/settings";
-import { useLoaderData, json, useNavigation,useNavigate, useSubmit } from "@remix-run/react";
-import { Footer } from "../components/Footer.jsx";
+import { useLoaderData, json, useNavigate, useSubmit } from "@remix-run/react";
 import support from "../assets/images/support.png";
 import FBT from "../assets/images/fbt.jpg";
 import Bundle from "../assets/images/bundle.jpg";
@@ -45,14 +44,12 @@ export const action = async ({ request }) => {
 };
 export default function Index() {
   const submitForm = useSubmit();
-  const navigation = useNavigation();
   const navigate = useNavigate();
   const [appSettings, setAppSettings] = useState({
     appStatus: false,
     themeStatus: null
   });
   const settingsData = useLoaderData();
-
   useEffect(() => {
     setAppSettings(settingsData)
   }, [settingsData]);
@@ -98,7 +95,7 @@ export default function Index() {
                     </Text>
                   </InlineStack>
                   <div>
-                    <Button onClick={handleSave} icon={(navigation.state === "loading") ? <Spinner size="small" /> : <></>}>{buttonText}</Button>
+                    <Button onClick={handleSave}>{buttonText}</Button>
                   </div>
                 </InlineGrid>
               </BlockStack>
@@ -126,7 +123,7 @@ export default function Index() {
               </InlineGrid>
             </Card>
           </Layout.Section>
-          {((!settingsData.themeStatus.embedBlock.is_configured) || (!settingsData.themeStatus.blocks.is_configured)) && (
+          {(settingsData.themeStatus.blocks[0].is_configured === true) && (settingsData.themeStatus.embedBlock?.is_disabled === false) ? "":(
             <Layout.Section>
               <Banner
                 title={'Activate our app on your theme'}
@@ -146,7 +143,7 @@ export default function Index() {
                     <BlockStack gap="200">
                     <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">Frequently Bought Together</Text>
-                    <Button variant="primary" onClick={() => navigate("/app/assign")} icon={ExternalIcon}>Create FBT</Button>
+                    <Button variant="primary" onClick={() => navigate("/products")} icon={ExternalIcon}>Create FBT</Button>
                   </InlineGrid>
                    <Text  variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text> 
                     </BlockStack>
@@ -154,7 +151,7 @@ export default function Index() {
                 <Card roundedAbove="sm">
                     <BlockStack gap="200">
                     <InlineGrid columns="1fr auto">
-                    <Text variant="headingMd" as="h6" fontWeight="bold">Simple Bundle</Text>
+                    <Text variant="headingMd" as="h6" fontWeight="bold">FBT Bundle</Text>
                     <Button variant="primary" onClick={() => navigate("/app/bundle/list")} icon={ExternalIcon}>Create FBT Bundle</Button>
                   </InlineGrid>
                   <Text  variant="headingMd" as="h6" alignment="center"><img src={Bundle} alt="Theme Setup" width="300px" /></Text>   
@@ -164,7 +161,6 @@ export default function Index() {
         </Layout.Section>
         </Layout>
       </BlockStack>
-      <Footer />
     </Page>
   );
 }

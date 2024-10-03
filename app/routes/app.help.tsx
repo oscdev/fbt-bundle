@@ -1,6 +1,5 @@
 import { Banner, BlockStack, Button, Card, Icon, Box, InlineGrid, Page, Text } from "@shopify/polaris";
 import { EmailIcon, ExternalIcon, InfoIcon, PersonFilledIcon, QuestionCircleIcon, StarFilledIcon } from "@shopify/polaris-icons";
-import { Footer } from "../components/Footer.js";
 import logo from "../assets/images/logo.jpg";
 import { useNavigate } from "@remix-run/react";
 
@@ -47,10 +46,20 @@ export default function Help() {
           {/* faq section */}
           <InlineGrid columns="1fr auto">
             <Text variant="headingMd" as="h2">FAQs</Text>
-            <Button variant="plain"  onClick={() => navigate("/app/faq")} icon={ExternalIcon}>FAQs</Button>
+            <a style={{ textDecoration: 'none' }} target='blank' href={'https://www.oscprofessionals.com/oscp-upsell-cross-sell-app#oscp-upsell-cross-sell-faq'}><Button variant="plain" icon={ExternalIcon}>FAQs</Button></a>
           </InlineGrid>
           <InlineGrid columns="1fr auto">
             <Text variant="bodyMd" as="span">Check out our FAQ section for detailed answers about app functionalities and compatibility.</Text>
+          </InlineGrid>
+        </Card>
+        <Card roundedAbove="sm">
+          {/* Settings section */}
+          <InlineGrid columns="1fr auto">
+            <Text variant="headingMd" as="h2">App Settings</Text>
+            <Button onClick={() => navigate("/app/theme-setup")} variant="plain" icon={ExternalIcon}>Settings</Button>
+          </InlineGrid>
+          <InlineGrid columns="1fr auto">
+            <Text variant="bodyMd" as="span">Check out our Widget section.</Text>
           </InlineGrid>
         </Card>
         {/* apps section for other apps */}
@@ -99,7 +108,6 @@ export default function Help() {
           </Card>
         </InlineGrid>
       </BlockStack>
-      <Footer />
     </Page>
   );
 }

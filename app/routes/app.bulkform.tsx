@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Card, Page, Button, InlineGrid, Tag, BlockStack, Frame, Toast, Text, Tooltip, Spinner } from "@shopify/polaris";
+import { Card, Page, Button, InlineGrid, Tag, BlockStack, Frame, Toast, Text, Tooltip, Spinner, Box } from "@shopify/polaris";
 import { useLoaderData, useNavigation, useNavigate } from "@remix-run/react";
 import { json } from "@remix-run/node";
 import { Confirm } from "../components/Confirm";
@@ -189,7 +189,8 @@ const Bulkform = () => {
           {products.map((product) => {
             const { id, title, crossProducts } = product;
             return (
-              <BlockStack gap="400" key={product.id}>
+              <BlockStack gap="100" key={product.id}>
+                <Box padding="200">
                 <Card>
                   <BlockStack gap="400">
                     <InlineGrid columns="1fr auto">
@@ -219,9 +220,9 @@ const Bulkform = () => {
                         className="Polaris-IndexTable__Table Polaris-IndexTable--tableStickyLast CustomTable"
                         border="0"
                       >
-                        <tbody className=" CustomBody">
+                        <tbody>
                           <tr className="Polaris-IndexTable__TableRow priceRow">
-                            <td className="customCell">
+                            <td>
                               Assign Products
                             </td>
                             <td className="Polaris-DataTable__Cell Polaris-DataTable__Cell--verticalAlignTop Polaris-DataTable__Cell--firstColumn Polaris-DataTable__Cell--total">
@@ -245,6 +246,7 @@ const Bulkform = () => {
                     </div>
                   </BlockStack>
                 </Card>
+                </Box>
               </BlockStack>
             );
           })}
@@ -263,7 +265,9 @@ const Bulkform = () => {
               error={toastMessage.error}
             />
           )}
+          <Box padding="100">
           <Footer />
+          </Box>
         </Frame>
       </Page>
       <Confirm

@@ -155,7 +155,7 @@ export function Resource(props) {
                         <BlockStack gap="200">
                             <InlineGrid columns="1fr auto">
                                 <Text variant="headingMd" as="h2">
-                                    Add Products
+                                    Products
                                 </Text>
                                 <Button
                                     variant="primary"
@@ -168,7 +168,7 @@ export function Resource(props) {
                                 </Button>
                             </InlineGrid>
 
-                            <Text variant="bodyLg" as="p">Add products to sell in FBT bundle </Text>
+                            <Text variant="bodyLg" as="p">Product to sell in FBT bundle </Text>
 
                             {cartItems.length > 0 && (
                                 <BlockStack gap="300">
@@ -244,9 +244,9 @@ export function Resource(props) {
                     ) : (
                         <BlockStack gap="200">
                             <Text variant="headingMd" as="h2">
-                                Add Products
+                                Products
                             </Text>
-                            <Text variant="bodyLg" as="p">Add products to sell in FBT bundle </Text>
+                            <Text variant="bodyLg" as="p">Product to sell in FBT bundle </Text>
                             <EmptyState
                                 heading="No FBT Bundle products added"
                                 image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
