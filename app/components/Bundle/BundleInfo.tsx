@@ -1,18 +1,7 @@
-import { TextField, Card, Form, FormLayout, Layout, Text, BlockStack, Checkbox } from "@shopify/polaris";
-import { useState, useCallback } from "react";
+import { TextField, Card, Form, FormLayout, Layout, Text, BlockStack } from "@shopify/polaris";
+
 export function BundleInfo(pros) {
-    const { bundleName, description, bundlePrice } = pros;
-    const [mannualPrice, setMannualPrice] = useState(false);
-
-    const [checked, setChecked] = useState(false);
-    const handleChange = useCallback(
-        (newChecked: boolean) => {
-            setChecked(newChecked)
-            setMannualPrice(newChecked)
-        },
-        [],
-    );
-
+    const { bundleName, description } = pros; 
     return (
         <Card>
             <BlockStack gap="200">
@@ -35,20 +24,7 @@ export function BundleInfo(pros) {
                             autoComplete="off"
                         />
 
-                        <TextField
-                            label={<Text variant="headingXs" as="h6">Price</Text>}
-                            prefix="Store currency Symbol"
-                            value={bundlePrice.value}
-                            readOnly={!mannualPrice}
-                            onChange={(e) => { bundlePrice.onChange(e) }}
-                            placeholder="0.00"
-                            autoComplete="off"
-                            connectedRight={<Checkbox
-                                label="Set Price Manually"
-                                checked={checked}
-                                onChange={handleChange}
-                            />}
-                        />
+                        
                     </FormLayout>
                 </Form>
             </BlockStack>
