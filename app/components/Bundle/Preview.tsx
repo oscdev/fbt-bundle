@@ -1,9 +1,9 @@
 import React from 'react';
-import { Card, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonBodyText, Button, Thumbnail, Badge } from '@shopify/polaris';
+import { Card, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonBodyText, Button, Thumbnail, Badge, Box } from '@shopify/polaris';
 import { XIcon } from '@shopify/polaris-icons';
 export function Preview(pros) {
   const { bundleName, bundlePrice, description, cartItems, cartItemsMedia, currencyCodes, globalPriceRules } = pros;
-  
+
   //console.log("globalPriceRules",globalPriceRules)
   const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;
   // Calculate total price by summing the prices of the matched items
@@ -40,42 +40,43 @@ export function Preview(pros) {
 
   return (
     <Card>
-        <BlockStack gap="300">
-          <Text variant="headingLg" as="h5">Preview</Text>
-          <Card>
-            <BlockStack gap="100">
-              <Text alignment="center" variant="headingMd" as="h6">{(bundleName.value) ? bundleName.value : "Bundle of 3 Combos"}</Text>
+      <BlockStack gap="300">
+        <Text variant="headingLg" as="h5">Preview</Text>
+        <Card>
+          <BlockStack gap="100">
+            <Box padding="200"><Text alignment="center" variant="headingMd" as="h6">{(bundleName.value) ? bundleName.value : "Bundle of 3 Combos"}</Text></Box>
 
-              {cartItems.map(
-                ({ merchandiseId, defaultQuantity }, index) => (
-                  <>
-                    {cartItemsMedia.map(
-                      ({ node: { id, title, featuredImage, variants } }) => (
-                        (merchandiseId.value === id.split("/").pop()) && (
-                          <>
-                            {/* <InlineStack align="start" wrap={false} gap="300"> */}
-                            <InlineStack align="start" blockAlign='center' wrap={false} gap="300">
-                              <Thumbnail
-                                source={featuredImage.url}
-                                alt={title}
-                              />
-                              {/* Display title and price */}
-                              <Text variant="bodyLg" as="p"><Badge tone="success">{defaultQuantity.value}</Badge> X {title}</Text>
-                              
-                            </InlineStack>
-                            <Text alignment="end" variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', '')}{variants.edges[0].node.price} { '  ' }</Text>
-                            {/* </InlineStack> */}
-                            {(index !== cartItemsMedia.length - 1) ? <Text variant="bodyMd" alignment='center' as="h3"> ---------------- + ----------------</Text> : ''}
-                          </>
-                        )
-                      ),
-                    )}
-                  </>
-                ),
-              )}
-
-              {(!cartItems.length) ? (
+            {cartItems.map(
+              ({ merchandiseId, defaultQuantity }, index) => (
                 <>
+                  {cartItemsMedia.map(
+                    ({ node: { id, title, featuredImage, variants } }) => (
+                      (merchandiseId.value === id.split("/").pop()) && (
+                        <>
+                          {/* <InlineStack align="start" wrap={false} gap="300"> */}
+                          <InlineStack align="start" blockAlign='center' wrap={false} gap="300">
+                            <Thumbnail
+                              source={featuredImage.url}
+                              alt={title}
+                            />
+                            {/* Display title and price */}
+                            <Text variant="bodyLg" as="p"><Badge tone="success">{defaultQuantity.value}</Badge> X {title}</Text>
+
+                          </InlineStack>
+                          <Text alignment="end" variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', '')}{variants.edges[0].node.price} {'  '}</Text>
+                          {/* </InlineStack> */}
+                          {(index !== cartItemsMedia.length - 1) ? <Text variant="bodyMd" alignment='center' as="h3"> ---------------- + ----------------</Text> : ''}
+                        </>
+                      )
+                    ),
+                  )}
+                </>
+              ),
+            )}
+
+            {(!cartItems.length) ? (
+              <>
+                <BlockStack gap="300">
                   <InlineStack align="start" wrap={false} gap="300">
                     <SkeletonThumbnail size="small" />
                     <SkeletonBodyText lines={2} />
@@ -90,23 +91,26 @@ export function Preview(pros) {
                     <SkeletonThumbnail size="small" />
                     <SkeletonBodyText lines={2} />
                   </InlineStack>
-                </>
-              ) : null}
-
-              <Badge tone="info"><Text variant="bodyLg" as="p">{(description.value) ? description.value : "Buy this combo and save 10% OFF"}</Text></Badge>
-
-
+                </BlockStack>
+                <Box padding="100">
+                  <Badge tone="info">
+                    <Text variant="bodyLg" as="p">{(description.value) ? description.value : "Buy this combo and save 10% OFF"}</Text>
+                  </Badge>
+                </Box>
+              </>
+            ) : null}
+            <Box padding="100">
               {/* Display the total price */}
               <InlineStack wrap={false} gap="300" align="end">
                 <Text variant="bodyLg" as="p" fontWeight="semibold">Total: </Text>
                 <Text variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', '')}{finalPrice.toFixed(2)}</Text>
                 <Text variant="bodyLg" as="p" fontWeight="semibold" textDecorationLine="line-through">{currency.replace('{{amount}}', '')}{bundlePrice.value}</Text>
               </InlineStack>
-
-              <Button disabled={!cartItems.length}>Add to Bundle</Button>
-            </BlockStack>
-          </Card>
-        </BlockStack>
-      </Card>
+            </Box>
+            <Button disabled={!cartItems.length}>Add to Bundle</Button>
+          </BlockStack>
+        </Card>
+      </BlockStack>
+    </Card>
   );
 }

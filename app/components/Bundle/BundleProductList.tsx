@@ -14,7 +14,7 @@ export function BundleProductList(props) {
         <EmptyState
             heading="Once you create a new bundle product, it will be visible here!"
             action={{
-                content: 'Create New Bundle',
+                content: 'Create Bundle',
                 url: '/app/bundle/new',
                 icon: PlusIcon,
             }}
@@ -33,8 +33,6 @@ export function BundleProductList(props) {
                 <IndexTable.Cell>{node.title}</IndexTable.Cell>
                 <IndexTable.Cell>{expandedCartItemsLength}</IndexTable.Cell>
                 <IndexTable.Cell>{globalPriceRule.value} %</IndexTable.Cell>
-                {/* <IndexTable.Cell>{globalPriceRule.startAt}</IndexTable.Cell>
-                <IndexTable.Cell>{globalPriceRule.endAt}</IndexTable.Cell> */}
                 <IndexTable.Cell>
                     <div className="customTableRow">
                         <ButtonGroup>
@@ -56,48 +54,23 @@ export function BundleProductList(props) {
     return (
         <Layout.Section>
             <Card>
-              {(productList.length) ? <><Text variant="headingMd" as="h2" alignment="end"><Button url="/app/bundle/new" icon={PlusIcon} variant="primary">Create Bundle Product</Button></Text><Box paddingBlock="200">
-              <IndexTable
-                  resourceName={resourceName}
-                  itemCount={productList.length}
-                  emptyState={emptyStateMarkup}
-                  selectedItemsCount={"All"}
-                  onSelectionChange={() => { }}
-                  headings={[
-                      { title: "Name" },
-                      { title: "Products" },
-                      { title: "Discount" },
-                    //   { title: "StartAt" },
-                    //   { title: "EndAt" },
-                      { title: "Actions" }
-                  ]}
-                  selectable={false}
-              >
-                  {rowMarkup}
-              </IndexTable>
-          </Box> </>
-              :  <Box paddingBlock="200">
-              <IndexTable
-                  resourceName={resourceName}
-                  itemCount={productList.length}
-                  emptyState={emptyStateMarkup}
-                  selectedItemsCount={"All"}
-                  onSelectionChange={() => { }}
-                  headings={[
-                      { title: "Name" },
-                      { title: "Products" },
-                      { title: "Disc Type" },
-                      { title: "Disc Value" },
-                    //   { title: "StartAt" },
-                    //   { title: "EndAt" },
-                      { title: "Actions" }
-                  ]}
-                  selectable={false}
-              >
-                  {rowMarkup}
-              </IndexTable>
-          </Box> }  
-               
+                <IndexTable
+                    resourceName={resourceName}
+                    itemCount={productList.length}
+                    emptyState={emptyStateMarkup}
+                    selectedItemsCount={"All"}
+                    onSelectionChange={() => { }}
+                    headings={[
+                        { title: "Name" },
+                        { title: "Products" },
+                        { title: "Discount" },
+                        { title: "Actions" }
+                    ]}
+                    selectable={false}
+                >
+                    {rowMarkup}
+                </IndexTable>
+
             </Card>
         </Layout.Section>
     );

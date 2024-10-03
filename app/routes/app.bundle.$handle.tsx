@@ -1,11 +1,10 @@
-import { Layout, Page, BlockStack } from "@shopify/polaris";
+import { Layout, Page, BlockStack, Banner } from "@shopify/polaris";
 import { useField, useDynamicList, useForm } from '@shopify/react-form';
 import { BundleInfo, Preview, Resource, BundleDiscountInfo, Customize } from "../components/Bundle/index";
 import { useState } from "react";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useSubmit, useNavigate } from "@remix-run/react";
 import { Confirm } from "~/components/Confirm";
-import { Footer } from "../components/Footer";
 import { bundle, settings } from "../services/index";
 
 export const action = async ({ params, request }) => {
@@ -35,12 +34,10 @@ export const loader = async ({ params, request }) => {
 };
 
 
-export default function Bubdle() {
+export default function Bundle() {
   const { bundleResult, handle, shopData } = useLoaderData();
-
-  console.log("bundleResult", JSON.stringify(bundleResult));
-  console.log("handle", handle);
-
+  const [showToast, setShowToast] = useState(false);
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const submitForm = useSubmit();
   const [isConfirmExit, setIsConfirmExit] = useState(false);
   const [confirmMsg, setConfirmMsg] = useState(false);
@@ -96,11 +93,34 @@ export default function Bubdle() {
       globalPriceRules: useDynamicList(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.globalPriceRules : defaultGlobalPriceRules, emptyGlobalPriceRulesFactory)
     },
     onSubmit: async (data) => {
-      return submitForm({ 
+      const remoteErrors = [];
+      // validate the bundle name
+      if (!data.bundleName) {
+        remoteErrors.push("Bundle Name is mandatory");
+      }
+      // validate the selected products length
+      if (!data.expandedCartItems.length) {
+        remoteErrors.push("Select Products are mandatory");
+      }
+      // validate the discount value based on discount type
+      if (!data.globalPriceRules[0].value) {
+        remoteErrors.push("Discount value is mandatory");
+      }
+
+      if (remoteErrors.length) {
+        setIsFormSubmitting(false);
+        return { status: "fail", errors: remoteErrors };
+      } else {
+       submitForm({ 
         bundleData: JSON.stringify(data),
         cartItemsMedia: JSON.stringify(cartItemsMedia),
         removableCartItems: JSON.stringify(removableCartItems)
       }, { method: "post" });
+      setTimeout(async() => {
+        setShowToast(true);
+      }, 2000)
+        return { status: "success" };
+      }
     }
   });
 
@@ -148,6 +168,20 @@ function onCancelExit() {
     setIsConfirmExit(false)
 }
 
+const errorBanner =
+submitErrors.length > 0 ? (
+  <Layout.Section>
+    <Banner tone="critical">
+      <p>There were some values is mandatory with your form submission:</p>
+      <ul>
+        {submitErrors.map(({ message }, index) => (
+          <li key={index}>{submitErrors[index]}</li>
+        ))}
+      </ul>
+    </Banner>
+  </Layout.Section>
+) : null;
+
   return (
     <Page
       title="Create bundle for Frequently Bought Together"
@@ -161,6 +195,7 @@ function onCancelExit() {
       backAction={{ content: "Settings", onAction: () => confirmExit() }}
     >
       <Layout>
+      {errorBanner}
         <Layout.Section>
           <BlockStack gap="300">
             {/* {removableCartItems.toString()} <br />             */}
@@ -201,8 +236,10 @@ function onCancelExit() {
             currencyCodes={shopData}
           />
         </Layout.Section>
-        <Footer />
       </Layout>
+      {showToast && 
+         shopify.toast.show("Bundle product created successfully!", {onDismiss: () => setShowToast(false)})
+        }
       <Confirm
         isConfirm={isConfirmExit}
         confirmMsg={confirmMsg}

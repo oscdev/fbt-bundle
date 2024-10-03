@@ -2,7 +2,6 @@ import { Page, Layout, Frame } from "@shopify/polaris";
 import { ThemeSetup } from "../components/Dashboard/ThemeSetup";
 import { settings } from "../services/index.js";
 import { useLoaderData, json, useNavigate } from "@remix-run/react";
-import { Footer } from "../components/Footer.js";
 import { authenticate } from "../shopify.server.js";
 
 async function getLoaderData(request) {
@@ -34,7 +33,6 @@ export default function Index() {
             <ThemeSetup settingsData={settingsData} />
           ): null}
         </Layout>
-        <Footer />
       </Frame>     
     </Page>
   );

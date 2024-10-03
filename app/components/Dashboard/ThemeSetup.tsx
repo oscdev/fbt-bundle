@@ -9,6 +9,13 @@ export function ThemeSetup(props) {
 
     return (
         <Layout.Section>
+            {settingsData.themeStatus.blocks.length !== 0 && settingsData.themeStatus.blocks[0].is_configured === true ? "" : (
+                <Banner tone="critical">
+                    <Text variant="bodyLg" as="p">
+                        This Theme <i><u>{settingsData.themeStatus.activeTheme.name}</u></i> is NOT Supported.
+                    </Text>
+                </Banner>
+            ) }
             <Card>
                 <BlockStack gap="200">
                     <Text variant="headingMd" as="h2">
@@ -46,31 +53,14 @@ export function ThemeSetup(props) {
                                     <Text variant="headingMd" as="h6" fontWeight="bold">
                                         Product Widget
                                     </Text>
-                                    <Button icon={ExternalIcon} target="_blank" disabled={settingsData.themeStatus.blocks[0].is_configured === true}
+                                    <Button icon={ExternalIcon} target="_blank"
                                         url={"https://" + settingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?template=product&addAppBlockId=7f58f248-eb9e-4678-860e-39566c950875/frequently&target=mainSection"}>{(
                                             settingsData.themeStatus.blocks.length !== 0
-                                                ? (settingsData.themeStatus.blocks[0].is_configured === true ? "App block Enabled" : "Enable App block")
+                                                ? (settingsData.themeStatus.blocks[0].is_configured === true ? "View" : "Enable App block")
                                                 : "Theme not Supported"
                                         )}
                                     </Button>
                                 </InlineGrid>
-                                {settingsData.themeStatus.blocks.length !== 0 ? (
-                                    settingsData.themeStatus.blocks[0].is_configured === true ? (
-                                        <Text variant="bodyLg" as="p" fontWeight="semibold" tone="success">
-                                            The Frequently Bought Together Widget is enabled.
-                                        </Text>
-                                    ) : (
-                                        <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">
-                                            The Frequently Bought Together Widget is disabled.
-                                        </Text>
-                                    )
-                                ) : (
-                                    <Banner tone="critical">
-                                        <Text variant="bodyLg" as="p">
-                                            This Theme <i><u>{settingsData.themeStatus.activeTheme.name}</u></i> is NOT Supported. {' '}
-                                        </Text>
-                                    </Banner>
-                                )}
                                 <Text variant="bodyMd" as="p">
                                     Enable the widget in your theme for the "Frequently Bought Together" section to function on your product page.</Text>
                             </BlockStack>
@@ -81,31 +71,14 @@ export function ThemeSetup(props) {
                                     <Text variant="headingMd" as="h6" fontWeight="bold">
                                         Bundle Widget
                                     </Text>
-                                    <Button icon={ExternalIcon} target="_blank" disabled={settingsData.themeStatus.blocks[0].is_configured === true}
+                                    <Button icon={ExternalIcon} target="_blank"
                                         url={"https://" + settingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?template=product&addAppBlockId=7f58f248-eb9e-4678-860e-39566c950875/fbt-bundle&target=mainSection"}>{(
                                             settingsData.themeStatus.blocks.length !== 0
-                                                ? (settingsData.themeStatus.blocks[0].is_configured === true ? "Bundle block Enabled" : "Enable Bundle block")
+                                                ? (settingsData.themeStatus.blocks[0].is_configured === true ? "View" : "Enable Bundle block")
                                                 : "Theme not Supported"
                                         )}
                                     </Button>
                                 </InlineGrid>
-                                {settingsData.themeStatus.blocks.length !== 0 ? (
-                                    settingsData.themeStatus.blocks[0].is_configured === true ? (
-                                        <Text variant="bodyLg" as="p" fontWeight="semibold" tone="success">
-                                            The FBT Bundle Widget is enabled.
-                                        </Text>
-                                    ) : (
-                                        <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">
-                                            The FBT Bundle Widget is disabled.
-                                        </Text>
-                                    )
-                                ) : (
-                                    <Banner tone="critical">
-                                        <Text variant="bodyLg" as="p">
-                                            This Theme <i><u>{settingsData.themeStatus.activeTheme.name}</u></i> is NOT Supported. {' '}
-                                        </Text>
-                                    </Banner>
-                                )}
                                 <Text variant="bodyMd" as="p">
                                     Enable the widget in your theme for the "FBT Bundle" section to function on your product page.</Text>
                             </BlockStack>
