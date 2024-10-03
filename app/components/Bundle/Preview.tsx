@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonBodyText, Button, Thumbnail, Badge, Box } from '@shopify/polaris';
+import { Card, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonBodyText, Button, Thumbnail, Badge, Box, SkeletonDisplayText } from '@shopify/polaris';
 import { XIcon } from '@shopify/polaris-icons';
 export function Preview(pros) {
   const { bundleName, bundlePrice, description, cartItems, cartItemsMedia, currencyCodes, globalPriceRules } = pros;
@@ -101,7 +101,7 @@ export function Preview(pros) {
             ) : null}
             <Box padding="100">
               {/* Display the total price */}
-              <InlineStack wrap={false} gap="300" align="end">
+              <InlineStack wrap={false} gap="300" align="end">                
                 <Text variant="bodyLg" as="p" fontWeight="semibold">Total: </Text>
                 <Text variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', '')}{finalPrice.toFixed(2)}</Text>
                 <Text variant="bodyLg" as="p" fontWeight="semibold" textDecorationLine="line-through">{currency.replace('{{amount}}', '')}{bundlePrice.value}</Text>

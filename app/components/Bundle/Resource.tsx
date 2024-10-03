@@ -3,7 +3,7 @@ import { Form, Text, Button, BlockStack, TextField, FormLayout, Thumbnail, Empty
 import { Confirm } from "../Confirm";
 import { XIcon, ArrowDownIcon, ArrowUpIcon } from '@shopify/polaris-icons';
 export function Resource(props) {
-    const { cartItems, onAddCartItems, onEditCartItems, onRemoveCartItems, onMoveCartItems, onSetRemovableCartItems, cartItemsMedia, setCartItemsMedia, bundlePrice, setPriceManually } = props;
+    const { cartItems, onAddCartItems, onEditCartItems, onRemoveCartItems, onMoveCartItems, onSetRemovableCartItems, cartItemsMedia, setCartItemsMedia } = props;
     const [loading, setLoading] = useState(true);
     const [isProductRemove, setIsProductRemove] = useState(false);
     const [productIndex, setProductIndex] = useState(null);
@@ -213,7 +213,7 @@ export function Resource(props) {
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
                                                                         <TextField
                                                                             prefix="Quantity:"
-                                                                            placeholder="e.g. 1"
+                                                                            placeholder="E.g. 1"
                                                                             min={1}
                                                                             label="Quantity"
                                                                             labelHidden

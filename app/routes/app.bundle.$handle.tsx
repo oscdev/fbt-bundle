@@ -36,6 +36,7 @@ export const loader = async ({ params, request }) => {
 
 export default function Bundle() {
   const { bundleResult, handle, shopData } = useLoaderData();
+  console.log('bundleResult = ', bundleResult)
   const [showToast, setShowToast] = useState(false);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const submitForm = useSubmit();
@@ -83,7 +84,7 @@ export default function Bundle() {
       componentMetaId: useField(bundleResult.components?.id || ''),
       bundleName: useField(bundleResult.title || ''),
       bundleHandle: useField(bundleResult.handle || ''),
-      bundlePrice: useField(bundleResult.price || ''),
+      bundlePrice: useField(bundleResult.variants?.edges[0].node.price || ''),
       description: useField(bundleResult.bodyHtml || ''),
       customer: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.customer : ''),
       minPurchasableItems: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.minPurchasableItem : '')
@@ -211,7 +212,8 @@ submitErrors.length > 0 ? (
               onMoveCartItems={moveCartItems}
               onSetRemovableCartItems={onSetRemovableCartItems}
               cartItemsMedia={cartItemsMedia}
-              setCartItemsMedia={setCartItemsMedia}              
+              setCartItemsMedia={setCartItemsMedia}   
+                       
             />
             <BundleDiscountInfo
               globalPriceRules={globalPriceRules}
@@ -221,6 +223,7 @@ submitErrors.length > 0 ? (
               bundlePrice={bundlePrice}
               cartItems={cartItems}
               cartItemsMedia={cartItemsMedia}
+              currencyCodes={shopData} 
             />
             {/* <Customize /> */}
           </BlockStack>

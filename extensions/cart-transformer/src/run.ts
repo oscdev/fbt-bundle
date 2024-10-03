@@ -37,7 +37,7 @@ export function run(input: RunInput): FunctionRunResult {
             title: cartLine.merchandise.product.title,
             image: null,
             expandedCartItems,
-            price: priceInput
+            //price: priceInput
           }
         });
       }

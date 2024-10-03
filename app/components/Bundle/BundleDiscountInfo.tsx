@@ -1,9 +1,9 @@
 import { useState, useCallback } from "react";
 import { TextField, Card, Form, FormLayout, Select, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker } from "@shopify/polaris";
 export function BundleDiscountInfo(pros) {
-  const { globalPriceRules, bundlePrice, cartItems, cartItemsMedia } = pros;
+  const { globalPriceRules, bundlePrice, cartItems, cartItemsMedia, currencyCodes } = pros;
 
-
+  const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;
 
   const handleChange = useCallback(
     (checked: boolean) => {
@@ -14,7 +14,7 @@ export function BundleDiscountInfo(pros) {
 
   const [isPriceDynamically, setIsPriceDynamically] = useState(false);
 
-  const [endDateEnable, setEndDateEnable] = useState(false);
+  const [endDateEnable, setEndDateEnable] = useState((globalPriceRules[0].endAt.value) ? true : false);
   const [startVisible, setStartVisible] = useState(false);
   const [endVisible, setEndVisible] = useState(false);
 
@@ -52,7 +52,7 @@ export function BundleDiscountInfo(pros) {
                 <BlockStack gap="300" key={"price-"+index}>
                   <TextField
                     label="Bundle Price"                    
-                    prefix="Store currency Symbol"
+                    prefix={currency.replace('{{amount}}', '')}
                     value={getBundlePrice(cartItems, cartItemsMedia)}
                     readOnly={isPriceDynamically}
                     onChange={(e) => { bundlePrice.onChange(e) }}
