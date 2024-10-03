@@ -63,11 +63,12 @@ export default function Bubdle() {
     endAt: formArg.endAt
   });
 
+  const today = new Date();
   const defaultGlobalPriceRules = [{
     value: '',
     type: 'percent',
-    startAt: '',
-    endAt: ''
+    startAt: today.toISOString().split('T')[0],
+    endAt: null
   }]
 
   const {
@@ -165,8 +166,7 @@ function onCancelExit() {
             {/* {removableCartItems.toString()} <br />             */}
             <BundleInfo
               bundleName={bundleName}
-              description={description}
-              bundlePrice={bundlePrice}
+              description={description}              
             />
             <Resource
               cartItems={cartItems}
@@ -183,6 +183,9 @@ function onCancelExit() {
               onAddGlobalPriceRules={addGlobalPriceRules}
               onRemoveGlobalPriceRules={removeGlobalPriceRules}
               onMoveGlobalPriceRules={moveGlobalPriceRules}
+              bundlePrice={bundlePrice}
+              cartItems={cartItems}
+              cartItemsMedia={cartItemsMedia}
             />
             {/* <Customize /> */}
           </BlockStack>
@@ -190,6 +193,7 @@ function onCancelExit() {
         <Layout.Section variant="oneThird">
           <Preview
             bundleName={bundleName}
+            bundlePrice={bundlePrice}
             description={description}
             cartItems={cartItems}
             cartItemsMedia={cartItemsMedia}

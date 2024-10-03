@@ -2,9 +2,9 @@ import React from 'react';
 import { Card, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonBodyText, Button, Thumbnail, Badge } from '@shopify/polaris';
 import { XIcon } from '@shopify/polaris-icons';
 export function Preview(pros) {
-  const { bundleName, description, cartItems, cartItemsMedia, currencyCodes, globalPriceRules } = pros;
-
-  console.log("globalPriceRules",globalPriceRules)
+  const { bundleName, bundlePrice, description, cartItems, cartItemsMedia, currencyCodes, globalPriceRules } = pros;
+  
+  //console.log("globalPriceRules",globalPriceRules)
   const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;
   // Calculate total price by summing the prices of the matched items
   const totalPrice = cartItems.reduce((total, { merchandiseId, defaultQuantity }) => {
@@ -60,10 +60,10 @@ export function Preview(pros) {
                                 alt={title}
                               />
                               {/* Display title and price */}
-                              <Text variant="bodyLg" as="p">{title}</Text>
+                              <Text variant="bodyLg" as="p"><Badge tone="success">{defaultQuantity.value}</Badge> X {title}</Text>
                               
                             </InlineStack>
-                            <Text alignment="end" variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', '')}{variants.edges[0].node.price} { '  ' }<Badge icon={XIcon} tone="success">{defaultQuantity.value}</Badge></Text>
+                            <Text alignment="end" variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', '')}{variants.edges[0].node.price} { '  ' }</Text>
                             {/* </InlineStack> */}
                             {(index !== cartItemsMedia.length - 1) ? <Text variant="bodyMd" alignment='center' as="h3"> ---------------- + ----------------</Text> : ''}
                           </>
@@ -74,7 +74,7 @@ export function Preview(pros) {
                 ),
               )}
 
-              {(!cartItemsMedia.length) ? (
+              {(!cartItems.length) ? (
                 <>
                   <InlineStack align="start" wrap={false} gap="300">
                     <SkeletonThumbnail size="small" />
@@ -100,10 +100,10 @@ export function Preview(pros) {
               <InlineStack wrap={false} gap="300" align="end">
                 <Text variant="bodyLg" as="p" fontWeight="semibold">Total: </Text>
                 <Text variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', '')}{finalPrice.toFixed(2)}</Text>
-                <Text variant="bodyLg" as="p" fontWeight="semibold" textDecorationLine="line-through">{currency.replace('{{amount}}', '')}{(totalPrice).toFixed(2)}</Text>
+                <Text variant="bodyLg" as="p" fontWeight="semibold" textDecorationLine="line-through">{currency.replace('{{amount}}', '')}{bundlePrice.value}</Text>
               </InlineStack>
 
-              <Button disabled>Add to Bundle</Button>
+              <Button disabled={!cartItems.length}>Add to Bundle</Button>
             </BlockStack>
           </Card>
         </BlockStack>
