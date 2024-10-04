@@ -133,7 +133,7 @@ export function BundleDiscountInfo(pros) {
                           endAt.onChange(date.end);
                           setEndVisible(false);
                         }}
-                        selected={(endAt.value) ? new Date(endAt.value) : new Date()}
+                        selected={(endAt.value) ? new Date(endAt.value) : new Date().toISOString().split('T')[0]}
                       />
                     </Popover>
                   </InlineStack>
