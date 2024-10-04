@@ -36,7 +36,7 @@ export const loader = async ({ params, request }) => {
 
 export default function Bundle() {
   const { bundleResult, handle, shopData } = useLoaderData();
-  console.log('bundleResult = ', bundleResult)
+  //console.log('bundleResult = ', bundleResult)
   const [showToast, setShowToast] = useState(false);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const submitForm = useSubmit();
@@ -45,6 +45,7 @@ export default function Bundle() {
   const [cartItemsMedia, setCartItemsMedia] = useState([]);
 
   const [removableCartItems, setRemovableCartItems] = useState([]);
+  
 
   const navigate = useNavigate();
   const emptyExpandedCartItemsFactory = (formArg) => ({
@@ -76,7 +77,7 @@ export default function Bundle() {
     submitErrors,
     dirty,
     dynamicLists,
-    fields: { bundleName, description, bundleHandle, componentMetaId, bundlePrice },
+    fields: { bundleName, description, bundleHandle, componentMetaId, bundlePrice, calculatePrice },
   } = useForm({
     fields: {
       bundleId: useField(bundleResult.id || ''),
@@ -87,6 +88,7 @@ export default function Bundle() {
       bundlePrice: useField(bundleResult.variants?.edges[0].node.price || ''),
       description: useField(bundleResult.bodyHtml || ''),
       customer: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.customer : ''),
+      calculatePrice: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.calculatePrice : false),
       minPurchasableItems: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.minPurchasableItem : '')
     },
     dynamicLists: {
@@ -142,8 +144,8 @@ export default function Bundle() {
   } = dynamicLists;
 
   const onSetRemovableCartItems = (meta, merchandiseId) => {
-    console.log('bundleHandle', bundleHandle.value);
-    console.log('meta', meta);
+    //.log('bundleHandle', bundleHandle.value);
+    //console.log('meta', meta);
     if(bundleHandle.value == meta.value) {
       setRemovableCartItems(removableCartItems => [...removableCartItems, "gid://shopify/Product/" + merchandiseId]);
     }   
@@ -167,6 +169,19 @@ function onConfirmExit() {
 }
 function onCancelExit() {
     setIsConfirmExit(false)
+}
+
+function calculateBundlePrice(items, itemsMedia) { 
+  //console.log('calculateBundlePrice', items, itemsMedia); 
+  let calculatedPrice = 0;   
+  items.forEach((item) => {
+    itemsMedia.forEach((media) => {
+      if (item.merchandiseId.value == media.node.id.split("/").pop()) {
+        calculatedPrice = calculatedPrice + (item.defaultQuantity.value * parseFloat(media.node.variants.edges[0].node.price))
+      }
+    })
+  })
+  bundlePrice.onChange(calculatedPrice);    
 }
 
 const errorBanner =
@@ -213,7 +228,8 @@ submitErrors.length > 0 ? (
               onSetRemovableCartItems={onSetRemovableCartItems}
               cartItemsMedia={cartItemsMedia}
               setCartItemsMedia={setCartItemsMedia}   
-                       
+              calculatePrice={calculatePrice}
+              onCalculatePrice={calculateBundlePrice}      
             />
             <BundleDiscountInfo
               globalPriceRules={globalPriceRules}
@@ -224,6 +240,8 @@ submitErrors.length > 0 ? (
               cartItems={cartItems}
               cartItemsMedia={cartItemsMedia}
               currencyCodes={shopData} 
+              calculatePrice={calculatePrice}
+              onCalculatePrice={calculateBundlePrice}
             />
             {/* <Customize /> */}
           </BlockStack>
