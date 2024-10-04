@@ -6,7 +6,7 @@
   <div id="fbt-block">
     <div class="fbt-bundle_container bundle_main">
       <div class="fbt_container-inner">
-        <div class="fbt_title">Frequently bought together</div>
+        <div class="fbt_title">{{ product.title }}</div>
           {% assign total_price = 0 %}
           {% assign discount_percentage = cart_discount %}
           {% comment %}
@@ -35,7 +35,8 @@
                   <div class="plus-icon"></div>
                   <div class="plus-line-icon"></div>
                 </div>
-                {% assign total_price = total_price | plus: product_item.price %}
+                {% assign total_price = multiplied_price | plus: product_item.price %}
+                {% assign multiplied_price = total_price | times: item.defaultQuantity %}
                 {% comment %}
                   Add each product's price to 'total_price'.
                 {% endcomment %}
@@ -43,17 +44,17 @@
             {% endfor %}
           </div>
 
-          <p class="fbt_description">Buy this combo and save {{ discount_percentage }}%</p>
+          <p class="fbt_description">{{ product.description }} {{ discount_percentage }}%</p>
             {% comment %} Shows the discount percentage for the bundle {% endcomment %}
-              {% assign discount_amount = total_price | times: discount_percentage | divided_by: 100 %}
-              {% assign final_price = total_price | minus: discount_amount %}
+              {% assign discount_amount = multiplied_price | times: discount_percentage | divided_by: 100 %}
+              {% assign final_price = multiplied_price | minus: discount_amount %}
               {% comment %} Calculate discount amount and final price after applying discount {% endcomment %}
 
               <div class="fbt_footer">
                 <p class="fbt_footer__total-label">Total</p>
                   <div class="fbt_footer__total-price">
                     <span class="money discounted">{{ final_price | money }}</span>
-                    <del class="money">{{ total_price | money }}</del>
+                    <del class="money">{{ multiplied_price | money }}</del>
                     {% comment %} Display final price with discount and strike through original price {% endcomment %}
                   </div>
               </div>
@@ -111,7 +112,7 @@
         <div id="fbt-block">
           <div class="fbt-bundle_container bundle_associated_product">
             <div class="fbt_container-inner">
-              <div class="fbt_title">Frequently bought together</div>
+              <div class="fbt_title">{{ bundle_product.title }}</div>
       
               {% assign total_price = 0 %}
               {% assign discount_percentage = bundle_card_discount %}
@@ -131,20 +132,20 @@
                       <div class="plus-icon"></div>
                       <div class="plus-line-icon"></div>
                     </div>
-                    {% assign total_price = total_price | plus: product_item.price %}
+                    {% assign total_price = multiplied_price | plus: product_item.price %}
+                     {% assign multiplied_price = total_price | times: item.defaultQuantity %}
                   {% endif %}
                 {% endfor %}
               </div>
       
-              <p class="fbt_description">Buy this combo and save {{ discount_percentage }}%</p>
-              {% assign discount_amount = total_price | times: discount_percentage | divided_by: 100 %}
-              {% assign final_price = total_price | minus: discount_amount %}
-      
+              <p class="fbt_description">{{ bundle_product.description }}{{ discount_percentage }}%</p>
+              {% assign discount_amount = multiplied_price | times: discount_percentage | divided_by: 100 %}
+              {% assign final_price = multiplied_price | minus: discount_amount %}
               <div class="fbt_footer">
                 <p class="fbt_footer__total-label">Total</p>
                 <div class="fbt_footer__total-price">
                   <span class="money discounted">{{ final_price | money }}</span>
-                  <del class="money">{{ total_price | money }}</del>
+                  <del class="money">{{ multiplied_price | money }}</del>
                 </div>          
               </div>
 
@@ -261,7 +262,7 @@
           "type": "text",
           "id": "fbt_cart_text",
           "label": "Add to Cart Button Text",
-          "default": "Get the Bundle"
+          "default": "Get the bundle"
         }
       ]
     }

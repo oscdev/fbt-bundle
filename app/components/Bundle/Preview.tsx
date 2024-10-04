@@ -1,5 +1,5 @@
 import { Card, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonBodyText, Button, Thumbnail, Badge, Box, SkeletonDisplayText } from '@shopify/polaris';
-import { XIcon } from '@shopify/polaris-icons';
+import divider from '../../assets/images/divider.png';
 export function Preview(pros) {
   const { bundleName, bundlePrice, description, cartItems, cartItemsMedia, currencyCodes, globalPriceRules } = pros;
   const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;
@@ -30,7 +30,9 @@ export function Preview(pros) {
                           </InlineStack>
                           <Text alignment="end" variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', '')}{variants.edges[0].node.price} {'  '}</Text>
                           {/* </InlineStack> */}
-                          {(index !== cartItemsMedia.length - 1) ? <Text variant="bodyMd" alignment='center' as="h3"> ---------------- + ----------------</Text> : ''}
+                          {(index !== cartItemsMedia.length - 1) ? <Text variant="bodyMd" alignment='center' as="h3">
+                            <img width="100%" src={divider} alt="divider" />
+                          </Text> : ''}
                         </>
                       )
                     ),
@@ -71,22 +73,22 @@ export function Preview(pros) {
               <InlineStack wrap={false} gap="300" align="end">
                 <Text variant="bodyLg" as="p" fontWeight="semibold">Total: </Text>
                 {(globalPriceRules.length && globalPriceRules[0].value.value) ? <>
-                  <Text variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', (bundlePrice.value - ((globalPriceRules[0].value.value/100)*bundlePrice.value)).toFixed(2))}</Text>
+                  <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">{currency.replace('{{amount}}', (bundlePrice.value - ((globalPriceRules[0].value.value / 100) * bundlePrice.value)).toFixed(2))}</Text>
                   <Text variant="bodyLg" as="p" fontWeight="semibold" textDecorationLine="line-through">{currency.replace('{{amount}}', bundlePrice.value)}</Text>
                 </> : <>
-                <Text variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', bundlePrice.value)}</Text>
+                  <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">{currency.replace('{{amount}}', bundlePrice.value)}</Text>
                 </>}
-                
+
               </InlineStack>
-            </Box> : <Box padding="100">              
+            </Box> : <Box padding="100">
               <InlineStack wrap={false} gap="300" align="end">
                 <Text variant="bodyLg" as="p" fontWeight="semibold">Total: </Text>
                 <SkeletonBodyText lines={1} />
                 <SkeletonBodyText lines={1} />
               </InlineStack>
             </Box>}
-            
-            <Button disabled={!cartItems.length}>Add to Bundle</Button>
+
+            <Button variant="primary" disabled={!cartItems.length}>Add to Bundle</Button>
           </BlockStack>
         </Card>
       </BlockStack>

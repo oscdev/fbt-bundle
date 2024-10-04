@@ -197,7 +197,7 @@ export default function Bundle() {
 
   return (
     <Page
-      title="Create bundle for Frequently Bought Together"
+      title="Create bundle"
       primaryAction={{
         content: "Save",
         disabled: !dirty,
