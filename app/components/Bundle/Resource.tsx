@@ -237,9 +237,8 @@ export function Resource(props) {
                     ) : (
                         <BlockStack gap="200">
                             <Text variant="headingMd" as="h2">
-                                Products
+                                Bundle Products
                             </Text>
-                            <Text variant="bodyLg" as="p">Product to sell in FBT bundle </Text>
                             <EmptyState
                                 heading="No FBT Bundle products added"
                                 image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"

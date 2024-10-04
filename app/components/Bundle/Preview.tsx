@@ -1,14 +1,14 @@
-import { Card, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonBodyText, Button, Thumbnail, Badge, Box, SkeletonDisplayText } from '@shopify/polaris';
+import { Card, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonBodyText, Button, Thumbnail, Badge, Box, Divider } from '@shopify/polaris';
 import divider from '../../assets/images/divider.png';
 export function Preview(pros) {
   const { bundleName, bundlePrice, description, cartItems, cartItemsMedia, currencyCodes, globalPriceRules } = pros;
   const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;
-  return (
-    <Card>
-      <BlockStack gap="300">
-        <Text variant="headingLg" as="h5">Preview</Text>
-        <Card>
+  return (    
+      <BlockStack gap="300">        
+        <Card>          
           <BlockStack gap="100">
+          <Text variant="headingMd" as="h6" alignment="center">Preview</Text>
+          <Divider />
             <Box padding="200"><Text alignment="center" variant="headingMd" as="h6">{(bundleName.value) ? bundleName.value : "Bundle of 3 Combos"}</Text></Box>
 
             {cartItems.map(
@@ -61,7 +61,7 @@ export function Preview(pros) {
 
             <Box padding="100">
               <Badge tone="info">
-                {(description.value) ? description.value : "Buy this combo and save 10% OFF"}
+                {(description.value) ? description.value : "Buy this combo and get 10% OFF"}
               </Badge>
             </Box>
 
@@ -88,6 +88,5 @@ export function Preview(pros) {
           </BlockStack>
         </Card>
       </BlockStack>
-    </Card>
   );
 }
