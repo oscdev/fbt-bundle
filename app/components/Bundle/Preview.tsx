@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonBodyText, Button, Thumbnail, Badge, Box, SkeletonDisplayText } from '@shopify/polaris';
 import { XIcon } from '@shopify/polaris-icons';
 export function Preview(pros) {
@@ -86,9 +85,6 @@ export function Preview(pros) {
                 <SkeletonBodyText lines={1} />
               </InlineStack>
             </Box>}
-
-            
-
             
             <Button disabled={!cartItems.length}>Add to Bundle</Button>
           </BlockStack>

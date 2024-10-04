@@ -83,7 +83,7 @@ export default function Bundle() {
       description: useField(bundleResult.bodyHtml || ''),
       customer: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.customer : ''),
       minPurchasableItems: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.minPurchasableItem : ''),
-      calculatePrice: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.config.calculatePrice : false)
+      calculatePrice: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.config?.calculatePrice : false)
     },
     dynamicLists: {
       expandedCartItems: useDynamicList(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.expandedCartItems : [], emptyExpandedCartItemsFactory),
