@@ -2,12 +2,7 @@ import { useState, useCallback } from "react";
 import { TextField, Card, Form, FormLayout, Select, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker } from "@shopify/polaris";
 export function BundleDiscountInfo(pros) {
   const { globalPriceRules, onAddGlobalPriceRules, bundlePrice, cartItems, cartItemsMedia, currencyCodes, calculatePrice, onCalculatePrice } = pros;
-
   const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;
-
-
-  //const [isPriceDynamically, setIsPriceDynamically] = useState(false);
-
   const [endDateEnable, setEndDateEnable] = useState((globalPriceRules[0]?.endAt.value) ? true : false);
   const [startVisible, setStartVisible] = useState(false);
   const [endVisible, setEndVisible] = useState(false);
@@ -17,7 +12,6 @@ export function BundleDiscountInfo(pros) {
     const monthNames = ["January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     ];
-
     const d = new Date(date);
     return monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
   }
@@ -32,7 +26,6 @@ export function BundleDiscountInfo(pros) {
               <TextField
                 label="Bundle Price"
                 prefix={currency.replace('{{amount}}', '')}
-                //value={getBundlePrice(cartItems, cartItemsMedia)}
                 value={bundlePrice.value}
                 readOnly={calculatePrice.value}
                 onChange={(e) => { bundlePrice.onChange(e) }}
@@ -47,7 +40,6 @@ export function BundleDiscountInfo(pros) {
                   }}
                 />}
               />
-
               <Checkbox
                 label={"Apply Discounts"}
                 checked={globalPriceRules.length}
@@ -63,23 +55,19 @@ export function BundleDiscountInfo(pros) {
                   }                  
                 }}
               />
-
             </BlockStack>
             {globalPriceRules.map(({ type, value, startAt, endAt }, index) => (
               <>
                 <BlockStack gap="300" key={"price-" + index}>
-
                   <InlineStack align="start" wrap={false} gap="300">
-
                     <TextField
-                      placeholder="Discount in percent: e.g. 10"
+                      placeholder="E.g. 10"
                       suffix="%"
                       label="Discount Value"
                       value={value.value}
                       onChange={(e) => value.onChange(e)}
                       autoComplete="off"
                     />
-
                     <Popover
                       active={startVisible}
                       activator={<TextField
@@ -95,7 +83,7 @@ export function BundleDiscountInfo(pros) {
                         month={new Date(startAt.value).getMonth()}
                         year={new Date(startAt.value).getFullYear()}
                         onChange={(date) => {
-                          startAt.onChange(date.start);
+                          startAt.onChange(date.start.toISOString().split('T')[0]);
                           setStartVisible(false);
                         }}
                         selected={new Date(startAt.value)}
@@ -130,15 +118,14 @@ export function BundleDiscountInfo(pros) {
                         month={(endAt.value) ? new Date(endAt.value).getMonth() : new Date().getMonth()}
                         year={(endAt.value) ? new Date(endAt.value).getFullYear() : new Date().getFullYear()}
                         onChange={(date) => {
-                          endAt.onChange(date.end);
+                          endAt.onChange(date.end.toISOString().split('T')[0]);
                           setEndVisible(false);
                         }}
-                        selected={(endAt.value) ? new Date(endAt.value) : new Date().toISOString().split('T')[0]}
+                        selected={(endAt.value) ? new Date(endAt.value) : new Date()}
                       />
                     </Popover>
                   </InlineStack>
                 </BlockStack>
-
               </>
             )
             )}

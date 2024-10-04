@@ -17,8 +17,7 @@ export function Preview(pros) {
                   {cartItemsMedia.map(
                     ({ node: { id, title, featuredImage, variants } }) => (
                       (merchandiseId.value === id.split("/").pop()) && (
-                        <>
-                          {/* <InlineStack align="start" wrap={false} gap="300"> */}
+                        <>                          
                           <InlineStack align="start" blockAlign='center' wrap={false} gap="300">
                             <Thumbnail
                               source={featuredImage.url}
@@ -26,10 +25,8 @@ export function Preview(pros) {
                             />
                             {/* Display title and price */}
                             <Text variant="bodyLg" as="p"><Badge tone="success">{defaultQuantity.value}</Badge> X {title}</Text>
-
                           </InlineStack>
-                          <Text alignment="end" variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', '')}{variants.edges[0].node.price} {'  '}</Text>
-                          {/* </InlineStack> */}
+                          <Text alignment="end" variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', '')}{variants.edges[0].node.price} {'  '}</Text>                          
                           {(index !== cartItemsMedia.length - 1) ? <Text variant="bodyMd" alignment='center' as="h3">
                             <img width="100%" src={divider} alt="divider" />
                           </Text> : ''}

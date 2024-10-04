@@ -12,17 +12,11 @@ export const action = async ({ params, request }) => {
   const bundleData = JSON.parse(formData.get("bundleData"));
   const cartItemsMedia = JSON.parse(formData.get("cartItemsMedia"));
   const removableCartItems = JSON.parse(formData.get("removableCartItems"));
-
   const savedResult = await bundle.setProduct(request, bundleData, cartItemsMedia);
-
-  const setBundleAssociatedResult = await bundle.setBundleAssociated(request, bundleData, savedResult);
-
-
+  await bundle.setBundleAssociated(request, bundleData, savedResult);
   if (removableCartItems.length) {
-    const unsetBundleAssociatedResult = await bundle.unsetBundleAssociated(request, removableCartItems);
-  }
-  console.log('saveResult = ', savedResult)
-  //return { success: true, }
+    await bundle.unsetBundleAssociated(request, removableCartItems);
+  }  
   return redirect("/app/bundle/list");
 };
 
@@ -33,20 +27,15 @@ export const loader = async ({ params, request }) => {
   return json({ bundleResult, handle, shopData });
 };
 
-
 export default function Bundle() {
   const { bundleResult, handle, shopData } = useLoaderData();
-  //console.log('bundleResult = ', bundleResult)
-  const [showToast, setShowToast] = useState(false);
-  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+  const [showToast, setShowToast] = useState(false);  
   const submitForm = useSubmit();
+  const [xhr, setXhr] = useState(false);
   const [isConfirmExit, setIsConfirmExit] = useState(false);
   const [confirmMsg, setConfirmMsg] = useState(false);
   const [cartItemsMedia, setCartItemsMedia] = useState([]);
-
   const [removableCartItems, setRemovableCartItems] = useState([]);
-
-
   const navigate = useNavigate();
   const emptyExpandedCartItemsFactory = (formArg) => ({
     merchandiseId: formArg.merchandiseId,
@@ -61,8 +50,6 @@ export default function Bundle() {
     startAt: formArg.startAt,
     endAt: formArg.endAt
   });
-
-
 
   const {
     submit,
@@ -83,7 +70,7 @@ export default function Bundle() {
       description: useField(bundleResult.bodyHtml || ''),
       customer: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.customer : ''),
       minPurchasableItems: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.minPurchasableItem : ''),
-      calculatePrice: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.config?.calculatePrice : false)
+      calculatePrice: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.config?.calculatePrice : true)
     },
     dynamicLists: {
       expandedCartItems: useDynamicList(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.expandedCartItems : [], emptyExpandedCartItemsFactory),
@@ -108,17 +95,15 @@ export default function Bundle() {
       }
 
       if (remoteErrors.length) {
-        setIsFormSubmitting(false);
+        setXhr(false);
         return { status: "fail", errors: remoteErrors };
       } else {
+        setXhr(true);
         submitForm({
           bundleData: JSON.stringify(data),
           cartItemsMedia: JSON.stringify(cartItemsMedia),
           removableCartItems: JSON.stringify(removableCartItems)
-        }, { method: "post" });
-        setTimeout(async () => {
-          setShowToast(true);
-        }, 2000)
+        }, { method: "post" });        
         return { status: "success" };
       }
     }
@@ -140,9 +125,7 @@ export default function Bundle() {
     }
   } = dynamicLists;
 
-  const onSetRemovableCartItems = (meta, merchandiseId) => {
-    //.log('bundleHandle', bundleHandle.value);
-    //console.log('meta', meta);
+  const onSetRemovableCartItems = (meta, merchandiseId) => {   
     if (bundleHandle.value == meta.value) {
       setRemovableCartItems(removableCartItems => [...removableCartItems, "gid://shopify/Product/" + merchandiseId]);
     }
@@ -168,8 +151,7 @@ export default function Bundle() {
     setIsConfirmExit(false)
   }
 
-  function calculateBundlePrice(items, itemsMedia) {
-    //console.log('calculateBundlePrice', items, itemsMedia); 
+  function calculateBundlePrice(items, itemsMedia) {   
     let calculatedPrice = 0;
     items.forEach((item) => {
       itemsMedia.forEach((media) => {
@@ -201,6 +183,7 @@ export default function Bundle() {
       primaryAction={{
         content: "Save",
         disabled: !dirty,
+        loading: xhr,
         onAction: () => {
           submit()
         }
@@ -210,8 +193,7 @@ export default function Bundle() {
       <Layout>
         {errorBanner}
         <Layout.Section>
-          <BlockStack gap="300">
-            {/* {removableCartItems.toString()} <br />             */}
+          <BlockStack gap="300">            
             <BundleInfo
               bundleName={bundleName}
               description={description}

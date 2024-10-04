@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { Form, Text, Button, BlockStack, TextField, FormLayout, Thumbnail, EmptyState, Spinner, Divider, Card, Tooltip, InlineGrid, Badge, InlineStack } from "@shopify/polaris";
+import { Form, Text, Button, BlockStack, TextField, FormLayout, Thumbnail, EmptyState, Spinner, Card, Tooltip, InlineGrid, InlineStack } from "@shopify/polaris";
 import { Confirm } from "../Confirm";
 import { XIcon, ArrowDownIcon, ArrowUpIcon } from '@shopify/polaris-icons';
 export function Resource(props) {
     const {
         cartItems,
         onAddCartItems,
-        onEditCartItems,
         onRemoveCartItems,
         onMoveCartItems,
         onSetRemovableCartItems,
@@ -20,7 +19,6 @@ export function Resource(props) {
     const [productIndex, setProductIndex] = useState(null);
     const [removableAssociatedMeta, setRemovableAssociatedMeta] = useState(null);
     const [removableMerchandiseId, setRemovableMerchandiseId] = useState(null);
-
     const [confirmMsg, setIsConfirmMsg] = useState('');
 
     async function getProducts() {
@@ -68,22 +66,17 @@ export function Resource(props) {
         const { data } = await res.json();
         if (productsId) {
             const sequence = data.products.edges;
-
             const productIdsOrder = productsId.split(",");
-
             // Create a map of input nodes by their IDs
             const inputMap = new Map(
                 sequence.map((item) => [item.node.id.split("/").pop(), item]),
             );
-
             // Rearrange the input based on the order in productIdsOrder
             const output = productIdsOrder.map((id) => inputMap.get(id));
             setCartItemsMedia(output);
         } else {
             setCartItemsMedia(data.products.edges);
         }
-
-
         setLoading(false);
     }
 
@@ -102,7 +95,6 @@ export function Resource(props) {
             filterObj.push("NOT " + gqId);
         }
         filterObj.push("NOT metafields.oscp.fbtSearchable:searchable");
-
         const pickedResource = await window.shopify.resourcePicker({
             type: 'product',
             action: "add",
@@ -124,8 +116,6 @@ export function Resource(props) {
         });
     }
 
-
-
     // Trigger the confirmation modal before removing the item
     function removeResource(index, metafield, merchandiseId) {
         setIsConfirmMsg(`Are you sure you want to remove this product?`);
@@ -138,14 +128,11 @@ export function Resource(props) {
     // Remove the item from the cart if confirmed
     function onConfirmProductRemove() {
         onRemoveCartItems(productIndex);
-
         if (removableAssociatedMeta !== null) {
             onSetRemovableCartItems(removableAssociatedMeta, removableMerchandiseId);
         }
-
         setRemovableAssociatedMeta(null);
         setRemovableMerchandiseId(null);
-
         setIsProductRemove(false); // Close the confirmation modal
         setProductIndex(null); // Reset the index
     }
@@ -153,13 +140,10 @@ export function Resource(props) {
     // Cancel the removal
     function onCancelRemove() {
         setIsProductRemove(false);
-
         setRemovableAssociatedMeta(null);
-        setRemovableMerchandiseId(null)
-
+        setRemovableMerchandiseId(null);
         setProductIndex(null); // Reset the index
     }
-
 
     return (
         <Card>
@@ -169,7 +153,7 @@ export function Resource(props) {
                         <BlockStack gap="200">
                             <InlineGrid columns="1fr auto">
                                 <Text variant="headingMd" as="h2">
-                                    Products
+                                    Bundle Products
                                 </Text>
                                 <Button
                                     variant="primary"
@@ -178,12 +162,10 @@ export function Resource(props) {
                                         pickResource();
                                     }}
                                 >
-                                    Browse
+                                    Add More Products
                                 </Button>
                             </InlineGrid>
-
                             <Text variant="bodyLg" as="p">Product to sell in FBT bundle </Text>
-
                             {cartItems.length > 0 && (
                                 <BlockStack gap="300">
                                     {loading ? (
@@ -221,7 +203,6 @@ export function Resource(props) {
                                                                         alt={title}
                                                                     />
                                                                     <Text variant="bodyLg" as="p">{title}</Text>
-
                                                                 </InlineStack>
                                                                 <InlineStack gap="200" key={index} blockAlign="center">
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
@@ -235,18 +216,10 @@ export function Resource(props) {
                                                                             value={defaultQuantity.value}
                                                                             onChange={(e) => {
                                                                                 defaultQuantity.onChange(e);
-                                                                                // defaultQuantity.onChange(e);
-                                                                                // setTimeout(() => {
-                                                                                //     if (calculatePrice.value) onCalculatePrice(cartItems, cartItemsMedia);
-                                                                                // }, 1000);
-
                                                                             }}
                                                                             autoComplete="off" /></Text>
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
-                                                                        <Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => {
-                                                                            // if (metafield !== null && metafield.value !== null) {
-                                                                            //     onSetRemovableCartItems(metafield, merchandiseId.value);
-                                                                            // }
+                                                                        <Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => {                                                                            
                                                                             removeResource(index, metafield, merchandiseId.value)
                                                                         }}></Button>
                                                                     </Text>
@@ -260,7 +233,6 @@ export function Resource(props) {
                                     )}
                                 </BlockStack>
                             )}
-
                         </BlockStack>
                     ) : (
                         <BlockStack gap="200">
@@ -279,7 +251,7 @@ export function Resource(props) {
                                         pickResource();
                                     }}
                                 >
-                                    Browse
+                                    Add Products
                                 </Button>
                             </EmptyState>
                         </BlockStack>
