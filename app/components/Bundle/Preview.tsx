@@ -61,7 +61,7 @@ export function Preview(pros) {
 
             <Box padding="100">
               <Badge tone="info">
-                {(description.value) ? description.value : "Buy this combo and save 10% OFF"}
+                {(description.value) ? description.value : "Buy this combo and get 10% OFF"}
               </Badge>
             </Box>
 
