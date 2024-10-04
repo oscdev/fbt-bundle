@@ -48,12 +48,12 @@ export function Preview(pros) {
                     <SkeletonThumbnail size="small" />
                     <SkeletonBodyText lines={2} />
                   </InlineStack>
-                  <Text variant="bodyMd" alignment='center' as="h3"> ------------ + ------------</Text>
+                  <Text variant="bodyMd" alignment='center' as="h3"><img width="100%" src={divider} alt="divider" /></Text>
                   <InlineStack align="start" wrap={false} gap="300">
                     <SkeletonThumbnail size="small" />
                     <SkeletonBodyText lines={2} />
                   </InlineStack>
-                  <Text variant="bodyMd" alignment='center' as="h3">------------ + ------------</Text>
+                  <Text variant="bodyMd" alignment='center' as="h3"><img width="100%" src={divider} alt="divider" /></Text>
                   <InlineStack align="start" wrap={false} gap="300">
                     <SkeletonThumbnail size="small" />
                     <SkeletonBodyText lines={2} />
@@ -71,14 +71,13 @@ export function Preview(pros) {
             {(cartItemsMedia.length && bundlePrice.value) ? <Box padding="100">
               {/* Display the total price */}
               <InlineStack wrap={false} gap="300" align="end">
-                <Text variant="bodyLg" as="p" fontWeight="semibold">Total: </Text>
+                <Text variant="bodyLg" as="p" fontWeight="semibold">Total: </Text>              
                 {(globalPriceRules.length && globalPriceRules[0].value.value) ? <>
                   <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">{currency.replace('{{amount}}', (bundlePrice.value - ((globalPriceRules[0].value.value / 100) * bundlePrice.value)).toFixed(2))}</Text>
                   <Text variant="bodyLg" as="p" fontWeight="semibold" textDecorationLine="line-through">{currency.replace('{{amount}}', bundlePrice.value)}</Text>
                 </> : <>
                   <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">{currency.replace('{{amount}}', bundlePrice.value)}</Text>
                 </>}
-
               </InlineStack>
             </Box> : <Box padding="100">
               <InlineStack wrap={false} gap="300" align="end">
