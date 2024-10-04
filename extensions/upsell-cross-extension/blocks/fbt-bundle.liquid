@@ -2,112 +2,190 @@
 {% assign cart_items = product.metafields.oscp.fbtBundle.value.expand.expandedCartItems %}
 {% assign cart_discount = product.metafields.oscp.fbtBundle.value.expand.globalPriceRules[0].value %}
 
-{% comment %} 
-   First product in the bundle is assigned to 'item'. 
-   'cart_items' holds all bundled products. 
-   'cart_discount' holds the discount percentage. 
-{% endcomment %}
-{% if product.metafields.oscp.fbtBundle.value != blank %} 
+{% if product.metafields.oscp.fbtBundle %}
   <div id="fbt-block">
-    <div class="fbt-bundle_container">
+    <div class="fbt-bundle_container bundle_main">
       <div class="fbt_container-inner">
         <div class="fbt_title">Frequently bought together</div>
+          {% assign total_price = 0 %}
+          {% assign discount_percentage = cart_discount %}
+          {% comment %}
+            'total_price' will calculate total of all product prices in the bundle.
+            'discount_percentage' holds the discount to apply.
+          {% endcomment %}
 
-        {% assign total_price = 0 %}
-        {% assign discount_percentage = cart_discount %}
-        {% comment %} 
-          'total_price' will calculate total of all product prices in the bundle.
-          'discount_percentage' holds the discount to apply. 
-        {% endcomment %}
-
-        <div class="fbt_items">
-          {% for item in cart_items %}
-            {% assign product_handle = item.handle %}
-            {% assign product_item = all_products[product_handle] %}
-            {% comment %}
-              For each item in the bundle, the product handle is used to get product details from 'all_products'.
-            {% endcomment %}
-            
-            {% if product_item %}
-              {% comment %} If product is found, display product image, name, and price. {% endcomment %}
-
-              <div class="fbt_item">
-                <img src="{{ product_item.featured_image | img_url: 'large' }}" alt="{{ product_item.title }}" height="50" width="50" loading="eager">
-                <div class="fbt_item-info">
-                  <a class="fbt_product-url" href="{{ product_item.url }}" target="_blank">{{ product_item.title }}</a>
-                  <div class="fbt_item-price">
-                    <span class="money">{{ product_item.price | money }}</span>
-                  </div>
-                </div>
-                <div class="plus-icon"></div>
-                <div class="plus-line-icon"></div>
-              </div>
-              {% assign total_price = total_price | plus: product_item.price %}
-              {% comment %} 
-                Add each product's price to 'total_price'. 
+          <div class="fbt_items">
+            {% for item in cart_items %}
+              {% assign product_handle = item.handle %}
+              {% assign product_item = all_products[product_handle] %}
+              {% comment %}
+                For each item in the bundle, the product handle is used to get product details from 'all_products'.
               {% endcomment %}
-            {% endif %}
-          {% endfor %}
-        </div>
 
-        <p class="fbt_description">Buy this combo and save {{ discount_percentage }}%</p>
-        {% comment %} Shows the discount percentage for the bundle {% endcomment %}
-
-        {% assign discount_amount = total_price | times: discount_percentage | divided_by: 100 %}
-        {% assign final_price = total_price | minus: discount_amount %}
-        {% comment %} Calculate discount amount and final price after applying discount {% endcomment %}
-
-        <div class="fbt_footer">
-          <p class="fbt_footer__total-label">Total</p>
-          <div class="fbt_footer__total-price">
-            <span class="money discounted">{{ final_price | money }}</span>
-            <del class="money">{{ total_price | money }}</del>
-            {% comment %} Display final price with discount and strike through original price {% endcomment %}
-          </div>          
-        </div>
-
-        {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
-          {% assign count = 0 %}
-          {% for item in cart_items %}
-            {% assign product_handle = item.handle %}
-            {% assign product_item = all_products[product_handle] %}
-            {% assign count = count | plus: 1 %}
-            {% comment %} 
-              Loop through each product in the bundle and assign a count to track them. 
-            {% endcomment %}
-
-            {% if product_item %}
-              <input class="itemsProductt" type="hidden" name="properties[Product {{ count }}]" value="{{ product_item.title }}">
-              {% comment %} Add each product's title as a hidden input for form submission. {% endcomment %}
-            {% endif %}
-          {% endfor %}
-
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-          {% comment %} Hidden input for the main product's variant ID {% endcomment %}
-
-          <div class="product-form__buttons">
-            <button type="submit" name="add" class="fbt_addcart">
-              <span>
-                {%- if product.selected_or_first_available_variant.available -%}
-                  {{ block.settings.fbt_cart_text }}
-                  {% comment %} Button text when the product is available {% endcomment %}
-                {%- else -%}
-                  Sold Out
-                  {% comment %} Button text when the product is sold out {% endcomment %}
-                {%- endif -%}
-              </span>
-            </button>
-            {%- if block.settings.show_dynamic_checkout -%}
-              {{ form | payment_button }}
-              {% comment %} Dynamic checkout button if enabled {% endcomment %}
-            {%- endif -%}
+              {% if product_item %}
+                {% comment %} If product is found, display product image, name, and price. {% endcomment %}
+                  <div class="fbt_item">
+                    <img src="{{ product_item.featured_image | img_url: 'large' }}" alt="{{ product_item.title }}" height="50" width="50" loading="eager">
+                      <div class="fbt_item-info">
+                        <a class="fbt_product-url" href="{{ product_item.url }}" target="_blank">{{ product_item.title }}</a>
+                        <div class="fbt_item-price">
+                        <span class="money">{{ product_item.price | money }}</span>
+                      </div>
+                    </div>
+                  <div class="plus-icon"></div>
+                  <div class="plus-line-icon"></div>
+                </div>
+                {% assign total_price = total_price | plus: product_item.price %}
+                {% comment %}
+                  Add each product's price to 'total_price'.
+                {% endcomment %}
+              {% endif %}
+            {% endfor %}
           </div>
-        {%- endform -%}
-      </div>
-    </div>
-  </div>
 
-  <style>
+          <p class="fbt_description">Buy this combo and save {{ discount_percentage }}%</p>
+            {% comment %} Shows the discount percentage for the bundle {% endcomment %}
+              {% assign discount_amount = total_price | times: discount_percentage | divided_by: 100 %}
+              {% assign final_price = total_price | minus: discount_amount %}
+              {% comment %} Calculate discount amount and final price after applying discount {% endcomment %}
+
+              <div class="fbt_footer">
+                <p class="fbt_footer__total-label">Total</p>
+                  <div class="fbt_footer__total-price">
+                    <span class="money discounted">{{ final_price | money }}</span>
+                    <del class="money">{{ total_price | money }}</del>
+                    {% comment %} Display final price with discount and strike through original price {% endcomment %}
+                  </div>
+              </div>
+
+              {%- form 'product', product, id: product_form_id, class: 'form bundle_fbt', novalidate: 'novalidate', data-type:'add-to-cart-form' -%}
+                {% assign count = 0 %}
+                {% for item in cart_items %}
+                  {% assign product_handle = item.handle %}
+                  {% assign product_item = all_products[product_handle] %}
+                  {% assign count = count | plus: 1 %}
+                  {% comment %}
+                    Loop through each product in the bundle and assign a count to track them.
+                  {% endcomment %}
+
+                  {% if product_item %}
+                    <input class="itemsProductt" type="hidden" name="id" value="{{ product_item.variants.first.id }}">
+                    {% comment %} Add each product's title as a hidden input for form submission. {% endcomment %}
+                  {% endif %}
+                {% endfor %}
+
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                {% comment %} Hidden input for the main product's variant ID {% endcomment %}
+
+                <div class="product-form__buttons">
+                  <button type="submit" name="add" class="fbt_addcart">
+                    <span>
+                      {%- if product.selected_or_first_available_variant.available -%}
+                        {{ block.settings.fbt_cart_text }}
+                        {% comment %} Button text when the product is available {% endcomment %}
+                      {%- else -%}
+                        Sold Out
+                        {% comment %} Button text when the product is sold out {% endcomment %}
+                      {%- endif -%}
+                    </span>
+                  </button>
+                  {%- if block.settings.show_dynamic_checkout -%}
+                    {{ form | payment_button }}
+                    {% comment %} Dynamic checkout button if enabled {% endcomment %}
+                  {%- endif -%}
+                </div>
+              {%- endform -%}
+            </div>
+        </div>
+    </div>
+{% elsif product.metafields.oscp.fbtBundleAssociated %}
+    {% assign bundle_handle = product.metafields.oscp.fbtBundleAssociated.value %}
+    {% assign bundle_product = all_products[bundle_handle] %}
+    {% assign bundle_product_variant_id = bundle_product.variants.first.id %}
+
+    {% if bundle_product %}
+      {% assign bundle_metafield = bundle_product.metafields.oscp.fbtBundle.value %}
+      {% assign bundle_card_discount = bundle_metafield.expand.globalPriceRules[0].value %}
+      {% if bundle_metafield %}
+        {% assign product_handles = bundle_metafield.expand.expandedCartItems %}
+        <div id="fbt-block">
+          <div class="fbt-bundle_container bundle_associated_product">
+            <div class="fbt_container-inner">
+              <div class="fbt_title">Frequently bought together</div>
+      
+              {% assign total_price = 0 %}
+              {% assign discount_percentage = bundle_card_discount %}
+      
+              <div class="fbt_items">
+                {% for item in product_handles %}
+                  {% assign product_item = all_products[item.handle] %}
+                  {% if product_item %}
+                    <div class="fbt_item">
+                      <img src="{{ product_item.featured_image | img_url: 'large' }}" alt="{{ product_item.title }}" height="50" width="50" loading="eager">
+                      <div class="fbt_item-info">
+                        <a class="fbt_product-url" href="{{ product_item.url }}" target="_blank">{{ product_item.title }}</a>
+                        <div class="fbt_item-price">
+                          <span class="money">{{ product_item.price | money }}</span>
+                        </div>
+                      </div>
+                      <div class="plus-icon"></div>
+                      <div class="plus-line-icon"></div>
+                    </div>
+                    {% assign total_price = total_price | plus: product_item.price %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+      
+              <p class="fbt_description">Buy this combo and save {{ discount_percentage }}%</p>
+              {% assign discount_amount = total_price | times: discount_percentage | divided_by: 100 %}
+              {% assign final_price = total_price | minus: discount_amount %}
+      
+              <div class="fbt_footer">
+                <p class="fbt_footer__total-label">Total</p>
+                <div class="fbt_footer__total-price">
+                  <span class="money discounted">{{ final_price | money }}</span>
+                  <del class="money">{{ total_price | money }}</del>
+                </div>          
+              </div>
+
+              {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type:'add-to-cart-form' -%}
+                {% assign count = 0 %}
+                {% for item in product_handles %}
+                  {% assign product_handle = item.handle %}
+                  {% assign product_item = all_products[product_handle] %}
+                  {% assign product_variant_id = product_item.variants.first.id %}
+                  {% assign count = count | plus: 1 %}
+              
+                  {% if product_item %}
+                    <input class="itemsProductt" type="hidden" name="id" value="{{ product_variant_id }}">
+                  {% endif %}
+                {% endfor %}
+              
+                <input type="hidden" name="id" value="{{ bundle_product_variant_id }}">
+              
+                <div class="product-form__buttons">
+                  <button type="submit" name="add" class="11 fbt_addcart">
+                    <span>
+                      {%- if product.selected_or_first_available_variant.available -%}
+                  {{ block.settings.fbt_cart_text }}
+                      {%- else -%}
+                  Sold Out
+                      {%- endif -%}
+                    </span>
+                  </button>
+                  {%- if block.settings.show_dynamic_checkout -%}
+                    {{ form | payment_button }}
+                  {%- endif -%}
+                </div>
+              {%- endform -%}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+{% endif %}
+
+<style>
     .fbt_container-inner {
       border: 2px solid {{ block.settings.border_color }} !important;
       background: {{ block.settings.container_background_color }} !important;
@@ -126,66 +204,65 @@
     .money.discounted {
       color: {{ block.settings.discount_text_color }} !important;
     }
-  </style>
-{% endif %}
+</style>
 
 {% schema %}
-  {
-    "name": "FBT Bundle",
-    "target": "section",
-    "templates": ["product"],
-    "stylesheet": "fbt-bundle.css",
-    "available_if": "{{ app.metafields.app_settings.app_enabled }}",
-    "settings": [
-      {
+    {
+      "name": "FBT Bundle",
+      "target": "section",
+      "templates": ["product"],
+      "stylesheet": "fbt-bundle.css",
+      "available_if": "{{ app.metafields.app_settings.app_enabled }}",
+      "settings": [
+        {
+            "type": "color",
+            "id": "border_color",
+            "label": "Container Border Color",
+            "default": "#000000"
+        },
+        {
+            "type": "color",
+            "id": "container_background_color",
+            "label": "Container Background Color",
+            "default": "#f0f0f0"
+        },
+        {
+            "type": "color",
+            "id": "description_background_color",
+            "label": "Description Background Color",
+            "default": "#EDEDED"
+        },
+        {
+            "type": "color",
+            "id": "description_text_color",
+            "label": "Description Text Color",
+            "default": "#000000"
+        },
+        {
           "type": "color",
-          "id": "border_color",
-          "label": "Container Border Color",
+          "id": "button_background_color",
+          "label": "Add to Cart Button Background Color",
           "default": "#000000"
-      },
-      {
+        },
+        {
           "type": "color",
-          "id": "container_background_color",
-          "label": "Container Background Color",
-          "default": "#f0f0f0"
-      },
-      {
+          "id": "discount_text_color",
+          "label": "Discounted Price Text Color",
+          "default": "#9D2A2A"
+        },
+        {
           "type": "color",
-          "id": "description_background_color",
-          "label": "Description Background Color",
-          "default": "#EDEDED"
-      },
-      {
-          "type": "color",
-          "id": "description_text_color",
-          "label": "Description Text Color",
-          "default": "#000000"
-      },
-      {
-        "type": "color",
-        "id": "button_background_color",
-        "label": "Add to Cart Button Background Color",
-        "default": "#000000"
-      },
-      {
-        "type": "color",
-        "id": "discount_text_color",
-        "label": "Discounted Price Text Color",
-        "default": "#9D2A2A"
-      },
-      {
-        "type": "color",
-        "id": "button_text_color",
-        "label": "Add to Cart Button Text Color",
-        "default": "#ffffff"
-      }
-      ,
-      {
-        "type": "text",
-        "id": "fbt_cart_text",
-        "label": "Add to Cart Button Text",
-        "default": "Get the Bundle"
-      }
-    ]
-  }
-{% endschema %}
+          "id": "button_text_color",
+          "label": "Add to Cart Button Text Color",
+          "default": "#ffffff"
+        }
+        ,
+        {
+          "type": "text",
+          "id": "fbt_cart_text",
+          "label": "Add to Cart Button Text",
+          "default": "Get the Bundle"
+        }
+      ]
+    }
+  {% endschema %}
