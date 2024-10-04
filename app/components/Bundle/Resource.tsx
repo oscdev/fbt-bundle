@@ -91,8 +91,7 @@ export function Resource(props) {
         getProducts();
     }, [cartItems.length]);
 
-    useEffect(() => {
-        console.log('I changed', cartItems);
+    useEffect(() => {        
         if (calculatePrice.value) onCalculatePrice(cartItems, cartItemsMedia);
     }, [cartItems]);
 
@@ -160,7 +159,6 @@ export function Resource(props) {
 
         setProductIndex(null); // Reset the index
     }
-    //console.log("cartItems", cartItems)
 
 
     return (

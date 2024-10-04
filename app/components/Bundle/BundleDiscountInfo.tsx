@@ -1,14 +1,14 @@
 import { useState, useCallback } from "react";
 import { TextField, Card, Form, FormLayout, Select, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker } from "@shopify/polaris";
 export function BundleDiscountInfo(pros) {
-  const { globalPriceRules, bundlePrice, cartItems, cartItemsMedia, currencyCodes, calculatePrice, onCalculatePrice } = pros;
+  const { globalPriceRules, onAddGlobalPriceRules, bundlePrice, cartItems, cartItemsMedia, currencyCodes, calculatePrice, onCalculatePrice } = pros;
 
   const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;
-  
+
 
   //const [isPriceDynamically, setIsPriceDynamically] = useState(false);
 
-  const [endDateEnable, setEndDateEnable] = useState((globalPriceRules[0].endAt.value) ? true : false);
+  const [endDateEnable, setEndDateEnable] = useState((globalPriceRules[0]?.endAt.value) ? true : false);
   const [startVisible, setStartVisible] = useState(false);
   const [endVisible, setEndVisible] = useState(false);
 
@@ -22,47 +22,52 @@ export function BundleDiscountInfo(pros) {
     return monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
   }
 
-  function getBundlePrice(cartItems, cartItemsMedia) {
-    if (!calculatePrice.value) return bundlePrice.value;
-    let calculatedPrice = 0;   
-    cartItems.forEach((item) => {
-      cartItemsMedia.forEach((media) => {
-        if (item.merchandiseId.value == media.node.id.split("/").pop()) {
-          calculatedPrice = calculatedPrice + (item.defaultQuantity.value * parseFloat(media.node.variants.edges[0].node.price))
-        }
-      })
-    })
-   return "" + calculatedPrice;    
-  }
-
   return (
     <Card>
       <BlockStack gap="200">
         <Text variant="headingMd" as="h2">Price And Discount</Text>
         <Form onSubmit={() => { }}>
           <FormLayout>
+            <BlockStack gap="300">
+              <TextField
+                label="Bundle Price"
+                prefix={currency.replace('{{amount}}', '')}
+                //value={getBundlePrice(cartItems, cartItemsMedia)}
+                value={bundlePrice.value}
+                readOnly={calculatePrice.value}
+                onChange={(e) => { bundlePrice.onChange(e) }}
+                placeholder="0.00"
+                autoComplete="off"
+                connectedRight={<Checkbox
+                  label="Calculate Price Dynamically"
+                  checked={calculatePrice.value}
+                  onChange={(e) => {
+                    calculatePrice.onChange(e);
+                    if (e) onCalculatePrice(cartItems, cartItemsMedia);
+                  }}
+                />}
+              />
+
+              <Checkbox
+                label={"Apply Discounts"}
+                checked={globalPriceRules.length}
+                onChange={(e) => {
+                  if(!globalPriceRules.length){
+                    const today = new Date();
+                    onAddGlobalPriceRules({
+                      value: '',
+                      type: 'percent',
+                      startAt: today.toISOString().split('T')[0],
+                      endAt: null
+                    })
+                  }                  
+                }}
+              />
+
+            </BlockStack>
             {globalPriceRules.map(({ type, value, startAt, endAt }, index) => (
               <>
-                <BlockStack gap="300" key={"price-"+index}>
-                  <TextField
-                    label="Bundle Price"                    
-                    prefix={currency.replace('{{amount}}', '')}
-                    //value={getBundlePrice(cartItems, cartItemsMedia)}
-                    value={bundlePrice.value}
-                    readOnly={calculatePrice.value}
-                    onChange={(e) => { bundlePrice.onChange(e) }}
-                    placeholder="0.00"
-                    autoComplete="off"
-                    connectedRight={<Checkbox
-                      label="Calculate Price Dynamically"
-                      checked={calculatePrice.value}                      
-                      onChange={(e) => { 
-                        calculatePrice.onChange(e);
-                        if (e) onCalculatePrice(cartItems, cartItemsMedia);    
-                      }}
-                    />}
-                  />
-
+                <BlockStack gap="300" key={"price-" + index}>
 
                   <InlineStack align="start" wrap={false} gap="300">
 

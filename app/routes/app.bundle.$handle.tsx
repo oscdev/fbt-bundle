@@ -16,9 +16,9 @@ export const action = async ({ params, request }) => {
   const savedResult = await bundle.setProduct(request, bundleData, cartItemsMedia);
 
   const setBundleAssociatedResult = await bundle.setBundleAssociated(request, bundleData, savedResult);
-  
 
-  if(removableCartItems.length){
+
+  if (removableCartItems.length) {
     const unsetBundleAssociatedResult = await bundle.unsetBundleAssociated(request, removableCartItems);
   }
   console.log('saveResult = ', savedResult)
@@ -45,7 +45,7 @@ export default function Bundle() {
   const [cartItemsMedia, setCartItemsMedia] = useState([]);
 
   const [removableCartItems, setRemovableCartItems] = useState([]);
-  
+
 
   const navigate = useNavigate();
   const emptyExpandedCartItemsFactory = (formArg) => ({
@@ -62,13 +62,7 @@ export default function Bundle() {
     endAt: formArg.endAt
   });
 
-  const today = new Date();
-  const defaultGlobalPriceRules = [{
-    value: '',
-    type: 'percent',
-    startAt: today.toISOString().split('T')[0],
-    endAt: null
-  }]
+
 
   const {
     submit,
@@ -88,12 +82,12 @@ export default function Bundle() {
       bundlePrice: useField(bundleResult.variants?.edges[0].node.price || ''),
       description: useField(bundleResult.bodyHtml || ''),
       customer: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.customer : ''),
-      calculatePrice: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.calculatePrice : false),
-      minPurchasableItems: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.minPurchasableItem : '')
+      minPurchasableItems: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.minPurchasableItem : ''),
+      calculatePrice: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.config.calculatePrice : false)
     },
     dynamicLists: {
       expandedCartItems: useDynamicList(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.expandedCartItems : [], emptyExpandedCartItemsFactory),
-      globalPriceRules: useDynamicList(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.globalPriceRules : defaultGlobalPriceRules, emptyGlobalPriceRulesFactory)
+      globalPriceRules: useDynamicList(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.globalPriceRules : [], emptyGlobalPriceRulesFactory)
     },
     onSubmit: async (data) => {
       const remoteErrors = [];
@@ -106,22 +100,25 @@ export default function Bundle() {
         remoteErrors.push("Select Products are mandatory");
       }
       // validate the discount value based on discount type
-      if (!data.globalPriceRules[0].value) {
-        remoteErrors.push("Discount value is mandatory");
+
+      if (data.globalPriceRules.length) {
+        if (!data.globalPriceRules[0].value) {
+          remoteErrors.push("Discount value is mandatory");
+        }
       }
 
       if (remoteErrors.length) {
         setIsFormSubmitting(false);
         return { status: "fail", errors: remoteErrors };
       } else {
-       submitForm({ 
-        bundleData: JSON.stringify(data),
-        cartItemsMedia: JSON.stringify(cartItemsMedia),
-        removableCartItems: JSON.stringify(removableCartItems)
-      }, { method: "post" });
-      setTimeout(async() => {
-        setShowToast(true);
-      }, 2000)
+        submitForm({
+          bundleData: JSON.stringify(data),
+          cartItemsMedia: JSON.stringify(cartItemsMedia),
+          removableCartItems: JSON.stringify(removableCartItems)
+        }, { method: "post" });
+        setTimeout(async () => {
+          setShowToast(true);
+        }, 2000)
         return { status: "success" };
       }
     }
@@ -146,57 +143,57 @@ export default function Bundle() {
   const onSetRemovableCartItems = (meta, merchandiseId) => {
     //.log('bundleHandle', bundleHandle.value);
     //console.log('meta', meta);
-    if(bundleHandle.value == meta.value) {
+    if (bundleHandle.value == meta.value) {
       setRemovableCartItems(removableCartItems => [...removableCartItems, "gid://shopify/Product/" + merchandiseId]);
-    }   
+    }
   }
 
   function onShowForm() {
     navigate("/app");
-}
+  }
 
   function confirmExit() {
     if (dirty) {
-        setIsConfirmExit(true)
-        setConfirmMsg('Are you sure you want to exit without saving');
+      setIsConfirmExit(true)
+      setConfirmMsg('Are you sure you want to exit without saving');
     } else {
-        onShowForm()
+      onShowForm()
     }
-}
+  }
 
-function onConfirmExit() {
+  function onConfirmExit() {
     onShowForm()
-}
-function onCancelExit() {
+  }
+  function onCancelExit() {
     setIsConfirmExit(false)
-}
+  }
 
-function calculateBundlePrice(items, itemsMedia) { 
-  //console.log('calculateBundlePrice', items, itemsMedia); 
-  let calculatedPrice = 0;   
-  items.forEach((item) => {
-    itemsMedia.forEach((media) => {
-      if (item.merchandiseId.value == media.node.id.split("/").pop()) {
-        calculatedPrice = calculatedPrice + (item.defaultQuantity.value * parseFloat(media.node.variants.edges[0].node.price))
-      }
+  function calculateBundlePrice(items, itemsMedia) {
+    //console.log('calculateBundlePrice', items, itemsMedia); 
+    let calculatedPrice = 0;
+    items.forEach((item) => {
+      itemsMedia.forEach((media) => {
+        if (item.merchandiseId.value == media.node.id.split("/").pop()) {
+          calculatedPrice = calculatedPrice + (item.defaultQuantity.value * parseFloat(media.node.variants.edges[0].node.price))
+        }
+      })
     })
-  })
-  bundlePrice.onChange(calculatedPrice);    
-}
+    bundlePrice.onChange(calculatedPrice.toFixed(2));
+  }
 
-const errorBanner =
-submitErrors.length > 0 ? (
-  <Layout.Section>
-    <Banner tone="critical">
-      <p>There were some values is mandatory with your form submission:</p>
-      <ul>
-        {submitErrors.map(({ message }, index) => (
-          <li key={index}>{submitErrors[index]}</li>
-        ))}
-      </ul>
-    </Banner>
-  </Layout.Section>
-) : null;
+  const errorBanner =
+    submitErrors.length > 0 ? (
+      <Layout.Section>
+        <Banner tone="critical">
+          <p>There were some values is mandatory with your form submission:</p>
+          <ul>
+            {submitErrors.map(({ message }, index) => (
+              <li key={index}>{submitErrors[index]}</li>
+            ))}
+          </ul>
+        </Banner>
+      </Layout.Section>
+    ) : null;
 
   return (
     <Page
@@ -211,13 +208,13 @@ submitErrors.length > 0 ? (
       backAction={{ content: "Settings", onAction: () => confirmExit() }}
     >
       <Layout>
-      {errorBanner}
+        {errorBanner}
         <Layout.Section>
           <BlockStack gap="300">
             {/* {removableCartItems.toString()} <br />             */}
             <BundleInfo
               bundleName={bundleName}
-              description={description}              
+              description={description}
             />
             <Resource
               cartItems={cartItems}
@@ -227,9 +224,9 @@ submitErrors.length > 0 ? (
               onMoveCartItems={moveCartItems}
               onSetRemovableCartItems={onSetRemovableCartItems}
               cartItemsMedia={cartItemsMedia}
-              setCartItemsMedia={setCartItemsMedia}   
+              setCartItemsMedia={setCartItemsMedia}
               calculatePrice={calculatePrice}
-              onCalculatePrice={calculateBundlePrice}      
+              onCalculatePrice={calculateBundlePrice}
             />
             <BundleDiscountInfo
               globalPriceRules={globalPriceRules}
@@ -239,7 +236,7 @@ submitErrors.length > 0 ? (
               bundlePrice={bundlePrice}
               cartItems={cartItems}
               cartItemsMedia={cartItemsMedia}
-              currencyCodes={shopData} 
+              currencyCodes={shopData}
               calculatePrice={calculatePrice}
               onCalculatePrice={calculateBundlePrice}
             />
@@ -258,9 +255,9 @@ submitErrors.length > 0 ? (
           />
         </Layout.Section>
       </Layout>
-      {showToast && 
-         shopify.toast.show("Bundle product created successfully!", {onDismiss: () => setShowToast(false)})
-        }
+      {showToast &&
+        shopify.toast.show("Bundle product created successfully!", { onDismiss: () => setShowToast(false) })
+      }
       <Confirm
         isConfirm={isConfirmExit}
         confirmMsg={confirmMsg}
