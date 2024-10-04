@@ -25,7 +25,7 @@ export function BundleDiscountInfo(pros) {
   return (
     <Card>
       <BlockStack gap="200">
-        <Text variant="headingMd" as="h2">Price And Discount</Text>
+        <Text variant="headingMd" as="h2">Price and Discount</Text>
         <Form onSubmit={() => { }}>
           <FormLayout>
             <BlockStack gap="300">
