@@ -9,6 +9,8 @@ import { useLoaderData, json, useNavigate, useSubmit } from "@remix-run/react";
 import support from "../assets/images/support.png";
 import FBT from "../assets/images/fbt.jpg";
 import Bundle from "../assets/images/bundle.jpg";
+import { useAppBridge } from '@shopify/app-bridge-react';
+import { Redirect } from '@shopify/app-bridge/actions';
 
 // get loader data for app settings and theme settings (Enable/Disable) 
 async function getLoaderData(request) {
@@ -43,6 +45,7 @@ export const action = async ({ request }) => {
   return json({ status });
 };
 export default function Index() {
+  const app = useAppBridge();
   const submitForm = useSubmit();
   const navigate = useNavigate();
   const [appSettings, setAppSettings] = useState({
@@ -78,6 +81,10 @@ export default function Index() {
   const handleClick = () => {
     window.tidioChatApi.open();
   };
+
+  function handleFBTRedirection() {
+    window.open(`https://${settingsData.shopUrl}/admin/products`, "_blank");
+  }
 
   return (
     <Page title="Hi, Welcome to OSCP Upsell & Cross Sell App">
@@ -143,9 +150,12 @@ export default function Index() {
                     <BlockStack gap="200">
                     <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">Frequently Bought Together</Text>
-                    <Button variant="primary" onClick={() => navigate("/products")} icon={ExternalIcon}>Create FBT</Button>
-                  </InlineGrid>
-                   <Text  variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text> 
+                    {/* <Button variant="primary" onClick={() => navigate("/products")} icon={ExternalIcon}>Create FBT</Button> */}
+                    <Button variant="primary" onClick={handleFBTRedirection} icon={ExternalIcon}>
+                      Create FBT
+                    </Button>                  
+                    </InlineGrid>
+                    <Text  variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text> 
                     </BlockStack>
                 </Card>
                 <Card roundedAbove="sm">
