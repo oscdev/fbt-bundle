@@ -3,42 +3,7 @@ import { Card, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonBodyTex
 import { XIcon } from '@shopify/polaris-icons';
 export function Preview(pros) {
   const { bundleName, bundlePrice, description, cartItems, cartItemsMedia, currencyCodes, globalPriceRules } = pros;
-
-  //console.log("globalPriceRules",globalPriceRules)
   const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;
-  // Calculate total price by summing the prices of the matched items
-  const totalPrice = cartItems.reduce((total, { merchandiseId, defaultQuantity }) => {
-    cartItemsMedia.forEach(({ node: { id, variants } }) => {
-      if (merchandiseId.value === id.split("/").pop()) {
-        total += parseFloat(variants.edges[0].node.price) * defaultQuantity.value; // Add the price of the matched item
-      }
-    });
-    return total;
-  }, 0);
-
-  // Apply discount based on discount rules
-  let finalPrice = totalPrice;
-
-  // Assuming only one discount rule is applied (you can loop through multiple rules if needed)
-  //const discount = globalPriceRules[0];
-  const discount = 10;
-
-  if (discount && discount.value && discount.type) {
-    const discountValue = parseFloat(discount.value.value);
-    const discountType = discount.type.value;
-
-    if (discountType === "percent") {
-      // Apply percentage discount
-      finalPrice = finalPrice - (finalPrice * (discountValue / 100));
-    } else if (discountType === "fixed") {
-      // Apply fixed discount
-      finalPrice = finalPrice - discountValue;
-    }
-  }
-
-  // Ensure the final price doesn't go below zero
-  finalPrice = Math.max(0, finalPrice);
-
   return (
     <Card>
       <BlockStack gap="300">
