@@ -3,12 +3,23 @@ import { Form, Text, Button, BlockStack, TextField, FormLayout, Thumbnail, Empty
 import { Confirm } from "../Confirm";
 import { XIcon, ArrowDownIcon, ArrowUpIcon } from '@shopify/polaris-icons';
 export function Resource(props) {
-    const { cartItems, onAddCartItems, onEditCartItems, onRemoveCartItems, onMoveCartItems, onSetRemovableCartItems, cartItemsMedia, setCartItemsMedia } = props;
+    const {
+        cartItems,
+        onAddCartItems,
+        onEditCartItems,
+        onRemoveCartItems,
+        onMoveCartItems,
+        onSetRemovableCartItems,
+        cartItemsMedia,
+        setCartItemsMedia,
+        calculatePrice,
+        onCalculatePrice
+    } = props;
     const [loading, setLoading] = useState(true);
     const [isProductRemove, setIsProductRemove] = useState(false);
     const [productIndex, setProductIndex] = useState(null);
     const [removableAssociatedMeta, setRemovableAssociatedMeta] = useState(null);
-    const [removableMerchandiseId, setRemovableMerchandiseId] = useState(null); 
+    const [removableMerchandiseId, setRemovableMerchandiseId] = useState(null);
 
     const [confirmMsg, setIsConfirmMsg] = useState('');
 
@@ -71,7 +82,7 @@ export function Resource(props) {
         } else {
             setCartItemsMedia(data.products.edges);
         }
-        
+
 
         setLoading(false);
     }
@@ -79,6 +90,11 @@ export function Resource(props) {
     useEffect(() => {
         getProducts();
     }, [cartItems.length]);
+
+    useEffect(() => {
+        console.log('I changed', cartItems);
+        if (calculatePrice.value) onCalculatePrice(cartItems, cartItemsMedia);
+    }, [cartItems]);
 
     async function pickResource() {
         const filterObj = [];
@@ -141,7 +157,7 @@ export function Resource(props) {
 
         setRemovableAssociatedMeta(null);
         setRemovableMerchandiseId(null)
-        
+
         setProductIndex(null); // Reset the index
     }
     //console.log("cartItems", cartItems)
@@ -185,7 +201,7 @@ export function Resource(props) {
                                                 {cartItemsMedia.map(
                                                     ({ node: { id, title, featuredImage, metafield } }) => (
                                                         (merchandiseId.value == id.split("/").pop()) && (
-                                                            <InlineGrid columns="1fr auto" key={"key-"+index}>
+                                                            <InlineGrid columns="1fr auto" key={"key-" + index}>
                                                                 <InlineStack gap="200" blockAlign="center" wrap={false}>
                                                                     {/* {id} */}
                                                                     <Tooltip content="Move Up">
@@ -219,7 +235,14 @@ export function Resource(props) {
                                                                             labelHidden
                                                                             type="number"
                                                                             value={defaultQuantity.value}
-                                                                            onChange={(e) => defaultQuantity.onChange(e)}
+                                                                            onChange={(e) => {
+                                                                                defaultQuantity.onChange(e);
+                                                                                // defaultQuantity.onChange(e);
+                                                                                // setTimeout(() => {
+                                                                                //     if (calculatePrice.value) onCalculatePrice(cartItems, cartItemsMedia);
+                                                                                // }, 1000);
+
+                                                                            }}
                                                                             autoComplete="off" /></Text>
                                                                     <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
                                                                         <Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => {
