@@ -1,4 +1,4 @@
-import { Layout, Page, BlockStack, Banner } from "@shopify/polaris";
+import { Layout, Page, BlockStack, Banner, Button, Box, InlineStack } from "@shopify/polaris";
 import { useField, useDynamicList, useForm } from '@shopify/react-form';
 import { BundleInfo, Preview, Resource, BundleDiscountInfo, Customize } from "../components/Bundle/index";
 import { useState, useEffect } from "react";
@@ -6,7 +6,7 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useSubmit, useNavigate, useActionData  } from "@remix-run/react";
 import { Confirm } from "~/components/Confirm";
 import { bundle, settings } from "../services/index";
-
+import { ExternalIcon } from "@shopify/polaris-icons";
 export const action = async ({ params, request }) => {
   const formData = await request.formData();
   const bundleData = JSON.parse(formData.get("bundleData"));
@@ -19,7 +19,7 @@ export const action = async ({ params, request }) => {
   }  
   //console.log("savedResult", savedResult);
   //return redirect("/app/bundle/list");
-  return json({ status: "success", message: `Successfully saved bundle ${savedResult.title}` });
+  return json({ status: "success", message: `Successfully saved bundle ${savedResult.title}.` });
 };
 
 export const loader = async ({ params, request }) => {
@@ -33,13 +33,6 @@ export default function Bundle() {
   const { bundleResult, handle, shopData } = useLoaderData();
   const saveStatus = useActionData<typeof action>();
   const navigate = useNavigate();
-
-  //console.log("saveStatus", saveStatus);
-  // if (saveStatus) {    
-  //   navigate("/app/bundle/list");
-  // }
-
-  const [showToast, setShowToast] = useState(false);  
   const submitForm = useSubmit();
   const [xhr, setXhr] = useState(false);
   const [isConfirmExit, setIsConfirmExit] = useState(false);
@@ -182,8 +175,11 @@ export default function Bundle() {
   }
 
   const successBanner = saveStatus?.status === "success" ? (<Layout.Section>
-    <Banner tone="success" action={{content: 'Bundle list' , url: "/app/bundle/list" }}>
+    <Banner tone="success">
+    <InlineStack gap="200" align="start" blockAlign="center">
       <p>{saveStatus?.message}</p>
+      <Button url={"/app/bundle/list"}variant="plain" icon={ExternalIcon}>View bundle list</Button>
+     </InlineStack>
     </Banner>
   </Layout.Section>) : null;
 
