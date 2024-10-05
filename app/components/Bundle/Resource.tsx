@@ -84,9 +84,17 @@ export function Resource(props) {
         getProducts();
     }, [cartItems.length]);
 
-    useEffect(() => {        
-        if (calculatePrice.value) onCalculatePrice(cartItems, cartItemsMedia);
-    }, [cartItems]);
+    // useEffect(() => {        
+    //     if (calculatePrice.value) onCalculatePrice(cartItems, cartItemsMedia);
+    // }, [cartItems]);
+
+    useEffect(() => {   
+        setTimeout(() => {
+            if (calculatePrice.value) {
+                onCalculatePrice(cartItems, cartItemsMedia);
+            } 
+        }, 500)
+    }, [calculatePrice.value, cartItems, cartItemsMedia]);
 
     async function pickResource() {
         const filterObj = [];
@@ -203,10 +211,10 @@ export function Resource(props) {
                                                                         alt={title}
                                                                     />
                                                                     <Text variant="bodyLg" as="p">{title}</Text>
+                                                                    
                                                                 </InlineStack>
                                                                 <InlineStack gap="200" key={index} blockAlign="center">
-                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
-                                                                        <TextField
+                                                                     <TextField
                                                                             prefix="Quantity:"
                                                                             placeholder="E.g. 1"
                                                                             min={1}
@@ -217,12 +225,10 @@ export function Resource(props) {
                                                                             onChange={(e) => {
                                                                                 defaultQuantity.onChange(e);
                                                                             }}
-                                                                            autoComplete="off" /></Text>
-                                                                    <Text variant="bodyLg" as="p" alignment="end" fontWeight="bold">
+                                                                            autoComplete="off" />
                                                                         <Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => {                                                                            
                                                                             removeResource(index, metafield, merchandiseId.value)
                                                                         }}></Button>
-                                                                    </Text>
                                                                 </InlineStack>
                                                             </InlineGrid>
                                                         )
