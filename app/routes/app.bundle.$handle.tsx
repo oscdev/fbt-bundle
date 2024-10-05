@@ -19,7 +19,7 @@ export const action = async ({ params, request }) => {
   }  
   //console.log("savedResult", savedResult);
   //return redirect("/app/bundle/list");
-  return json({ status: "success", message: `Successfully saved bundle ${savedResult.title}.` });
+  return json({ status: "success", message: `Successfully saved bundle ${savedResult.title}.`});
 };
 
 export const loader = async ({ params, request }) => {
@@ -176,9 +176,9 @@ export default function Bundle() {
 
   const successBanner = saveStatus?.status === "success" ? (<Layout.Section>
     <Banner tone="success">
-    <InlineStack gap="200" align="start" blockAlign="center">
+    <InlineStack gap="100" align="start" blockAlign="center">
       <p>{saveStatus?.message}</p>
-      <Button url={"/app/bundle/list"}variant="plain" icon={ExternalIcon}>View bundle list</Button>
+      <Button url={"/app/bundle/list"} variant="plain" icon={ExternalIcon}>View bundle list</Button>
      </InlineStack>
     </Banner>
   </Layout.Section>) : null;
