@@ -162,7 +162,7 @@ export default function Index() {
                     <BlockStack gap="200">
                     <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">FBT Bundle</Text>
-                    <Button variant="primary" onClick={() => navigate("/app/bundle/list")} icon={ExternalIcon}>Create FBT Bundle</Button>
+                    <Button variant="primary" onClick={() => navigate("/app/bundle/new")} icon={ExternalIcon}>Create FBT Bundle</Button>
                   </InlineGrid>
                   <Text  variant="headingMd" as="h6" alignment="center"><img src={Bundle} alt="Theme Setup" width="300px" /></Text>   
                     </BlockStack>

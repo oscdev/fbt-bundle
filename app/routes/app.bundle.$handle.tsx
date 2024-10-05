@@ -182,14 +182,10 @@ export default function Bundle() {
   }
 
   const successBanner = saveStatus?.status === "success" ? (<Layout.Section>
-    <Banner tone="success">
+    <Banner tone="success" action={{content: 'Bundle list' , url: "/app/bundle/list" }}>
       <p>{saveStatus?.message}</p>
     </Banner>
   </Layout.Section>) : null;
-
-  // {saveStatus?.status === "success" &&
-  //   shopify.toast.show(`${saveStatus.message}`, { onDismiss: () => setShowToast(false) })
-  // }
 
   const errorBanner =
     submitErrors.length > 0 ? (
@@ -200,7 +196,7 @@ export default function Bundle() {
             {submitErrors.map(({ message }, index) => (
               <li key={index}>{submitErrors[index]}</li>
             ))}
-          </ul>
+          </ul>          
         </Banner>
       </Layout.Section>
     ) : null;
@@ -251,7 +247,6 @@ export default function Bundle() {
               calculatePrice={calculatePrice}
               onCalculatePrice={calculateBundlePrice}
             />
-            {/* <Customize /> */}
           </BlockStack>
         </Layout.Section>
         <Layout.Section variant="oneThird">
