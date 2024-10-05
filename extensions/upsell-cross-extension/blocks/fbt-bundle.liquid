@@ -44,7 +44,7 @@
             {% endfor %}
           </div>
 
-          <p class="fbt_description">{{ product.description }} {{ discount_percentage }}%</p>
+          <p class="fbt_description">{{ product.description }}</p>
             {% comment %} Shows the discount percentage for the bundle {% endcomment %}
               {% assign discount_amount = multiplied_price | times: discount_percentage | divided_by: 100 %}
               {% assign final_price = multiplied_price | minus: discount_amount %}
@@ -53,8 +53,12 @@
               <div class="fbt_footer">
                 <p class="fbt_footer__total-label">Total</p>
                   <div class="fbt_footer__total-price">
-                    <span class="money discounted">{{ final_price | money }}</span>
-                    <del class="money">{{ multiplied_price | money }}</del>
+                    {% if cart_discount != blank %}
+                      <span class="money discounted">{{ final_price | money }}</span>
+                      <del class="money">{{ multiplied_price | money }}</del>
+                    {% else %}
+                      <span class="money discounted">{{ final_price | money }}</span>
+                    {% endif %}
                     {% comment %} Display final price with discount and strike through original price {% endcomment %}
                   </div>
               </div>
@@ -138,14 +142,18 @@
                 {% endfor %}
               </div>
       
-              <p class="fbt_description">{{ bundle_product.description }}{{ discount_percentage }}%</p>
+              <p class="fbt_description">{{ bundle_product.description }}</p>
               {% assign discount_amount = multiplied_price | times: discount_percentage | divided_by: 100 %}
               {% assign final_price = multiplied_price | minus: discount_amount %}
               <div class="fbt_footer">
                 <p class="fbt_footer__total-label">Total</p>
                 <div class="fbt_footer__total-price">
-                  <span class="money discounted">{{ final_price | money }}</span>
-                  <del class="money">{{ multiplied_price | money }}</del>
+                  {% if cart_discount != blank %}
+                    <span class="money discounted">{{ final_price | money }}</span>
+                    <del class="money">{{ multiplied_price | money }}</del>
+                  {% else %}
+                      <span class="money discounted">{{ final_price | money }}</span>
+                  {% endif %}
                 </div>          
               </div>
 
@@ -262,7 +270,7 @@
           "type": "text",
           "id": "fbt_cart_text",
           "label": "Add to Cart Button Text",
-          "default": "Get the bundle"
+          "default": "Add to bundle"
         }
       ]
     }

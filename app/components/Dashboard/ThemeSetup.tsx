@@ -1,4 +1,4 @@
-import { Layout, Card, Text, InlineGrid, Button, BlockStack, Banner } from "@shopify/polaris";
+import { Layout, Card, Text, InlineGrid, Button, BlockStack } from "@shopify/polaris";
 import { ExternalIcon } from "@shopify/polaris-icons";
 
 //Create the dashboard page Design
@@ -9,16 +9,6 @@ export function ThemeSetup(props) {
 
     return (
         <Layout.Section>
-            <BlockStack gap="200">
-            {/* Theme Setup Banner */}
-            {settingsData.themeStatus.blocks.length !== 0 && settingsData.themeStatus.blocks[0].is_configured !== true ? (
-                <Banner tone="critical">
-                    <Text variant="bodyLg" as="p">
-                        This Theme <i><u>{settingsData.themeStatus.activeTheme.name}</u></i> is NOT Supported.
-                    </Text>
-                </Banner>
-            ) :"" }
-            </BlockStack>
             <Card>
                 <BlockStack gap="200">
                     <Text variant="headingMd" as="h2">

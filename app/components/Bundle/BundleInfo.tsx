@@ -5,7 +5,7 @@ export function BundleInfo(pros) {
     return (
         <Card>
             <BlockStack gap="200">
-                <Text variant="headingMd" as="h2">General Info</Text>
+                <Text variant="headingMd" as="h2">General</Text>
                 <Form onSubmit={() => { }}>
                     <FormLayout>
                         <TextField
