@@ -44,7 +44,7 @@ export function BundleDiscountInfo(pros) {
                 label={"Apply Discounts"}
                 checked={globalPriceRules.length}
                 onChange={(e) => {
-                  if(!globalPriceRules.length){
+                  if (!globalPriceRules.length) {
                     const today = new Date();
                     onAddGlobalPriceRules({
                       value: '',
@@ -52,7 +52,7 @@ export function BundleDiscountInfo(pros) {
                       startAt: today.toISOString().split('T')[0],
                       endAt: null
                     })
-                  }                  
+                  }
                 }}
               />
             </BlockStack>
@@ -63,6 +63,7 @@ export function BundleDiscountInfo(pros) {
                     <TextField
                       placeholder="E.g. 10"
                       suffix="%"
+                      type="number"
                       label="Discount Value"
                       value={value.value}
                       onChange={(e) => value.onChange(e)}
@@ -80,18 +81,18 @@ export function BundleDiscountInfo(pros) {
                       onClose={() => setStartVisible(false)}
                     >
                       <Card>
-                      <DatePicker
-                        month={new Date(startAt.value).getMonth()}
-                        year={new Date(startAt.value).getFullYear()}
-                        disableDatesBefore={new Date(Date.now() - 1000 * 60 * 60 * 24)}
-                        onChange={(date) => {
-                          startAt.onChange(new Date(date.start.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);                          
-                          setStartVisible(false);
-                        }}
-                        selected={new Date(startAt.value)}
-                      />
+                        <DatePicker
+                          month={new Date(startAt.value).getMonth()}
+                          year={new Date(startAt.value).getFullYear()}
+                          disableDatesBefore={new Date(Date.now() - 1000 * 60 * 60 * 24)}
+                          onChange={(date) => {
+                            startAt.onChange(new Date(date.start.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
+                            setStartVisible(false);
+                          }}
+                          selected={new Date(startAt.value)}
+                        />
                       </Card>
-                     
+
                     </Popover>
                     <Popover
                       active={(endDateEnable) && endVisible}
@@ -119,18 +120,18 @@ export function BundleDiscountInfo(pros) {
                       onClose={() => setEndVisible(false)}
                     >
                       <Card>
-                      <DatePicker
-                        month={(endAt.value) ? new Date(endAt.value).getMonth() : new Date().getMonth()}
-                        year={(endAt.value) ? new Date(endAt.value).getFullYear() : new Date().getFullYear()}
-                        disableDatesBefore={new Date(startAt.value)}
-                        onChange={(date) => {                          
-                          endAt.onChange(new Date(date.end.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
-                          setEndVisible(false);
-                        }}
-                        selected={(endAt.value) ? new Date(endAt.value) : new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24))}
-                      />
+                        <DatePicker
+                          month={(endAt.value) ? new Date(endAt.value).getMonth() : new Date().getMonth()}
+                          year={(endAt.value) ? new Date(endAt.value).getFullYear() : new Date().getFullYear()}
+                          disableDatesBefore={new Date(startAt.value)}
+                          onChange={(date) => {
+                            endAt.onChange(new Date(date.end.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
+                            setEndVisible(false);
+                          }}
+                          selected={(endAt.value) ? new Date(endAt.value) : new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24))}
+                        />
                       </Card>
-                      
+
                     </Popover>
                   </InlineStack>
                 </BlockStack>

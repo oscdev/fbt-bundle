@@ -161,7 +161,7 @@ export function Resource(props) {
                         <BlockStack gap="200">
                             <InlineGrid columns="1fr auto">
                                 <Text variant="headingMd" as="h2">
-                                    Bundle Products
+                                    Products in Bundle
                                 </Text>
                                 <Button
                                     variant="primary"
