@@ -32,7 +32,7 @@ export function BundleProductList(props) {
             <IndexTable.Row id={'id-' + index} key={'key-' + index} position={index} disabled={true}>
                 <IndexTable.Cell>{node.title}</IndexTable.Cell>
                 <IndexTable.Cell>{expandedCartItemsLength}</IndexTable.Cell>
-                <IndexTable.Cell>{globalPriceRule.value} %</IndexTable.Cell>
+                <IndexTable.Cell>{globalPriceRule.value}%</IndexTable.Cell>
                 <IndexTable.Cell>
                     <div className="customTableRow">
                         <ButtonGroup>
