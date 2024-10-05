@@ -83,6 +83,7 @@ export function BundleDiscountInfo(pros) {
                       <DatePicker
                         month={new Date(startAt.value).getMonth()}
                         year={new Date(startAt.value).getFullYear()}
+                        disableDatesBefore={new Date(Date.now() - 1000 * 60 * 60 * 24)}
                         onChange={(date) => {
                           startAt.onChange(new Date(date.start.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);                          
                           setStartVisible(false);
@@ -121,11 +122,12 @@ export function BundleDiscountInfo(pros) {
                       <DatePicker
                         month={(endAt.value) ? new Date(endAt.value).getMonth() : new Date().getMonth()}
                         year={(endAt.value) ? new Date(endAt.value).getFullYear() : new Date().getFullYear()}
+                        disableDatesBefore={new Date(startAt.value)}
                         onChange={(date) => {                          
                           endAt.onChange(new Date(date.end.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
                           setEndVisible(false);
                         }}
-                        selected={(endAt.value) ? new Date(endAt.value) : new Date()}
+                        selected={(endAt.value) ? new Date(endAt.value) : new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24))}
                       />
                       </Card>
                       
