@@ -84,7 +84,7 @@ export function BundleDiscountInfo(pros) {
                         month={new Date(startAt.value).getMonth()}
                         year={new Date(startAt.value).getFullYear()}
                         onChange={(date) => {
-                          startAt.onChange(date.start.toISOString().split('T')[0]);
+                          startAt.onChange(new Date(date.start.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);                          
                           setStartVisible(false);
                         }}
                         selected={new Date(startAt.value)}
@@ -121,8 +121,8 @@ export function BundleDiscountInfo(pros) {
                       <DatePicker
                         month={(endAt.value) ? new Date(endAt.value).getMonth() : new Date().getMonth()}
                         year={(endAt.value) ? new Date(endAt.value).getFullYear() : new Date().getFullYear()}
-                        onChange={(date) => {
-                          endAt.onChange(date.end.toISOString().split('T')[0]);
+                        onChange={(date) => {                          
+                          endAt.onChange(new Date(date.end.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
                           setEndVisible(false);
                         }}
                         selected={(endAt.value) ? new Date(endAt.value) : new Date()}
