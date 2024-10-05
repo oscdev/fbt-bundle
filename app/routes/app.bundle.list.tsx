@@ -26,14 +26,12 @@ export default function BundleList() {
       primaryAction={
         <Button icon={PlusIcon} variant="primary" url= "/app/bundle/new">Create Bundle</Button>
       }
-    >
-      <div className="bundle-list">
+    >      
       <Layout>
         <Layout.Section>
             <BundleProductList productList={bundleProductList} />
         </Layout.Section>
       </Layout>
-      </div>
     </Page>
   );
 }
