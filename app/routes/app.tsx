@@ -42,7 +42,7 @@ export default function App() {
       {/* <BlockStack gap="300"> */}
       <NavMenu>
         <Link to="/app" rel="home">Home</Link>
-        <Link to="/app/bundle/list">Bundle products</Link>
+        <Link to="/app/bundle/list">Bundle Offers</Link>
         <Link to="/app/help">Help</Link>
       </NavMenu>
       {navigation.state === "loading" && (
