@@ -79,15 +79,19 @@ export function BundleDiscountInfo(pros) {
                       autofocusTarget="first-node"
                       onClose={() => setStartVisible(false)}
                     >
+                      <Card>
                       <DatePicker
                         month={new Date(startAt.value).getMonth()}
                         year={new Date(startAt.value).getFullYear()}
+                        disableDatesBefore={new Date(Date.now() - 1000 * 60 * 60 * 24)}
                         onChange={(date) => {
-                          startAt.onChange(date.start.toISOString().split('T')[0]);
+                          startAt.onChange(new Date(date.start.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);                          
                           setStartVisible(false);
                         }}
                         selected={new Date(startAt.value)}
                       />
+                      </Card>
+                     
                     </Popover>
                     <Popover
                       active={(endDateEnable) && endVisible}
@@ -114,15 +118,19 @@ export function BundleDiscountInfo(pros) {
                       autofocusTarget="first-node"
                       onClose={() => setEndVisible(false)}
                     >
+                      <Card>
                       <DatePicker
                         month={(endAt.value) ? new Date(endAt.value).getMonth() : new Date().getMonth()}
                         year={(endAt.value) ? new Date(endAt.value).getFullYear() : new Date().getFullYear()}
-                        onChange={(date) => {
-                          endAt.onChange(date.end.toISOString().split('T')[0]);
+                        disableDatesBefore={new Date(startAt.value)}
+                        onChange={(date) => {                          
+                          endAt.onChange(new Date(date.end.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
                           setEndVisible(false);
                         }}
-                        selected={(endAt.value) ? new Date(endAt.value) : new Date()}
+                        selected={(endAt.value) ? new Date(endAt.value) : new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24))}
                       />
+                      </Card>
+                      
                     </Popover>
                   </InlineStack>
                 </BlockStack>
