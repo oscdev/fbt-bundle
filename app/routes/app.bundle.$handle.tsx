@@ -1,9 +1,9 @@
 import { Layout, Page, BlockStack, Banner } from "@shopify/polaris";
 import { useField, useDynamicList, useForm } from '@shopify/react-form';
 import { BundleInfo, Preview, Resource, BundleDiscountInfo, Customize } from "../components/Bundle/index";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { json, redirect } from "@remix-run/node";
-import { useLoaderData, useSubmit, useNavigate } from "@remix-run/react";
+import { useLoaderData, useSubmit, useNavigate, useActionData  } from "@remix-run/react";
 import { Confirm } from "~/components/Confirm";
 import { bundle, settings } from "../services/index";
 
@@ -17,7 +17,9 @@ export const action = async ({ params, request }) => {
   if (removableCartItems.length) {
     await bundle.unsetBundleAssociated(request, removableCartItems);
   }  
-  return redirect("/app/bundle/list");
+  //console.log("savedResult", savedResult);
+  //return redirect("/app/bundle/list");
+  return json({ status: "success", message: `Successfully saved bundle ${savedResult.title}` });
 };
 
 export const loader = async ({ params, request }) => {
@@ -29,6 +31,14 @@ export const loader = async ({ params, request }) => {
 
 export default function Bundle() {
   const { bundleResult, handle, shopData } = useLoaderData();
+  const saveStatus = useActionData<typeof action>();
+  const navigate = useNavigate();
+
+  //console.log("saveStatus", saveStatus);
+  // if (saveStatus) {    
+  //   navigate("/app/bundle/list");
+  // }
+
   const [showToast, setShowToast] = useState(false);  
   const submitForm = useSubmit();
   const [xhr, setXhr] = useState(false);
@@ -36,7 +46,15 @@ export default function Bundle() {
   const [confirmMsg, setConfirmMsg] = useState(false);
   const [cartItemsMedia, setCartItemsMedia] = useState([]);
   const [removableCartItems, setRemovableCartItems] = useState([]);
-  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    if(saveStatus?.status === "success") {
+      reset();
+      setXhr(false);
+    }    
+}, [saveStatus]);
+  
   const emptyExpandedCartItemsFactory = (formArg) => ({
     merchandiseId: formArg.merchandiseId,
     handle: formArg.handle,
@@ -163,6 +181,16 @@ export default function Bundle() {
     bundlePrice.onChange(calculatedPrice.toFixed(2));
   }
 
+  const successBanner = saveStatus?.status === "success" ? (<Layout.Section>
+    <Banner tone="success">
+      <p>{saveStatus?.message}</p>
+    </Banner>
+  </Layout.Section>) : null;
+
+  // {saveStatus?.status === "success" &&
+  //   shopify.toast.show(`${saveStatus.message}`, { onDismiss: () => setShowToast(false) })
+  // }
+
   const errorBanner =
     submitErrors.length > 0 ? (
       <Layout.Section>
@@ -192,6 +220,7 @@ export default function Bundle() {
     >
       <Layout>
         {errorBanner}
+        {successBanner}
         <Layout.Section>
           <BlockStack gap="300">            
             <BundleInfo
@@ -237,9 +266,6 @@ export default function Bundle() {
           />
         </Layout.Section>
       </Layout>
-      {showToast &&
-        shopify.toast.show("Bundle product created successfully!", { onDismiss: () => setShowToast(false) })
-      }
       <Confirm
         isConfirm={isConfirmExit}
         confirmMsg={confirmMsg}
