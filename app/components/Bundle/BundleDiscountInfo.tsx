@@ -79,6 +79,7 @@ export function BundleDiscountInfo(pros) {
                       autofocusTarget="first-node"
                       onClose={() => setStartVisible(false)}
                     >
+                      <Card>
                       <DatePicker
                         month={new Date(startAt.value).getMonth()}
                         year={new Date(startAt.value).getFullYear()}
@@ -88,6 +89,8 @@ export function BundleDiscountInfo(pros) {
                         }}
                         selected={new Date(startAt.value)}
                       />
+                      </Card>
+                     
                     </Popover>
                     <Popover
                       active={(endDateEnable) && endVisible}
@@ -114,6 +117,7 @@ export function BundleDiscountInfo(pros) {
                       autofocusTarget="first-node"
                       onClose={() => setEndVisible(false)}
                     >
+                      <Card>
                       <DatePicker
                         month={(endAt.value) ? new Date(endAt.value).getMonth() : new Date().getMonth()}
                         year={(endAt.value) ? new Date(endAt.value).getFullYear() : new Date().getFullYear()}
@@ -123,6 +127,8 @@ export function BundleDiscountInfo(pros) {
                         }}
                         selected={(endAt.value) ? new Date(endAt.value) : new Date()}
                       />
+                      </Card>
+                      
                     </Popover>
                   </InlineStack>
                 </BlockStack>
