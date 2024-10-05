@@ -24,9 +24,10 @@ export function BundleProductList(props) {
 
     const rowMarkup = productList.map(({ node }, index) => {
         // Parse the metafield value to access dynamic data
-        const metafieldValue = JSON.parse(node.metafield.value);
-        const expandedCartItemsLength = metafieldValue.expand.expandedCartItems.length;
-        const globalPriceRule = metafieldValue.expand.globalPriceRules[0];
+        const metafieldValue = (node.metafield) ? JSON.parse(node.metafield.value) : null;
+        if(!metafieldValue) return null;
+        const expandedCartItemsLength = metafieldValue.expand?.expandedCartItems.length;
+        const globalPriceRule = metafieldValue.expand?.globalPriceRules[0];
 
         return (
             <IndexTable.Row id={'id-' + index} key={'key-' + index} position={index} disabled={true}>
@@ -56,7 +57,7 @@ export function BundleProductList(props) {
             <Card>
                 <IndexTable
                     resourceName={resourceName}
-                    itemCount={productList.length}
+                    itemCount={rowMarkup.length}
                     emptyState={emptyStateMarkup}
                     selectedItemsCount={"All"}
                     onSelectionChange={() => { }}

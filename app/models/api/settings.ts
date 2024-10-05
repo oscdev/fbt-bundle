@@ -222,7 +222,12 @@ export const modelShopSettings = {
                             "namespace": "oscp",
                             "key": "fbtSearchable",
                             "type": "single_line_text_field",
-                            "ownerType": "PRODUCT"
+                            "ownerType": "PRODUCT",
+                            "capabilities": {
+                                "adminFilterable": {
+                                "enabled": true
+                                }
+                            }
                         }
                     }
                 }
