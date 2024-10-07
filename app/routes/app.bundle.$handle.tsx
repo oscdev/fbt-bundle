@@ -69,7 +69,7 @@ export default function Bundle() {
     submitErrors,
     dirty,
     dynamicLists,
-    fields: { bundleName, description, bundleHandle, componentMetaId, bundlePrice, calculatePrice },
+    fields: { bundleName, labelOnCard, bundleHandle, componentMetaId, bundlePrice, calculatePrice },
   } = useForm({
     fields: {
       bundleId: useField(bundleResult.id || ''),
@@ -77,11 +77,11 @@ export default function Bundle() {
       componentMetaId: useField(bundleResult.components?.id || ''),
       bundleName: useField(bundleResult.title || ''),
       bundleHandle: useField(bundleResult.handle || ''),
-      bundlePrice: useField(bundleResult.variants?.edges[0].node.price || ''),
-      description: useField(bundleResult.bodyHtml || ''),
+      bundlePrice: useField(bundleResult.variants?.edges[0].node.price || ''),      
       customer: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.customer : ''),
       minPurchasableItems: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.conditions.minPurchasableItem : ''),
-      calculatePrice: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.config?.calculatePrice : true)
+      calculatePrice: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.config?.calculatePrice : true),
+      labelOnCard: useField(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.config?.labelOnCard : ''),
     },
     dynamicLists: {
       expandedCartItems: useDynamicList(bundleResult.metafield?.value ? JSON.parse(bundleResult.metafield?.value).expand.expandedCartItems : [], emptyExpandedCartItemsFactory),
@@ -217,7 +217,7 @@ export default function Bundle() {
           <BlockStack gap="300">            
             <BundleInfo
               bundleName={bundleName}
-              description={description}
+              labelOnCard={labelOnCard}
             />
             <Resource
               cartItems={cartItems}
@@ -249,7 +249,7 @@ export default function Bundle() {
           <Preview
             bundleName={bundleName}
             bundlePrice={bundlePrice}
-            description={description}
+            labelOnCard={labelOnCard}
             cartItems={cartItems}
             cartItemsMedia={cartItemsMedia}
             globalPriceRules={globalPriceRules}

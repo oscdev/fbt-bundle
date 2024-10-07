@@ -49,8 +49,7 @@ export const bundle = {
             {
                 variables: {
                     "input": {
-                        "title": data.bundleName,
-                        "bodyHtml": data.description,
+                        "title": data.bundleName,                        
                         "metafields": [{
                             "namespace": "oscp",
                             "key": "fbtBundleComponentReference",
@@ -67,7 +66,10 @@ export const bundle = {
                                     "conditions": {
                                         "customer": data.customer,
                                         "minPurchasableItem": null
-                                    }
+                                    },
+                                    "config": {
+                                        "labelOnCard": data.description
+                                    }                                    
                                 },
                                 "merge": null
                             })
@@ -136,8 +138,7 @@ export const bundle = {
                 "variables": {
                     "input": {
                         "id": data.bundleId,
-                        "title": data.bundleName,
-                        "bodyHtml": data.description,
+                        "title": data.bundleName,                        
                         "metafields": [
                             {
                                 "namespace": "oscp",
@@ -156,6 +157,9 @@ export const bundle = {
                                     "conditions": {
                                         "customer": data.customer,
                                         "minPurchasableItem": null
+                                    },
+                                    "config": {
+                                        "labelOnCard": data.description
                                     }
                                 },
                                 "merge": null

@@ -1,7 +1,7 @@
 import { TextField, Card, Form, FormLayout, Layout, Text, BlockStack } from "@shopify/polaris";
 
 export function BundleInfo(pros) {
-    const { bundleName, description } = pros; 
+    const { bundleName, labelOnCard } = pros; 
     return (
         <Card>
             <BlockStack gap="200">
@@ -17,9 +17,9 @@ export function BundleInfo(pros) {
                         />
 
                         <TextField
-                            label={<Text variant="headingXs" as="h6">Short Description</Text>}
-                            value={description.value}
-                            onChange={(e) => description.onChange(e)}
+                            label={<Text variant="headingXs" as="h6">Card label</Text>}
+                            value={labelOnCard.value}
+                            onChange={(e) => labelOnCard.onChange(e)}
                             placeholder="E.g. Buy this combo and get 10% OFF"
                             autoComplete="off"
                         />
