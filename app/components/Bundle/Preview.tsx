@@ -20,11 +20,11 @@ export function Preview(pros) {
                         <>                          
                           <InlineStack align="start" blockAlign='center' wrap={false} gap="300">
                             <Thumbnail
-                              source={featuredImage.url}
+                              source={featuredImage?.url}
                               alt={title}
                             />
                             {/* Display title and price */}
-                            <Text variant="bodyLg" as="p"><Badge tone="success">{defaultQuantity.value}</Badge> X {title}</Text>
+                            <Text variant="bodyLg" as="p"><Badge tone="success">{defaultQuantity.value}</Badge> x {title}</Text>
                           </InlineStack>
                           <Text alignment="end" variant="bodyLg" as="p" fontWeight="semibold">{currency.replace('{{amount}}', '')}{variants.edges[0].node.price} {'  '}</Text>                          
                           {(index !== cartItemsMedia.length - 1) ? <Text variant="bodyMd" alignment='center' as="h3">
