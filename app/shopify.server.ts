@@ -24,19 +24,19 @@ const shopify = shopifyApp({
   webhooks: {
     APP_UNINSTALLED: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/app/uninstalled",
+      callbackUrl: "/webhooks",
     },
     CUSTOMERS_DATA_REQUEST: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/customers/data_request",
+      callbackUrl: "/webhooks",
     },
     CUSTOMERS_REDACT: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/customers/redact",
+      callbackUrl: "/webhooks",
     },
     SHOP_REDACT: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/shop/redact",
+      callbackUrl: "/webhooks",
     },
   },
   hooks: {
