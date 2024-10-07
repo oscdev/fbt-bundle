@@ -69,7 +69,7 @@ export function BundleDiscountInfo(pros) {
                       onChange={(e) => value.onChange(e)}
                       autoComplete="off"
                     />
-                    <Popover
+                    {/* <Popover
                       active={startVisible}
                       activator={<TextField
                         label="Start At"
@@ -132,7 +132,7 @@ export function BundleDiscountInfo(pros) {
                         />
                       </Card>
 
-                    </Popover>
+                    </Popover> */}
                   </InlineStack>
                 </BlockStack>
               </>
