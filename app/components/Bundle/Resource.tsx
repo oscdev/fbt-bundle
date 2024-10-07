@@ -207,7 +207,7 @@ export function Resource(props) {
                                                                         />
                                                                     </Tooltip>
                                                                     <Thumbnail
-                                                                        source={featuredImage.url}
+                                                                        source={featuredImage?.url}
                                                                         alt={title}
                                                                     />
                                                                     <Text variant="bodyLg" as="p">{title}</Text>
