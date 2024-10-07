@@ -68,7 +68,8 @@ export const bundle = {
                                         "minPurchasableItem": null
                                     },
                                     "config": {
-                                        "labelOnCard": data.description
+                                        "labelOnCard": data.labelOnCard,
+                                        "calculatePrice": data.calculatePrice
                                     }                                    
                                 },
                                 "merge": null
@@ -159,7 +160,8 @@ export const bundle = {
                                         "minPurchasableItem": null
                                     },
                                     "config": {
-                                        "labelOnCard": data.description
+                                        "labelOnCard": data.labelOnCard,
+                                        "calculatePrice": data.calculatePrice
                                     }
                                 },
                                 "merge": null
