@@ -1,11 +1,13 @@
 import { useState, useCallback } from "react";
-import { TextField, Card, Form, FormLayout, Select, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker } from "@shopify/polaris";
+import { TextField, Card, Form, FormLayout, Select, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker, Button, PageActions } from "@shopify/polaris";
+import { XIcon, ArrowDownIcon, ArrowUpIcon } from '@shopify/polaris-icons';
 export function BundleDiscountInfo(pros) {
-  const { globalPriceRules, onAddGlobalPriceRules, bundlePrice, cartItems, cartItemsMedia, currencyCodes, calculatePrice, onCalculatePrice } = pros;
+  const { globalPriceRules, onAddGlobalPriceRules, onRemoveGlobalPriceRules, bundlePrice, cartItems, cartItemsMedia, currencyCodes, calculatePrice, onCalculatePrice } = pros;
   const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;
   const [endDateEnable, setEndDateEnable] = useState((globalPriceRules[0]?.endAt.value) ? true : false);
   const [startVisible, setStartVisible] = useState(false);
   const [endVisible, setEndVisible] = useState(false);
+  const [activeRowIndex, setActiveRowIndex] = useState();
 
   function getFormatedDate(date) {
     if (!date) return;
@@ -64,24 +66,27 @@ export function BundleDiscountInfo(pros) {
                       placeholder="E.g. 10"
                       prefix="%"
                       type="number"
-                      max={99.99}  
-                      min={0.01}                    
+                      max={99.99}
+                      min={0.01}
                       label="Discount Value"
                       value={value.value}
-                      onChange={(e) => {                       
-                          if((parseFloat(e) < 100) || (e == '')) value.onChange(e)
-                          //value.onChange(e)
-                        }
+                      onChange={(e) => {
+                        if ((parseFloat(e) < 100) || (e == '')) value.onChange(e)
+                        //value.onChange(e)
+                      }
                       }
                       autoComplete="off"
                     />
-                    {/* <Popover
-                      active={startVisible}
+                    <Popover
+                      active={startVisible && activeRowIndex === index}
                       activator={<TextField
                         label="Start At"
                         value={getFormatedDate(startAt.value)}
                         autoComplete="off"
-                        onFocus={() => setStartVisible(true)}
+                        onFocus={() => {
+                          setActiveRowIndex(index);
+                          setStartVisible(true);
+                        }}
                       />}
                       autofocusTarget="first-node"
                       onClose={() => setStartVisible(false)}
@@ -101,23 +106,34 @@ export function BundleDiscountInfo(pros) {
 
                     </Popover>
                     <Popover
-                      active={(endDateEnable) && endVisible}
+                      active={(endDateEnable) && endVisible && activeRowIndex === index}
                       activator={<TextField
                         label="End At"
                         value={getFormatedDate(endAt.value)}
                         autoComplete="off"
                         placeholder="End At"
-                        disabled={!endDateEnable}
+                        disabled={!endAt.value ? true : false}
                         onFocus={() => setEndVisible(true)}
                         connectedLeft={<Checkbox
                           label="Basic checkbox"
                           labelHidden={true}
-                          checked={endDateEnable}
-                          onChange={() => {
-                            setEndDateEnable(!endDateEnable);
-                            setTimeout(() => {
-                              (endDateEnable) && endAt.onChange(null)
-                            }, 200);
+                          //checked={endDateEnable}
+                          checked={endAt.value ? true : false}
+                          onChange={(e) => {
+                            console.log(e);
+                            if(e && !endAt.value) {
+                              endAt.onChange(new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24)))
+                              setActiveRowIndex(index);                              
+                            }else{
+                              endAt.onChange(null)
+                            }
+                            setEndDateEnable(e);
+
+                            // setEndDateEnable(e);
+                            // setActiveRowIndex(index);
+                            // setTimeout(() => {
+                            //   (endDateEnable) && endAt.onChange(null)
+                            // }, 200);
                           }}
                           onFocus={() => setEndVisible(true)}
                         />}
@@ -138,12 +154,35 @@ export function BundleDiscountInfo(pros) {
                         />
                       </Card>
 
-                    </Popover> */}
+                    </Popover>
+                    <Button size="large" variant="plain" tone="critical" icon={XIcon} onClick={() => { 
+                      onRemoveGlobalPriceRules(index)
+                    }}></Button>
                   </InlineStack>
                 </BlockStack>
               </>
             )
             )}
+
+            {((globalPriceRules.length)) && (
+              <PageActions
+                primaryAction={{
+                  content: 'More Discounts',
+                  disabled: (globalPriceRules.length >= 3) ? true : false,
+                  onAction: () => {
+                    const today = new Date();
+                    onAddGlobalPriceRules({
+                      value: '',
+                      type: 'percent',
+                      startAt: today.toISOString().split('T')[0],
+                      endAt: null
+                    })
+                  }
+                }}
+              />
+            )}
+
+
           </FormLayout>
         </Form>
       </BlockStack>
