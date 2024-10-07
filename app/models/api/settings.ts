@@ -227,7 +227,10 @@ export const modelShopSettings = {
                                 "adminFilterable": {
                                 "enabled": true
                                 }
-                            }
+                            },
+                            "access": {
+                                "admin": "PRIVATE"
+                            },
                         }
                     }
                 }

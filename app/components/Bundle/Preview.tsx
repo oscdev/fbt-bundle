@@ -1,7 +1,7 @@
 import { Card, Text, BlockStack, InlineStack, SkeletonThumbnail, SkeletonBodyText, Button, Thumbnail, Badge, Box, Divider } from '@shopify/polaris';
 import divider from '../../assets/images/divider.png';
 export function Preview(pros) {
-  const { bundleName, bundlePrice, description, cartItems, cartItemsMedia, currencyCodes, globalPriceRules } = pros;
+  const { bundleName, bundlePrice, labelOnCard, cartItems, cartItemsMedia, currencyCodes, globalPriceRules } = pros;
   const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;
   return (    
       <BlockStack gap="300">        
@@ -61,7 +61,7 @@ export function Preview(pros) {
 
             <Box padding="100">
               <Badge tone="info">
-                {(description.value) ? description.value : "Buy this combo and get 10% OFF"}
+                {(labelOnCard.value) ? labelOnCard.value : "Buy this combo and get 10% OFF"}
               </Badge>
             </Box>
 
