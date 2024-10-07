@@ -64,9 +64,16 @@ export function BundleDiscountInfo(pros) {
                       placeholder="E.g. 10"
                       suffix="%"
                       type="number"
+                      max={99.99}  
+                      min={0.01}                    
                       label="Discount Value"
                       value={value.value}
-                      onChange={(e) => value.onChange(e)}
+                      onChange={(e) => {
+                        console.log(e)
+                          if((parseFloat(e) < 100) || (e == '')) value.onChange(e)
+                          //value.onChange(e)
+                        }
+                      }
                       autoComplete="off"
                     />
                     {/* <Popover
