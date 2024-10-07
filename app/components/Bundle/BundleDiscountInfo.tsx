@@ -62,7 +62,7 @@ export function BundleDiscountInfo(pros) {
                   <InlineStack align="start" wrap={false} gap="300">
                     <TextField
                       placeholder="E.g. 10"
-                      suffix="%"
+                      prefix="%"
                       type="number"
                       max={99.99}  
                       min={0.01}                    

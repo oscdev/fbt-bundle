@@ -17,7 +17,7 @@ export function BundleInfo(pros) {
                         />
 
                         <TextField
-                            label={<Text variant="headingXs" as="h6">Card label</Text>}
+                            label={<Text variant="headingXs" as="h6">Discount label</Text>}
                             value={labelOnCard.value}
                             onChange={(e) => labelOnCard.onChange(e)}
                             placeholder="E.g. Buy this combo and get 10% OFF"

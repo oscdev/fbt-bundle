@@ -1,6 +1,15 @@
 {% assign item = product.metafields.oscp.fbtBundle.value.expand.expandedCartItems[0] %}
 {% assign cart_items = product.metafields.oscp.fbtBundle.value.expand.expandedCartItems %}
 {% assign cart_discount = product.metafields.oscp.fbtBundle.value.expand.globalPriceRules[0].value %}
+{% assign disc_text = product.metafields.oscp.fbtBundle.value.expand.config.labelOnCard %}
+{% comment %}
+{% assign offer_rule = product.metafields.oscp.fbtBundle.value.expand.globalPriceRules[0] %}
+{% assign current_date = 'now' | date: '%Y-%m-%d' %}
+{% assign highest_value_object = nil %}
+{% assign highest_value = 0 %}
+{{ offer_rule.startAt }} <br/>
+{{ current_date }}
+{% endcomment %}
 
 {% if product.metafields.oscp.fbtBundle %}
   <div id="fbt-block">
@@ -44,7 +53,7 @@
             {% endfor %}
           </div>
 
-          <p class="fbt_description">{{ product.description }}</p>
+          <p class="fbt_description">{{ disc_text }}</p>
             {% comment %} Shows the discount percentage for the bundle {% endcomment %}
               {% assign discount_amount = multiplied_price | times: discount_percentage | divided_by: 100 %}
               {% assign final_price = multiplied_price | minus: discount_amount %}
@@ -89,7 +98,7 @@
                         {{ block.settings.fbt_cart_text }}
                         {% comment %} Button text when the product is available {% endcomment %}
                       {%- else -%}
-                        Sold Out
+                        {{ block.settings.fbt_cart_text }}
                         {% comment %} Button text when the product is sold out {% endcomment %}
                       {%- endif -%}
                     </span>
@@ -142,13 +151,13 @@
                 {% endfor %}
               </div>
       
-              <p class="fbt_description">{{ bundle_product.description }}</p>
+              <p class="fbt_description">{{ bundle_metafield.expand.config.labelOnCard }}</p>
               {% assign discount_amount = multiplied_price | times: discount_percentage | divided_by: 100 %}
               {% assign final_price = multiplied_price | minus: discount_amount %}
               <div class="fbt_footer">
                 <p class="fbt_footer__total-label">Total</p>
                 <div class="fbt_footer__total-price">
-                  {% if cart_discount != blank %}
+                  {% if bundle_card_discount != blank %}
                     <span class="money discounted">{{ final_price | money }}</span>
                     <del class="money">{{ multiplied_price | money }}</del>
                   {% else %}
@@ -178,7 +187,7 @@
                       {%- if product.selected_or_first_available_variant.available -%}
                   {{ block.settings.fbt_cart_text }}
                       {%- else -%}
-                  Sold Out
+                  {{ block.settings.fbt_cart_text }}
                       {%- endif -%}
                     </span>
                   </button>
