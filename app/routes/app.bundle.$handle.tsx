@@ -17,8 +17,6 @@ export const action = async ({ params, request }) => {
   if (removableCartItems.length) {
     await bundle.unsetBundleAssociated(request, removableCartItems);
   }  
-  //console.log("savedResult", savedResult);
-  //return redirect("/app/bundle/list");
   return json({ status: "success", message: `Successfully saved bundle ${savedResult.title}.`});
 };
 
