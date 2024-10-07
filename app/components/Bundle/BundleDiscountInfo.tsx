@@ -68,8 +68,7 @@ export function BundleDiscountInfo(pros) {
                       min={0.01}                    
                       label="Discount Value"
                       value={value.value}
-                      onChange={(e) => {
-                        console.log(e)
+                      onChange={(e) => {                       
                           if((parseFloat(e) < 100) || (e == '')) value.onChange(e)
                           //value.onChange(e)
                         }
