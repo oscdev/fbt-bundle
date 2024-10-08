@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Page, Layout, Card, BlockStack, Text, Button, Badge, Spinner, InlineStack, InlineGrid, Banner, ButtonGroup, Checkbox, SkeletonThumbnail, SkeletonBodyText,Box } from "@shopify/polaris";
+import { Page, Layout, Card, BlockStack, Text, Button, Badge, Spinner, InlineStack, InlineGrid, Banner, ButtonGroup, Checkbox, SkeletonThumbnail, SkeletonBodyText, Box } from "@shopify/polaris";
 import { authenticate } from "~/shopify.server";
 import logo from "../assets/images/oscLogo.png";
 import { ExternalIcon, ChatIcon } from "@shopify/polaris-icons";
@@ -108,9 +108,13 @@ export default function Index() {
               </BlockStack>
             </Card>
           </Layout.Section>
-          <Layout.Section>
             {/* Free assistance section */}
-            <Card>
+            <Layout.Section>
+            <Banner
+              title={'Welcome to OSCP Upsell & Cross Sell App'}
+              tone="info"
+            >
+              <BlockStack gap="300">
               <InlineGrid columns="1fr auto">
                 <BlockStack gap="300">
                   <Text variant="headingMd" as="h6" fontWeight="bold">
@@ -119,7 +123,7 @@ export default function Index() {
                   <Text variant="bodyLg" as="p">
                     If you need support with any features or setup, please reach out to our support team.</Text>
                   <ButtonGroup>
-                  <Button variant="primary" target="_blank" url="https://www.oscprofessionals.com/upsell-cross-sell-app-user-guide/">Get Started</Button>
+                    <Button variant="primary" target="_blank" url="https://www.oscprofessionals.com/upsell-cross-sell-app-user-guide/">Get Started</Button>
                     <Button variant="primary" onClick={handleClick} icon={ChatIcon}>Chat with us</Button>
                   </ButtonGroup>
                 </BlockStack>
@@ -128,47 +132,60 @@ export default function Index() {
                   src={support}
                 />
               </InlineGrid>
-            </Card>
+              <InlineGrid columns="1fr auto">
+                <BlockStack gap="300">
+                  <Text variant="headingMd" as="h6" fontWeight="bold">
+                    Feedback
+                  </Text>
+                  <Text variant="bodyLg" as="p">
+                    I wish you all the best on this day! Your feedback is valuable to us! Share your experience of using the OSCP Upsell & Cross Sell App.</Text>
+                  <ButtonGroup><Button variant="primary" target="_blank" url="https://apps.shopify.com/oscp-upsell-cross-sell-1#modal-show=ReviewListingModal">Share Feedback</Button></ButtonGroup>
+                  <Text variant="bodyLg" as="p" tone="success">
+                    YOUR REVIEW WILL BE OUR MOTIVATION!</Text>
+                </BlockStack>
+              </InlineGrid>
+              </BlockStack>
+            </Banner>
           </Layout.Section>
-          {(settingsData.themeStatus.blocks[0].is_configured === true) && (settingsData.themeStatus.embedBlock?.is_disabled === false) ? "":(
+          {(settingsData.themeStatus.blocks[0].is_configured === true) && (settingsData.themeStatus.embedBlock?.is_disabled === false) ? "" : (
             <Layout.Section>
               <Banner
                 title={'Activate our app on your theme'}
                 tone="warning"
               >
                 <BlockStack gap="200">
-                 <Text variant="bodyLg" as="p">
-                 Our application Grid is not configured in your theme. It is required to be enabled to start storefront integration.</Text>
-                 <Text variant="bodyLg" as="p" alignment="end"><Button url="/app/theme-setup" variant="primary">Activate App</Button></Text>
-               </BlockStack>
+                  <Text variant="bodyLg" as="p">
+                    Our application Grid is not configured in your theme. It is required to be enabled to start storefront integration.</Text>
+                  <Text variant="bodyLg" as="p" alignment="end"><Button url="/app/theme-setup" variant="primary">Activate App</Button></Text>
+                </BlockStack>
               </Banner>
             </Layout.Section>
           )}
           <Layout.Section>
             <InlineGrid gap="400" columns={2}>
-                <Card roundedAbove="sm">
-                    <BlockStack gap="200">
-                    <InlineGrid columns="1fr auto">
+              <Card roundedAbove="sm">
+                <BlockStack gap="200">
+                  <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">Frequently Bought Together</Text>
                     {/* <Button variant="primary" onClick={() => navigate("/products")} icon={ExternalIcon}>Create FBT</Button> */}
                     <Button variant="primary" onClick={handleFBTRedirection} icon={ExternalIcon}>
                       Create FBT
-                    </Button>                  
-                    </InlineGrid>
-                    <Text  variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text> 
-                    </BlockStack>
-                </Card>
-                <Card roundedAbove="sm">
-                    <BlockStack gap="200">
-                    <InlineGrid columns="1fr auto">
+                    </Button>
+                  </InlineGrid>
+                  <Text variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text>
+                </BlockStack>
+              </Card>
+              <Card roundedAbove="sm">
+                <BlockStack gap="200">
+                  <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">FBT Bundle</Text>
                     <Button variant="primary" onClick={() => navigate("/app/bundle/new")} icon={ExternalIcon}>Create FBT Bundle</Button>
                   </InlineGrid>
-                  <Text  variant="headingMd" as="h6" alignment="center"><img src={Bundle} alt="Theme Setup" width="300px" /></Text>   
-                    </BlockStack>
-                </Card>
+                  <Text variant="headingMd" as="h6" alignment="center"><img src={Bundle} alt="Theme Setup" width="300px" /></Text>
+                </BlockStack>
+              </Card>
             </InlineGrid>
-        </Layout.Section>
+          </Layout.Section>
         </Layout>
       </BlockStack>
     </Page>
