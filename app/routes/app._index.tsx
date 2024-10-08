@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Page, Layout, Card, BlockStack, Text, Button, Badge, Spinner, InlineStack, InlineGrid, Banner, ButtonGroup, Checkbox, SkeletonThumbnail, SkeletonBodyText, Box } from "@shopify/polaris";
+import { Page, Layout, Card, BlockStack, Text, Button, Badge, InlineStack, InlineGrid, Banner, ButtonGroup } from "@shopify/polaris";
 import { authenticate } from "~/shopify.server";
 import logo from "../assets/images/oscLogo.png";
 import { ExternalIcon, ChatIcon } from "@shopify/polaris-icons";
@@ -140,7 +140,7 @@ export default function Index() {
                   <Text variant="bodyLg" as="p">
                     I wish you all the best on this day! Your feedback is valuable to us! Share your experience of using the OSCP Upsell & Cross Sell App.</Text>
                   <ButtonGroup><Button variant="primary" target="_blank" url="https://apps.shopify.com/oscp-upsell-cross-sell-1#modal-show=ReviewListingModal">Share Feedback</Button></ButtonGroup>
-                  <Text variant="bodyLg" as="p" tone="success">
+                  <Text variant="bodyLg" as="p" tone="success" fontWeight="bold">
                     YOUR REVIEW WILL BE OUR MOTIVATION!</Text>
                 </BlockStack>
               </InlineGrid>
