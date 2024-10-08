@@ -22,7 +22,7 @@ export default function BundleList() {
   return (
     <Page
       title="Bundle List"
-      backAction={{ content: "Settings", url: "/app" }}
+      backAction={{ content: "Settings", url: "/app/bundle/list" }}
       primaryAction={
         <Button icon={PlusIcon} variant="primary" url= "/app/bundle/new">Create Bundle</Button>
       }
