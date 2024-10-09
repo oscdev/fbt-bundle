@@ -7,7 +7,6 @@ export function BundleDiscountInfo(pros) {
   const [startVisible, setStartVisible] = useState(false);
   const [endVisible, setEndVisible] = useState(false);
   const [activeRowIndex, setActiveRowIndex] = useState();
-  const [endDateActiveRowIndex, setEndDateActiveRowIndex] = useState();
 
   function getFormatedDate(date) {
     if (!date) return;
@@ -89,7 +88,7 @@ export function BundleDiscountInfo(pros) {
           </Box>
           <Box>
             <Popover              
-              active={endVisible && endDateActiveRowIndex === index}
+              active={endVisible && activeRowIndex === index}
               activator={<TextField
                 label="End At"
                 labelHidden
@@ -99,7 +98,7 @@ export function BundleDiscountInfo(pros) {
                 disabled={!endAt.value ? true : false}
                 onFocus={() => {
                   setEndVisible(true);
-                  setEndDateActiveRowIndex(index);
+                  setActiveRowIndex(index);
                 }}
               />}
               autofocusTarget="first-node"
