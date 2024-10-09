@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
-import { TextField, Card, Form, FormLayout, Select, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker, Button, PageActions, IndexTable, Box } from "@shopify/polaris";
-import { XIcon, ArrowDownIcon, ArrowUpIcon } from '@shopify/polaris-icons';
+import { TextField, Card, Form, FormLayout, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker, Button, PageActions, IndexTable, Box } from "@shopify/polaris";
+import { XIcon } from '@shopify/polaris-icons';
 export function BundleDiscountInfo(pros) {
   const { globalPriceRules, onAddGlobalPriceRules, onRemoveGlobalPriceRules, bundlePrice, cartItems, cartItemsMedia, currencyCodes, calculatePrice, onCalculatePrice } = pros;
   const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;  
@@ -91,8 +91,7 @@ export function BundleDiscountInfo(pros) {
               checked={endAt.value ? true : false}
               onChange={(e) => {                
                 if (e && !endAt.value) {
-                  endAt.onChange(new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
-                  //endAt.onChange(new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24)))                  
+                  endAt.onChange(new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);                  
                 } else {
                   endAt.onChange(null);
                 }
@@ -125,8 +124,7 @@ export function BundleDiscountInfo(pros) {
                   month={month}
                   year={year}
                   disableDatesBefore={new Date(startAt.value)}
-                  onChange={(date) => {
-                    //console.log(new Date(date.end.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
+                  onChange={(date) => {                    
                     endAt.onChange(new Date(date.end.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
                     setEndVisible(false);
                   }}
