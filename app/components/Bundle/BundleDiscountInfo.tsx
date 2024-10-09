@@ -79,7 +79,8 @@ export function BundleDiscountInfo(pros) {
               checked={endAt.value ? true : false}
               onChange={(e) => {                
                 if (e && !endAt.value) {
-                  endAt.onChange(new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24)))                  
+                  endAt.onChange(new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
+                  //endAt.onChange(new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24)))                  
                 } else {
                   endAt.onChange(null);
                 }
@@ -112,6 +113,7 @@ export function BundleDiscountInfo(pros) {
                   year={(endAt.value) ? new Date(endAt.value).getFullYear() : new Date().getFullYear()}
                   disableDatesBefore={new Date(startAt.value)}
                   onChange={(date) => {
+                    //console.log(new Date(date.end.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
                     endAt.onChange(new Date(date.end.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
                     setEndVisible(false);
                   }}
