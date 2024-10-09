@@ -3,8 +3,7 @@ import { TextField, Card, Form, FormLayout, Select, Text, BlockStack, InlineStac
 import { XIcon, ArrowDownIcon, ArrowUpIcon } from '@shopify/polaris-icons';
 export function BundleDiscountInfo(pros) {
   const { globalPriceRules, onAddGlobalPriceRules, onRemoveGlobalPriceRules, bundlePrice, cartItems, cartItemsMedia, currencyCodes, calculatePrice, onCalculatePrice } = pros;
-  const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;
-  const [endDateEnable, setEndDateEnable] = useState((globalPriceRules[0]?.endAt.value) ? true : false);
+  const currency = currencyCodes.currencyFormats.moneyInEmailsFormat;  
   const [startVisible, setStartVisible] = useState(false);
   const [endVisible, setEndVisible] = useState(false);
   const [activeRowIndex, setActiveRowIndex] = useState();
@@ -79,22 +78,18 @@ export function BundleDiscountInfo(pros) {
               label="Basic checkbox"
               labelHidden={true}
               checked={endAt.value ? true : false}
-              onChange={(e) => {
-                console.log(e);
+              onChange={(e) => {                
                 if (e && !endAt.value) {
-                  endAt.onChange(new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24)))
-                  //setActiveRowIndex(index);
+                  endAt.onChange(new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24)))                  
                 } else {
                   endAt.onChange(null);
-                  setEndDateEnable(e);
                 }
-              }}
-              onFocus={() => setEndVisible(true)}
+              }}              
             />
           </Box>
           <Box>
-            <Popover
-              active={(endDateEnable) && endVisible && endDateActiveRowIndex === index}
+            <Popover              
+              active={endVisible && endDateActiveRowIndex === index}
               activator={<TextField
                 label="End At"
                 labelHidden
@@ -104,7 +99,6 @@ export function BundleDiscountInfo(pros) {
                 disabled={!endAt.value ? true : false}
                 onFocus={() => {
                   setEndVisible(true);
-                  setEndDateEnable(true);
                   setEndDateActiveRowIndex(index);
                 }}
               />}
@@ -196,9 +190,10 @@ export function BundleDiscountInfo(pros) {
                 >
                   {discoubtsRowMarkup}
                 </IndexTable>
+                
                 <PageActions
                   primaryAction={{
-                    content: 'More Discounts',
+                    content: 'Add More Discounts',
                     disabled: (globalPriceRules.length >= 3) ? true : false,
                     onAction: () => {
                       const today = new Date();
