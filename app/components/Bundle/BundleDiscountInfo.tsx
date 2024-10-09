@@ -7,6 +7,16 @@ export function BundleDiscountInfo(pros) {
   const [startVisible, setStartVisible] = useState(false);
   const [endVisible, setEndVisible] = useState(false);
   const [activeRowIndex, setActiveRowIndex] = useState();
+  const [{month, year}, setDate] = useState({month: new Date().getMonth(), year: new Date().getFullYear()});
+
+  function resetHandleMonthChange(targetDate){
+    setDate({month: new Date(targetDate).getMonth(), year: new Date(targetDate).getFullYear()});
+  }
+  const handleMonthChange = useCallback(
+    (month: number, year: number) => setDate({month, year}),
+    [],
+  );
+
 
   function getFormatedDate(date) {
     if (!date) return;
@@ -51,6 +61,7 @@ export function BundleDiscountInfo(pros) {
             onFocus={() => {
               setActiveRowIndex(index);
               setStartVisible(true);
+              resetHandleMonthChange(startAt.value);
             }}
           />}
           autofocusTarget="first-node"
@@ -58,14 +69,15 @@ export function BundleDiscountInfo(pros) {
         >
           <Card>
             <DatePicker
-              month={new Date(startAt.value).getMonth()}
-              year={new Date(startAt.value).getFullYear()}
+              month={month}
+              year={year}
               disableDatesBefore={new Date(Date.now() - 1000 * 60 * 60 * 24)}
               onChange={(date) => {
                 startAt.onChange(new Date(date.start.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
                 setStartVisible(false);
               }}
               selected={new Date(startAt.value)}
+              onMonthChange={handleMonthChange}
             />
           </Card>
         </Popover>
@@ -100,6 +112,7 @@ export function BundleDiscountInfo(pros) {
                 onFocus={() => {
                   setEndVisible(true);
                   setActiveRowIndex(index);
+                  resetHandleMonthChange(endAt.value);
                 }}
               />}
               autofocusTarget="first-node"
@@ -109,8 +122,8 @@ export function BundleDiscountInfo(pros) {
             >
               <Card>
                 <DatePicker
-                  month={(endAt.value) ? new Date(endAt.value).getMonth() : new Date().getMonth()}
-                  year={(endAt.value) ? new Date(endAt.value).getFullYear() : new Date().getFullYear()}
+                  month={month}
+                  year={year}
                   disableDatesBefore={new Date(startAt.value)}
                   onChange={(date) => {
                     //console.log(new Date(date.end.getTime() + (1000 * 60 * 60 * 24)).toISOString().split('T')[0]);
@@ -118,6 +131,7 @@ export function BundleDiscountInfo(pros) {
                     setEndVisible(false);
                   }}
                   selected={(endAt.value) ? new Date(endAt.value) : new Date(new Date(startAt.value).getTime() + (1000 * 60 * 60 * 24))}
+                  onMonthChange={handleMonthChange}
                 />
               </Card>
             </Popover>
