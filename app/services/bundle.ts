@@ -95,9 +95,28 @@ export const bundle = {
 
         // Call the updateProductPrice function to update the price
         await this.updateProductPrice(admin, productId, variantId, bundlePrice);
+        await this.publishBundle(admin, productId);
         return productJson.data.productCreate.product
     },
+    publishBundle : async function (admin, productId) {
+        const publicationsQL = await admin.graphql(QL.FETCH_PUBLICATIONS);
+        const publications = await publicationsQL.json();        
+        const onlineStorePublication = publications.data.publications.edges.filter(edge => edge.node.name === 'Online Store')[0].node;
+        
 
+        const productPublicationsQL = await admin.graphql(
+            QL.PUBLICATIONS_MUTATION,
+            {
+                variables: {
+                    "id": productId,
+                    "input": {
+                        "publicationId": onlineStorePublication.id,
+                    }
+                }
+            }
+        );
+        const productPublications = await productPublicationsQL.json(); 
+    },
     //Separate function to update product price
     updateProductPrice : async function (admin, productId, variantId, bundlePrice) {
         return await admin.graphql(
