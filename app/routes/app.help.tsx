@@ -6,7 +6,6 @@ import support from "../assets/images/support.png";
 import { settings } from "../services/index.js";
 import { useLoaderData, json, useNavigate } from "@remix-run/react";
 import { authenticate } from "../shopify.server.js";
-
 async function getLoaderData(request) {
     const { admin } = await authenticate.admin(request);
     const [ themeStatus] = await Promise.all([
@@ -21,7 +20,8 @@ async function getLoaderData(request) {
   // get loader data for app settings and theme settings (Enable/Disable)
   export const loader = async ({ request }) => {
     const appSettingsData = await getLoaderData(request);
-    return json(appSettingsData);
+    const zoomMeet = process.env.ZOOM_MEET_KEY;
+    return json({ zoomMeet, appSettingsData});
   };
 // help component
 export default function Help() {
@@ -35,7 +35,7 @@ export default function Help() {
     window.open("https://apps.shopify.com/oscp-sales-volume-discount/", "_blank");
   }
   const redirectZoomMeetings = () => {
-    window.open("https://calendar.app.google/jqvd7CSa8PpdgzyY7", "_blank");
+    window.open("https://calendar.app.google/" + settingsData.zoomMeet + "", "_blank");
   }
 
   function redirectAppSettings() {

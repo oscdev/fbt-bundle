@@ -106,10 +106,9 @@
                    {%- else -%}
                       <button type="submit" name="add" class="11 fbt_addcart" disabled>
                     <span>
-                  Sold Out
-                    
-                      {% comment %} Button text when the product is sold out {% endcomment %}
+                      {{ block.settings.fbt_cart_text }}
                     </span>
+                      {% comment %} Button text when the product is sold out {% endcomment %}
                   </button>
                   {%- endif -%}
                   {%- if block.settings.show_dynamic_checkout -%}
@@ -212,7 +211,7 @@
                           {%- else -%}
                             <button type="submit" name="add" class="11 fbt_addcart" disabled>
                                 <span>
-                                  Sold Out
+                                  {{ block.settings.fbt_cart_text }}
                                 </span>
                             </button>
                         {%- endif -%}
