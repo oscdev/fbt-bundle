@@ -141,7 +141,7 @@ export default function Bundle() {
   }
 
   function onShowForm() {
-    navigate("/app");
+    navigate("/app/bundle/list");
   }
 
   function confirmExit() {
@@ -176,7 +176,7 @@ export default function Bundle() {
     <Banner tone="success">
     <InlineStack gap="100" align="start" blockAlign="center">
       <p>{saveStatus?.message}</p>
-      <Button url={"/app/bundle/list"} variant="plain" icon={ExternalIcon}>View bundle list</Button>
+      <Button url={"/app/bundle/list"} target="_blank" variant="plain" icon={ExternalIcon}>View bundle list</Button>
      </InlineStack>
     </Banner>
   </Layout.Section>) : null;

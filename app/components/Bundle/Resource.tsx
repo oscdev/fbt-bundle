@@ -170,7 +170,7 @@ export function Resource(props) {
                                         pickResource();
                                     }}
                                 >
-                                    Add More Products
+                                    Add more products
                                 </Button>
                             </InlineGrid>
                             <Text variant="bodyLg" as="p">Product to sell in FBT bundle </Text>

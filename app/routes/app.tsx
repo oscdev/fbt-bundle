@@ -43,6 +43,7 @@ export default function App() {
       <NavMenu>
         <Link to="/app" rel="home">Home</Link>
         <Link to="/app/bundle/list">Bundle Offers</Link>
+        <Link to="/app/theme-setup">Settings</Link>
         <Link to="/app/help">Help</Link>
       </NavMenu>
       {navigation.state === "loading" && (

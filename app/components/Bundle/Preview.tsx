@@ -22,8 +22,8 @@ export function Preview(pros) {
     });
     
     return (highestValueObject) ? <>
-      <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">{currency.replace('{{amount}}', (bundlePrice.value - ((highestValueObject.value.value / 100) * bundlePrice.value)).toFixed(2))}</Text>
       <Text variant="bodyLg" as="p" fontWeight="semibold" textDecorationLine="line-through">{currency.replace('{{amount}}', bundlePrice.value)}</Text>
+      <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">{currency.replace('{{amount}}', (bundlePrice.value - ((highestValueObject.value.value / 100) * bundlePrice.value)).toFixed(2))}</Text>     
     </> : <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">{currency.replace('{{amount}}', bundlePrice.value)}</Text>
   }
 

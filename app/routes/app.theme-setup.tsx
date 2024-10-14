@@ -27,13 +27,11 @@ export default function Index() {
     const settingsData = useLoaderData();
   return (
     <Page title="Theme Setup" backAction={{ onAction: () => navigate("/app") }}>
-      <Frame>
         <Layout> 
           {settingsData.themeStatus !== null ? (
             <ThemeSetup settingsData={settingsData} />
           ): null}
         </Layout>
-      </Frame>     
     </Page>
   );
 }
