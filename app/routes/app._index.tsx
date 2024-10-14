@@ -15,14 +15,16 @@ import { Redirect } from '@shopify/app-bridge/actions';
 // get loader data for app settings and theme settings (Enable/Disable) 
 async function getLoaderData(request) {
   const { admin } = await authenticate.admin(request);
-  const [appStatus, themeStatus] = await Promise.all([
+  const [appStatus, themeStatus, shopName] = await Promise.all([
     await settings.getAppStatus(request),
-    await settings.getThemeStatus(request)
+    await settings.getThemeStatus(request),
+    await settings.shopDetail(request)
   ])
   return {
     appStatus,
     themeStatus,
-    shopUrl: admin.rest.session.shop || ''
+    shopUrl: admin.rest.session.shop || '',
+    shopName
   };
 }
 
@@ -87,7 +89,7 @@ export default function Index() {
   }
 
   return (
-    <Page title="Hi, Welcome to OSCP Upsell & Cross Sell App">
+    <Page title={'Hi' + (settingsData.shopName.name ? ', ' + settingsData.shopName.name + ' ' : ' ') + '👋'}>
       <BlockStack gap="500">
         <Layout>
           <Layout.Section>

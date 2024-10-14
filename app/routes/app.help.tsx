@@ -1,10 +1,31 @@
-import { Banner, BlockStack, Button, Card, Icon, Box, InlineGrid, Page, Text } from "@shopify/polaris";
+import { List, BlockStack, Button, Card, Image, Box, InlineGrid, Page, Text, ButtonGroup } from "@shopify/polaris";
 import { EmailIcon, ExternalIcon, InfoIcon, PersonFilledIcon, QuestionCircleIcon, StarFilledIcon } from "@shopify/polaris-icons";
 import logo from "../assets/images/logo.jpg";
-import { useNavigate } from "@remix-run/react";
+import support from "../assets/images/support.png";
+// import { cnf } from "../../cnf.js";
+import { settings } from "../services/index.js";
+import { useLoaderData, json, useNavigate } from "@remix-run/react";
+import { authenticate } from "../shopify.server.js";
 
+async function getLoaderData(request) {
+    const { admin } = await authenticate.admin(request);
+    const [ themeStatus] = await Promise.all([
+      await settings.getThemeStatus(request)
+    ])
+    return {
+      themeStatus,
+      shopUrl: admin.rest.session.shop || ''
+    };
+  }
+  
+  // get loader data for app settings and theme settings (Enable/Disable)
+  export const loader = async ({ request }) => {
+    const appSettingsData = await getLoaderData(request);
+    return json(appSettingsData);
+  };
 // help component
 export default function Help() {
+  const settingsData = useLoaderData();
   const navigate = useNavigate();
   // redirects to shopify app store for app installation
   function wholesaleRedirect() {
@@ -13,7 +34,13 @@ export default function Help() {
   function upsellRedirect() {
     window.open("https://apps.shopify.com/oscp-sales-volume-discount/", "_blank");
   }
+  const redirectZoomMeetings = () => {
+    window.open("https://calendar.app.google/jqvd7CSa8PpdgzyY7", "_blank");
+  }
 
+  function redirectAppSettings() {
+    window.open(`https://${settingsData.shopUrl}/admin/settings/apps/app_installations/app/sr-test`, "_blank");
+  }
 
   return (
     <Page
@@ -22,6 +49,33 @@ export default function Help() {
       backAction={{ content: "Settings", url: "/app" }}
     >
       <BlockStack gap="500">
+        <Card roundedAbove="sm">
+
+          <InlineGrid columns="1fr auto">
+
+            <div className="support_text">
+              <BlockStack gap="300">
+                <Text variant="headingMd" as="h2"> For assistance,please reach out to our support team.
+                </Text>
+                <Text variant="bodyMd" as="span"> Schedule a Meeting to assist with the setup process, discount configurations, widget customizations, or any other concerns.</Text>
+              </BlockStack>
+              <Box padding='400' style={{ marginTop: '10px' }}>
+                <a style={{ textDecoration: 'none' }} target='blank'><Button onClick={redirectZoomMeetings}> Schedule a Meeting with Us </Button> </a>
+              </Box>
+            </div>
+
+            <div className="support_img" style={{ width: '100px', height: '100px' }}>
+              <Image
+                source={support}
+                alt="support_img"
+                width="100%"
+                height="100%"
+              />
+            </div>
+
+          </InlineGrid>
+
+        </Card>
         {/* contact us section */}
         <Card roundedAbove="sm">
           <InlineGrid columns="1fr auto">
@@ -35,7 +89,7 @@ export default function Help() {
         <Card roundedAbove="sm">
           {/* user guide section */}
           <InlineGrid columns="1fr auto">
-            <Text variant="headingMd" as="h2">User guide</Text>
+            <Text variant="headingMd" as="h2">Check the user guide</Text>
             <a style={{ textDecoration: 'none' }} target='blank' href={'https://www.oscprofessionals.com/upsell-cross-sell-app-user-guide/'}><Button variant="plain" icon={PersonFilledIcon}>User Guide</Button></a>
           </InlineGrid>
           <InlineGrid columns="1fr auto">
@@ -45,7 +99,7 @@ export default function Help() {
         <Card roundedAbove="sm">
           {/* faq section */}
           <InlineGrid columns="1fr auto">
-            <Text variant="headingMd" as="h2">FAQs</Text>
+            <Text variant="headingMd" as="h2">Check the FAQs</Text>
             <a style={{ textDecoration: 'none' }} target='blank' href={'https://www.oscprofessionals.com/oscp-upsell-cross-sell-app#oscp-upsell-cross-sell-faq'}><Button variant="plain" icon={ExternalIcon}>FAQs</Button></a>
           </InlineGrid>
           <InlineGrid columns="1fr auto">
@@ -53,14 +107,41 @@ export default function Help() {
           </InlineGrid>
         </Card>
         <Card roundedAbove="sm">
-          {/* Settings section */}
-          <InlineGrid columns="1fr auto">
-            <Text variant="headingMd" as="h2">App Settings</Text>
-            <Button onClick={() => navigate("/app/theme-setup")} variant="plain" icon={ExternalIcon}>Settings</Button>
-          </InlineGrid>
-          <InlineGrid columns="1fr auto">
-            <Text variant="bodyMd" as="span">Check out our Widget section.</Text>
-          </InlineGrid>
+          <BlockStack gap="400">
+            <InlineGrid columns="auto 1fr" alignItems="center">
+              <div className="support_img" style={{ width: '24px', height: '24px', marginRight: '8px' }}>
+                <Image
+                  source={support}
+                  alt="support_img"
+                  width="100%"
+                  height="100%"
+                />
+              </div>
+              {/* <Icon source={ChatReferralIcon} tone="base" /> */}
+              <Text variant="headingMd" as="h2"> Contact the support team </Text>
+            </InlineGrid>
+
+            <Text variant="bodyMd" as="h2"> To Send useful information to the support team and solve your issue as soon as possible,please follow these instructions:</Text>
+            <List type="number">
+              <List.Item> <Button variant="plain" onClick={redirectAppSettings}>Click Here</Button> to Open the OSCP Upsell & Cross Sell application in Settings </List.Item>
+              <List.Item>Scroll to the bottom of the Page, and click the <b>Share logs</b> button</List.Item>
+              <List.Item>After sharing the logs with us,send us a message through the bubble in the buttom-right of the screen and tell us about your issue</List.Item>
+            </List>
+          </BlockStack>
+        </Card>
+        <Card roundedAbove="sm">
+        <InlineGrid columns="1fr auto">
+                <BlockStack gap="300">
+                  <Text variant="headingMd" as="h6" fontWeight="bold">
+                    Feedback
+                  </Text>
+                  <Text variant="bodyLg" as="p">
+                    I wish you all the best on this day! Your feedback is valuable to us! Share your experience of using the OSCP Upsell & Cross Sell App.</Text>
+                  <ButtonGroup><Button variant="primary" target="_blank" url="https://apps.shopify.com/oscp-upsell-cross-sell-1#modal-show=ReviewListingModal">Share Feedback</Button></ButtonGroup>
+                  <Text variant="bodyLg" as="p" tone="success" fontWeight="bold">
+                    YOUR REVIEW WILL BE OUR MOTIVATION!</Text>
+                </BlockStack>
+              </InlineGrid>  
         </Card>
         {/* apps section for other apps */}
         <Text variant="headingMd" as="h2">Try our other apps</Text>

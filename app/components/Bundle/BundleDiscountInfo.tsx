@@ -40,7 +40,7 @@ export function BundleDiscountInfo(pros) {
           type="number"
           max={99.99}
           min={0.01}
-          label="Discount Value"
+          label="Discount value"
           labelHidden
           value={value.value}
           onChange={(e) => {
@@ -106,7 +106,7 @@ export function BundleDiscountInfo(pros) {
                 labelHidden
                 value={getFormatedDate(endAt.value)}
                 autoComplete="off"
-                placeholder="End At"
+                placeholder="End at"
                 disabled={!endAt.value ? true : false}
                 onFocus={() => {
                   setEndVisible(true);
@@ -195,8 +195,8 @@ export function BundleDiscountInfo(pros) {
                   itemCount={globalPriceRules.length}
                   headings={[
                     { title: 'Discount Value' },
-                    { title: 'Start At' },
-                    { title: 'End At' },
+                    { title: 'Start at' },
+                    { title: 'End at' },
                     { title: '' }
                   ]}
                   selectable={false}
@@ -206,7 +206,7 @@ export function BundleDiscountInfo(pros) {
                 
                 <PageActions
                   primaryAction={{
-                    content: 'Add More Discounts',
+                    content: 'Add more discounts',
                     disabled: (globalPriceRules.length >= 3) ? true : false,
                     onAction: () => {
                       const today = new Date();

@@ -1,4 +1,4 @@
-import { Layout, Card, Text, InlineGrid, Button, BlockStack } from "@shopify/polaris";
+import { Layout, Card, Text, InlineGrid, Button, BlockStack, Banner } from "@shopify/polaris";
 import { ExternalIcon } from "@shopify/polaris-icons";
 
 //Create the dashboard page Design
@@ -15,7 +15,7 @@ export function ThemeSetup(props) {
                         Theme Status <small><i>(Live Theme: {settingsData.themeStatus.activeTheme.name})</i></small>
                     </Text>
                     {/* App Embeds section */}
-                    <InlineGrid gap="400" columns={2}>
+                    <InlineGrid gap="400" columns={3}>
                         <Card roundedAbove="sm">
                             <BlockStack gap="200">
                                 <InlineGrid columns="1fr auto">
@@ -32,11 +32,13 @@ export function ThemeSetup(props) {
                                     <Text variant="bodyLg" as="p" fontWeight="semibold" tone="success">
                                         The App is enabled.
                                     </Text>}
-                                <Text variant="bodyMd" as="p">
-                                    You need to enable the app embed to display our widget on your store.
+                                <Text as="p" variant="bodyMd">
+                                    <Banner tone="info">
+                                        <b>Mandatory.</b>
+                                        <br />
+                                        Enable/Disable OSCP Upsell and Cross Sell on App Embeds.
+                                    </Banner>
                                 </Text>
-                                <Text variant="bodyMd" as="p">
-                                    Click the button to open a new window with the app embed settings. Just click Save.</Text>
                             </BlockStack>
                         </Card>
                         {/* Product Widget section */}
@@ -54,8 +56,13 @@ export function ThemeSetup(props) {
                                         )}
                                     </Button>
                                 </InlineGrid>
-                                <Text variant="bodyMd" as="p">
-                                    Enable the widget in your theme for the "Frequently Bought Together" section to function on your product page.</Text>
+                                <Text as="p" variant="bodyMd">
+                                    <Banner tone="info">
+                                        <b>Mandatory.</b>
+                                        <br />
+                                        Enable/Disable layout design to display "Frequently Bought Together" section on the product detail page.
+                                    </Banner>
+                                </Text>
                             </BlockStack>
                         </Card>
                         <Card roundedAbove="sm">
@@ -72,8 +79,13 @@ export function ThemeSetup(props) {
                                         )}
                                     </Button>
                                 </InlineGrid>
-                                <Text variant="bodyMd" as="p">
-                                    Enable the widget in your theme for the "FBT Bundle" section to function on your product page.</Text>
+                                <Text as="p" variant="bodyMd">
+                                    <Banner tone="info">
+                                        <b>Mandatory.</b>
+                                        <br />
+                                        Enable/Disable layout design to display "FBT Bundle" section on the product detail page.
+                                    </Banner>
+                                </Text>
                             </BlockStack>
                         </Card>
                     </InlineGrid>
