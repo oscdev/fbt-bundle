@@ -1,10 +1,9 @@
 import { List, BlockStack, Button, Card, Image, Box, InlineGrid, Page, Text, ButtonGroup } from "@shopify/polaris";
-import { EmailIcon, ExternalIcon, InfoIcon, PersonFilledIcon, QuestionCircleIcon, StarFilledIcon } from "@shopify/polaris-icons";
+import { EmailIcon, ExternalIcon, PersonFilledIcon, StarFilledIcon } from "@shopify/polaris-icons";
 import logo from "../assets/images/logo.jpg";
 import support from "../assets/images/support.png";
-// import { cnf } from "../../cnf.js";
 import { settings } from "../services/index.js";
-import { useLoaderData, json, useNavigate } from "@remix-run/react";
+import { useLoaderData, json } from "@remix-run/react";
 import { authenticate } from "../shopify.server.js";
 async function getLoaderData(request) {
     const { admin } = await authenticate.admin(request);
@@ -21,12 +20,13 @@ async function getLoaderData(request) {
   export const loader = async ({ request }) => {
     const appSettingsData = await getLoaderData(request);
     const zoomMeet = process.env.ZOOM_MEET_KEY;
-    return json({ zoomMeet, appSettingsData});
+    const appName = process.env.APPNAME;
+    const siteUrl = process.env.SITEURL;
+    return json({ zoomMeet,appName, siteUrl, appSettingsData});
   };
 // help component
 export default function Help() {
   const settingsData = useLoaderData();
-  const navigate = useNavigate();
   // redirects to shopify app store for app installation
   function wholesaleRedirect() {
     window.open("https://apps.shopify.com/custom-pricing-wholesale/", "_blank");
@@ -39,7 +39,8 @@ export default function Help() {
   }
 
   function redirectAppSettings() {
-    window.open(`https://${settingsData.shopUrl}/admin/settings/apps/app_installations/app/sr-test`, "_blank");
+    window.open(`https://${settingsData.appSettingsData.shopUrl}/admin/settings/apps/app_installations/app/${settingsData.appName}`, "_blank");
+
   }
 
   return (
@@ -55,7 +56,7 @@ export default function Help() {
 
             <div className="support_text">
               <BlockStack gap="300">
-                <Text variant="headingMd" as="h2"> For assistance,please reach out to our support team.
+                <Text variant="headingMd" as="h2"> For assistance, please reach out to our support team.
                 </Text>
                 <Text variant="bodyMd" as="span"> Schedule a Meeting to assist with the setup process, discount configurations, widget customizations, or any other concerns.</Text>
               </BlockStack>
@@ -90,7 +91,7 @@ export default function Help() {
           {/* user guide section */}
           <InlineGrid columns="1fr auto">
             <Text variant="headingMd" as="h2">Check the user guide</Text>
-            <a style={{ textDecoration: 'none' }} target='blank' href={'https://www.oscprofessionals.com/upsell-cross-sell-app-user-guide/'}><Button variant="plain" icon={PersonFilledIcon}>User Guide</Button></a>
+            <a style={{ textDecoration: 'none' }} target='blank' href={`${settingsData.siteUrl}/upsell-cross-sell-app-user-guide/`}><Button variant="plain" icon={PersonFilledIcon}>User Guide</Button></a>
           </InlineGrid>
           <InlineGrid columns="1fr auto">
             <Text variant="bodyMd" as="span">Our user guide has step by step instructions on how to setup and use the app.</Text>
@@ -100,7 +101,7 @@ export default function Help() {
           {/* faq section */}
           <InlineGrid columns="1fr auto">
             <Text variant="headingMd" as="h2">Check the FAQs</Text>
-            <a style={{ textDecoration: 'none' }} target='blank' href={'https://www.oscprofessionals.com/oscp-upsell-cross-sell-app#oscp-upsell-cross-sell-faq'}><Button variant="plain" icon={ExternalIcon}>FAQs</Button></a>
+            <a style={{ textDecoration: 'none' }} target='blank' href={`${settingsData.siteUrl}/oscp-upsell-cross-sell-app#oscp-upsell-cross-sell-faq`}><Button variant="plain" icon={ExternalIcon}>FAQs</Button></a>
           </InlineGrid>
           <InlineGrid columns="1fr auto">
             <Text variant="bodyMd" as="span">Check out our FAQ section for detailed answers about app functionalities and compatibility.</Text>
@@ -136,10 +137,8 @@ export default function Help() {
                     Feedback
                   </Text>
                   <Text variant="bodyLg" as="p">
-                    I wish you all the best on this day! Your feedback is valuable to us! Share your experience of using the OSCP Upsell & Cross Sell App.</Text>
-                  <ButtonGroup><Button variant="primary" target="_blank" url="https://apps.shopify.com/oscp-upsell-cross-sell-1#modal-show=ReviewListingModal">Share Feedback</Button></ButtonGroup>
-                  <Text variant="bodyLg" as="p" tone="success" fontWeight="bold">
-                    YOUR REVIEW WILL BE OUR MOTIVATION!</Text>
+                    Your feedback is valuable to us! Share your experience of using the OSCP Upsell & Cross Sell App.</Text>
+                  <ButtonGroup><Button target="_blank" url="https://apps.shopify.com/oscp-upsell-cross-sell-1#modal-show=ReviewListingModal">Share Feedback</Button></ButtonGroup>
                 </BlockStack>
               </InlineGrid>  
         </Card>

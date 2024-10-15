@@ -161,7 +161,7 @@ export function BundleDiscountInfo(pros) {
                 placeholder="0.00"
                 autoComplete="off"
                 connectedRight={<Checkbox
-                  label="Calculate Price Dynamically"
+                  label="Set price manually"
                   checked={calculatePrice.value}
                   onChange={(e) => {
                     calculatePrice.onChange(e);

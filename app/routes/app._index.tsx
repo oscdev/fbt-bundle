@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Page, Layout, Card, BlockStack, Text, Button, Badge, Spinner, InlineStack, InlineGrid, Banner, ButtonGroup, Checkbox, SkeletonThumbnail, SkeletonBodyText,Box } from "@shopify/polaris";
+import { Page, Layout, Card, BlockStack, Text, Button, Badge, InlineStack, InlineGrid, Banner, ButtonGroup} from "@shopify/polaris";
 import { authenticate } from "~/shopify.server";
 import logo from "../assets/images/oscLogo.png";
 import { ExternalIcon, ChatIcon } from "@shopify/polaris-icons";
@@ -9,8 +9,6 @@ import { useLoaderData, json, useNavigate, useSubmit } from "@remix-run/react";
 import support from "../assets/images/support.png";
 import FBT from "../assets/images/fbt.jpg";
 import Bundle from "../assets/images/bundle.jpg";
-import { useAppBridge } from '@shopify/app-bridge-react';
-import { Redirect } from '@shopify/app-bridge/actions';
 
 // get loader data for app settings and theme settings (Enable/Disable) 
 async function getLoaderData(request) {
@@ -47,7 +45,6 @@ export const action = async ({ request }) => {
   return json({ status });
 };
 export default function Index() {
-  const app = useAppBridge();
   const submitForm = useSubmit();
   const navigate = useNavigate();
   const [appSettings, setAppSettings] = useState({
@@ -152,7 +149,6 @@ export default function Index() {
                     <BlockStack gap="200">
                     <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">Frequently Bought Together</Text>
-                    {/* <Button variant="primary" onClick={() => navigate("/products")} icon={ExternalIcon}>Create FBT</Button> */}
                     <Button variant="primary" onClick={handleFBTRedirection} icon={ExternalIcon}>
                       Create FBT
                     </Button>                  

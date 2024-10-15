@@ -5,14 +5,13 @@ import { ExternalIcon } from "@shopify/polaris-icons";
 //@ts-ignore
 export function ThemeSetup(props) {
     const { settingsData } = props;
-    const liveThemeId = settingsData.themeStatus.activeTheme.id;
-
+    const liveThemeId = settingsData.appSettingsData.themeStatus?.activeTheme?.id;
     return (
         <Layout.Section>
             <Card>
                 <BlockStack gap="200">
                     <Text variant="headingMd" as="h2">
-                        Theme Status <small><i>(Live Theme: {settingsData.themeStatus.activeTheme.name})</i></small>
+                        Theme Status <small><i>(Live Theme: {settingsData.appSettingsData.themeStatus?.activeTheme?.name})</i></small>
                     </Text>
                     {/* App Embeds section */}
                     <InlineGrid gap="400" columns={3}>
@@ -22,10 +21,10 @@ export function ThemeSetup(props) {
                                     <Text variant="headingMd" as="h6" fontWeight="bold">
                                         App Embeds
                                     </Text>
-                                    {settingsData.themeStatus.embedBlock.is_disabled === true ?
-                                        <Button icon={ExternalIcon} target="_blank" url={"https://" + settingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?context=apps&template=index&activateAppId=7f58f248-eb9e-4678-860e-39566c950875/app-embed"}>Enable</Button> : <Button icon={ExternalIcon} target="_blank" url={"https://" + settingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?context=apps&template=index&activateAppId=7f58f248-eb9e-4678-860e-39566c950875/app-embed"}>View</Button>}
+                                    {settingsData.appSettingsData.themeStatus?.embedBlock?.is_disabled === true ?
+                                        <Button icon={ExternalIcon} target="_blank" url={"https://" + settingsData.appSettingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?context=apps&template=index&activateAppId=" +  settingsData.uuid + "/app-embed"}>Enable</Button> : <Button icon={ExternalIcon} target="_blank" url={"https://" + settingsData.appSettingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?context=apps&template=index&activateAppId=" +  settingsData.uuid + "/app-embed"}>View</Button>}
                                 </InlineGrid>
-                                {settingsData.themeStatus.embedBlock.is_disabled === true ? <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">
+                                {settingsData.appSettingsData.themeStatus?.embedBlock?.is_disabled === true ? <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">
                                     The App is disabled.
                                 </Text>
                                     :
@@ -49,9 +48,9 @@ export function ThemeSetup(props) {
                                         Product Widget
                                     </Text>
                                     <Button icon={ExternalIcon} target="_blank"
-                                        url={"https://" + settingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?template=product&addAppBlockId=7f58f248-eb9e-4678-860e-39566c950875/frequently&target=mainSection"}>{(
-                                            settingsData.themeStatus.blocks.length !== 0
-                                                ? (settingsData.themeStatus.blocks[0].is_configured === true ? "View" : "Enable App block")
+                                        url={"https://" + settingsData.appSettingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?template=product&addAppBlockId=" +  settingsData.uuid + "/frequently&target=mainSection"}>{(
+                                            settingsData.appSettingsData.themeStatus?.blocks?.length !== 0
+                                                ? (settingsData.appSettingsData.themeStatus?.blocks[0]?.is_configured === true ? "View" : "Enable App block")
                                                 : "Theme not Supported"
                                         )}
                                     </Button>
@@ -72,9 +71,9 @@ export function ThemeSetup(props) {
                                         Bundle Widget
                                     </Text>
                                     <Button icon={ExternalIcon} target="_blank"
-                                        url={"https://" + settingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?template=product&addAppBlockId=7f58f248-eb9e-4678-860e-39566c950875/fbt-bundle&target=mainSection"}>{(
-                                            settingsData.themeStatus.blocks.length !== 0
-                                                ? (settingsData.themeStatus.blocks[0].is_configured === true ? "View" : "Enable Bundle block")
+                                        url={"https://" + settingsData.appSettingsData.shopUrl + "/admin/themes/" + liveThemeId + "/editor?template=product&addAppBlockId=" +  settingsData.uuid + "/fbt-bundle&target=mainSection"}>{(
+                                            settingsData.appSettingsData.themeStatus?.blocks?.length !== 0
+                                                ? (settingsData.appSettingsData.themeStatus?.blocks[0]?.is_configured === true ? "View" : "Enable Bundle block")
                                                 : "Theme not Supported"
                                         )}
                                     </Button>
