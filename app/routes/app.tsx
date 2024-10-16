@@ -6,14 +6,25 @@ import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { NavMenu } from "@shopify/app-bridge-react";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { useNavigation } from "@remix-run/react";
-import { authenticate } from "../shopify.server";
+import { authenticate, MONTHLY_PLAN } from "../shopify.server";
 import { BlockStack, Box, Spinner } from "@shopify/polaris";
 import fs from "fs";
 import { Footer } from "../components/Footer";
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { session } = await authenticate.admin(request);
+  
+  // const { billing } = await authenticate.admin(request);
+  // await billing.require({
+  //   plans: [MONTHLY_PLAN],
+  //   isTest: true,
+  //   returnUrl: "https://admin.shopify.com/store/dev-praful-gupta/apps/pricing-22/app",
+  //   onFailure: async () => billing.request({ 
+  //       plan: MONTHLY_PLAN,
+  //       returnUrl: "https://admin.shopify.com/store/dev-praful-gupta/apps/pricing-22/app",
+  //       isTest: true
+  //   }),
+  // });
 
   // Log the complete request information
   const requestInfo = {
