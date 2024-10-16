@@ -11,16 +11,17 @@ export const loader = async ({ params, request }) => {
     const plan = u.searchParams.get("plan");
     const action = u.searchParams.get("action");
     const subscriptionId = u.searchParams.get("subscriptionId");
+    const { billing, session } = await authenticate.admin(request);
+    console.log("session", session)
 
-    if (plan && action !== 'unsubscribe') {
-        const { billing } = await authenticate.admin(request);
+    if (plan && action !== 'unsubscribe') {        
         await billing.require({
             plans: (plan == 'annual') ? [ANNUAL_PLAN] : [MONTHLY_PLAN],
             isTest: true,
-            returnUrl: "https://admin.shopify.com/store/dev-praful-gupta/apps/pricing-22/app/subscriptions",
+            returnUrl: `https://${session.shop}/admin/apps/${process.env.SHOPIFY_APP_NAME}/app/subscriptions`,
             onFailure: async () => billing.request({
                 plan: (plan == 'annual') ? ANNUAL_PLAN : MONTHLY_PLAN, //MONTHLY_PLAN,
-                returnUrl: "https://admin.shopify.com/store/dev-praful-gupta/apps/pricing-22/app/subscriptions",
+                returnUrl: `https://${session.shop}/admin/apps/${process.env.SHOPIFY_APP_NAME}/app/subscriptions`,
                 isTest: true
             }),
         });

@@ -17,8 +17,8 @@ export function SubscriptionCards(pros) {
                     </BlockStack>
                     {(name != 'Basic') && <PageActions
                         primaryAction={{
-                            content: (activeSubscription.length &&activeSubscription[0].name == name) ? 'Unsubscribe' : 'Subscribe',
-                            url: (activeSubscription.length && activeSubscription[0].name == name) ? action + '&action=unsubscribe&subscriptionId=' + activeSubscription[0].id : activeSubscription.length ? '' : action,
+                            content: (activeSubscription.length && activeSubscription[0].name == name) ? 'Unsubscribe' : 'Subscribe',
+                            url: (activeSubscription.length && activeSubscription[0].name == name) ? action + '&action=unsubscribe&subscriptionId=' + activeSubscription[0].id : action,
                         }}
                     />}
                     
