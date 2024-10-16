@@ -278,5 +278,22 @@ PUBLICATIONS_MUTATION: `mutation publishablePublish($id: ID!, $input: [Publicati
       message
     }
   }
+}`,
+GET_SUBSCRIPTIONS: `query {
+  app(id: "gid://shopify/App/170736975873"){
+    installation {
+      launchUrl
+      activeSubscriptions {
+        id
+        name
+        createdAt
+        returnUrl
+        status
+        currentPeriodEnd
+        trialDays
+        test
+      }
+    }
+  }	
 }`
 };
