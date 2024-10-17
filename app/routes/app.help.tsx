@@ -1,5 +1,5 @@
 import { List, BlockStack, Button, Card, Image, Box, InlineGrid, Page, Text, ButtonGroup } from "@shopify/polaris";
-import { EmailIcon, ExternalIcon, PersonFilledIcon, StarFilledIcon, ChatIcon } from "@shopify/polaris-icons";
+import { EmailIcon, ExternalIcon, PersonFilledIcon, StarFilledIcon } from "@shopify/polaris-icons";
 import logo from "../assets/images/oscLogo.png";
 import support from "../assets/images/support.png";
 import { settings } from "../services/index.js";
@@ -65,8 +65,7 @@ export default function Help() {
                 <Text variant="bodyMd" as="span"> Schedule a Meeting to assist with the setup process, discount configurations, widget customizations, or any other concerns.</Text>
               </BlockStack>
               <Box padding='400' style={{ marginTop: '10px' }}>
-                <a style={{ textDecoration: 'none' }} target='blank'> <ButtonGroup><Button onClick={redirectZoomMeetings}> Schedule a Meeting with Us </Button>
-                <Button onClick={handleClick} icon={ChatIcon}>Chat with us</Button></ButtonGroup> </a>
+                <a style={{ textDecoration: 'none' }} target='blank'><Button onClick={redirectZoomMeetings}> Schedule a Meeting with Us </Button></a>
               </Box>
             </div>
 
@@ -193,7 +192,6 @@ export default function Help() {
           </Card>
         </InlineGrid>
       </BlockStack>
-      <script src="//code.tidio.co/q0squwybsexugfdrwpuxt4cvrtsaxkzo.js" />
     </Page>
     
   );
