@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
-import { Page, Layout, Card, BlockStack, Text, Button, Badge, Spinner, InlineStack, InlineGrid, Banner, ButtonGroup, Checkbox, SkeletonThumbnail, SkeletonBodyText,Box } from "@shopify/polaris";
+import { Page, Layout, Card, BlockStack, Text, Button, Badge, InlineStack, InlineGrid, Banner } from "@shopify/polaris";
 import { authenticate } from "~/shopify.server";
 import logo from "../assets/images/oscLogo.png";
-import { ExternalIcon, ChatIcon } from "@shopify/polaris-icons";
+import { ExternalIcon } from "@shopify/polaris-icons";
 // import { cnf } from "../../cnf.js";
 import { settings } from "../services/settings";
 import { useLoaderData, json, useNavigate, useSubmit } from "@remix-run/react";
-import support from "../assets/images/support.png";
 import FBT from "../assets/images/fbt.jpg";
 import Bundle from "../assets/images/bundle.jpg";
 import { useAppBridge } from '@shopify/app-bridge-react';
-import { Redirect } from '@shopify/app-bridge/actions';
-
 // get loader data for app settings and theme settings (Enable/Disable) 
 async function getLoaderData(request) {
   const { admin } = await authenticate.admin(request);
@@ -78,9 +75,7 @@ export default function Index() {
       : "attention";
 
   // redirect chat button on click
-  const handleClick = () => {
-    window.tidioChatApi.open();
-  };
+
 
   function handleFBTRedirection() {
     window.open(`https://${settingsData.shopUrl}/admin/products`, "_blank");
@@ -108,67 +103,45 @@ export default function Index() {
               </BlockStack>
             </Card>
           </Layout.Section>
-          <Layout.Section>
-            {/* Free assistance section */}
-            <Card>
-              <InlineGrid columns="1fr auto">
-                <BlockStack gap="300">
-                  <Text variant="headingMd" as="h6" fontWeight="bold">
-                    Free assistance
-                  </Text>
-                  <Text variant="bodyLg" as="p">
-                    If you need support with any features or setup, please reach out to our support team.</Text>
-                  <ButtonGroup>
-                  <Button variant="primary" target="_blank" url="https://www.oscprofessionals.com/upsell-cross-sell-app-user-guide/">Get Started</Button>
-                    <Button variant="primary" onClick={handleClick} icon={ChatIcon}>Chat with us</Button>
-                  </ButtonGroup>
-                </BlockStack>
-                <img
-                  alt="Theme Setup"
-                  src={support}
-                />
-              </InlineGrid>
-            </Card>
-          </Layout.Section>
-          {(settingsData.themeStatus.blocks[0].is_configured === true) && (settingsData.themeStatus.embedBlock?.is_disabled === false) ? "":(
+          {(settingsData.themeStatus.blocks[0].is_configured === true) && (settingsData.themeStatus.embedBlock?.is_disabled === false) ? "" : (
             <Layout.Section>
               <Banner
                 title={'Activate our app on your theme'}
                 tone="warning"
               >
                 <BlockStack gap="200">
-                 <Text variant="bodyLg" as="p">
-                 Our application Grid is not configured in your theme. It is required to be enabled to start storefront integration.</Text>
-                 <Text variant="bodyLg" as="p" alignment="end"><Button url="/app/theme-setup" variant="primary">Activate App</Button></Text>
-               </BlockStack>
+                  <Text variant="bodyLg" as="p">
+                    Our application Grid is not configured in your theme. It is required to be enabled to start storefront integration.</Text>
+                  <Text variant="bodyLg" as="p" alignment="end"><Button url="/app/theme-setup" variant="primary">Activate App</Button></Text>
+                </BlockStack>
               </Banner>
             </Layout.Section>
           )}
           <Layout.Section>
             <InlineGrid gap="400" columns={2}>
-                <Card roundedAbove="sm">
-                    <BlockStack gap="200">
-                    <InlineGrid columns="1fr auto">
+              <Card roundedAbove="sm">
+                <BlockStack gap="200">
+                  <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">Frequently Bought Together</Text>
                     {/* <Button variant="primary" onClick={() => navigate("/products")} icon={ExternalIcon}>Create FBT</Button> */}
                     <Button variant="primary" onClick={handleFBTRedirection} icon={ExternalIcon}>
                       Create FBT
-                    </Button>                  
-                    </InlineGrid>
-                    <Text  variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text> 
-                    </BlockStack>
-                </Card>
-                <Card roundedAbove="sm">
-                    <BlockStack gap="200">
-                    <InlineGrid columns="1fr auto">
+                    </Button>
+                  </InlineGrid>
+                  <Text variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text>
+                </BlockStack>
+              </Card>
+              <Card roundedAbove="sm">
+                <BlockStack gap="200">
+                  <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">FBT Bundle</Text>
                     <Button variant="primary" onClick={() => navigate("/app/bundle/new")} icon={ExternalIcon}>Create FBT Bundle</Button>
                   </InlineGrid>
-                  <Text  variant="headingMd" as="h6" alignment="center"><img src={Bundle} alt="Theme Setup" width="300px" /></Text>   
-                    </BlockStack>
-                </Card>
+                  <Text variant="headingMd" as="h6" alignment="center"><img src={Bundle} alt="Theme Setup" width="300px" /></Text>
+                </BlockStack>
+              </Card>
             </InlineGrid>
-        </Layout.Section>
+          </Layout.Section>
         </Layout>
       </BlockStack>
     </Page>
