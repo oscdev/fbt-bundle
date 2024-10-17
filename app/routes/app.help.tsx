@@ -137,16 +137,16 @@ export default function Help() {
                     Feedback
                   </Text>
                   <Text variant="bodyLg" as="p">
-                    Your feedback is valuable to us! Share your experience of using the OSCP Upsell & Cross Sell App.</Text>
+                  Your feedback is valuable to us! Please share your experience using the OSCP Upsell & Cross Sell App.
+                   </Text>
                   <ButtonGroup><Button target="_blank" url="https://apps.shopify.com/oscp-upsell-cross-sell-1#modal-show=ReviewListingModal">Share Feedback</Button></ButtonGroup>
                 </BlockStack>
               </InlineGrid>  
         </Card>
         {/* apps section for other apps */}
         <Text variant="headingMd" as="h2">Try our other apps</Text>
-        <InlineGrid gap="400" columns={2}>
+        <InlineGrid gap="200" columns={2}>
           <Card roundedAbove="sm">
-            <Box background="bg-fill-info" padding="400" borderRadius="100">
               <BlockStack gap="200">
                 <InlineGrid columns="1fr auto">
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -165,11 +165,9 @@ export default function Help() {
                   Create Wholesale pricing based on Collections, Products, and their variants using Customer Tags.
                 </Text>
               </BlockStack>
-            </Box>
           </Card>
           <Card roundedAbove="sm">
-            <Box background="bg-fill-info" padding="400" borderRadius="100">
-              <BlockStack gap="400">
+              <BlockStack gap="200">
                 <InlineGrid columns="1fr auto">
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <img alt="OSCP Wholesale Logo" width="50px" src={logo} style={{ marginRight: '10px' }} />
@@ -184,7 +182,6 @@ export default function Help() {
                   Enhance sales with volume discounts and tiered discounts.
                 </Text>
               </BlockStack>
-            </Box>
           </Card>
         </InlineGrid>
       </BlockStack>
