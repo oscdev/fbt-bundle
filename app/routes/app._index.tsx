@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Page, Layout, Card, BlockStack, Text, Button, Badge, InlineStack, InlineGrid, Banner, ButtonGroup} from "@shopify/polaris";
 import { authenticate } from "~/shopify.server";
 import logo from "../assets/images/oscLogo.png";
-import { ExternalIcon, ChatIcon } from "@shopify/polaris-icons";
+import { ExternalIcon } from "@shopify/polaris-icons";
 // import { cnf } from "../../cnf.js";
 import { settings } from "../services/settings";
 import { useLoaderData, json, useNavigate, useSubmit } from "@remix-run/react";
@@ -77,9 +77,9 @@ export default function Index() {
       : "attention";
 
   // redirect chat button on click
-  const handleClick = () => {
-    window.tidioChatApi.open();
-  };
+  // const handleClick = () => {
+  //   window.tidioChatApi.open();
+  // };
 
   function handleFBTRedirection() {
     window.open(`https://${settingsData.shopUrl}/admin/products`, "_blank");
@@ -107,8 +107,8 @@ export default function Index() {
               </BlockStack>
             </Card>
           </Layout.Section>
-          <Layout.Section>
             {/* Free assistance section */}
+          {/* <Layout.Section>
             <Card>
               <InlineGrid columns="1fr auto">
                 <BlockStack gap="300">
@@ -128,7 +128,7 @@ export default function Index() {
                 />
               </InlineGrid>
             </Card>
-          </Layout.Section>
+          </Layout.Section> */}
           {(settingsData.themeStatus.blocks[0].is_configured === true) && (settingsData.themeStatus.embedBlock?.is_disabled === false) ? "":(
             <Layout.Section>
               <Banner

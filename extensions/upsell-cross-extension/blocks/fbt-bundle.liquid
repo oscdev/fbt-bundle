@@ -66,10 +66,10 @@
               {% comment %} Calculate discount amount and final price after applying discount {% endcomment %}
 
               <div class="fbt_footer">
-                <p class="fbt_footer__total-label">Total</p>
+                <p class="fbt_footer__total-label">Total:</p>
                   <div class="fbt_footer__total-price">
                       {% if highest_discount > 0 %}
-                        <del class="money">{{ total_price | money }}</del>
+                        <del class="money org">{{ total_price | money }}</del>
                         <span class="money discounted">{{ final_price | money }}</span>
                       {% else %}
                         <span class="money discounted">{{ final_price | money }}</span>
@@ -177,10 +177,10 @@
                 {% assign final_price = total_price %}
               {% endif %}
               <div class="fbt_footer">
-                <p class="fbt_footer__total-label">Total</p>
+                <p class="fbt_footer__total-label">Total:</p>
                 <div class="fbt_footer__total-price">
                   {% if highest_discount > 0 %}
-                    <del class="money">{{ total_price | money }}</del>
+                    <del class="money org">{{ total_price | money }}</del>
                     <span class="money discounted">{{ final_price | money }}</span>
                   {% else %}
                       <span class="money discounted">{{ final_price | money }}</span>
@@ -198,11 +198,18 @@
                     <input class="itemsProductt" type="hidden" name="id" value="{{ product_variant_id }}">
                   {% endif %}
                 {% endfor %}
-              
+                {% assign available = true %}
+                {% for item in product_handles %}
+                  {% assign product_handle = item.handle %}
+                  {% assign product_item = all_products[product_handle] %}
+                    {% if product_item.selected_or_first_available_variant.inventory_quantity < 1 %}
+                      {% assign available = false %}
+                      {% break %}
+                    {% endif %}
+                {% endfor %}
                 <input type="hidden" name="id" value="{{ bundle_product_variant_id }}">
-              
                   <div class="product-form__buttons">
-                        {%- if product.selected_or_first_available_variant.available and product_item.variants.inventory_quantity > 0 -%}
+                        {%- if product.selected_or_first_available_variant.available and available -%}
                           <button type="submit" name="add" class="11 fbt_addcart">
                             <span>
                               {{ block.settings.fbt_cart_text }}
@@ -228,7 +235,8 @@
 {% endif %}
 
 <style>
-    .fbt_container-inner {
+
+    .fbt-bundle_container {
       border: 2px solid {{ block.settings.border_color }} !important;
       background: {{ block.settings.container_background_color }} !important;
     }
@@ -246,6 +254,11 @@
     .money.discounted {
       color: {{ block.settings.discount_text_color }} !important;
     }
+
+    .fbt_addcart {
+      border-radius: {{ block.settings.button_border_radius }}px !important;
+    }
+
 </style>
 
 {% schema %}
@@ -260,7 +273,7 @@
             "type": "color",
             "id": "border_color",
             "label": "Container Border Color",
-            "default": "#000000"
+            "default": "#EDEDED"
         },
         {
             "type": "color",
@@ -297,8 +310,15 @@
           "id": "button_text_color",
           "label": "Add to Cart Button Text Color",
           "default": "#ffffff"
-        }
-        ,
+        },
+         {
+          "type": "range",
+          "id": "button_border_radius",
+          "label": "Button Border Radius",
+          "default": 0,
+          "min": 0,
+          "max": 50
+        },
         {
           "type": "text",
           "id": "fbt_cart_text",
