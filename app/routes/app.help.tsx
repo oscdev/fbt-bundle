@@ -43,10 +43,6 @@ export default function Help() {
 
   }
 
-  const handleClick = () => {
-    window.tidioChatApi.open();
-  };
-
   return (
     <Page
       title="Help"
