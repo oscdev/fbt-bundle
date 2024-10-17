@@ -108,45 +108,6 @@ export default function Index() {
               </BlockStack>
             </Card>
           </Layout.Section>
-            {/* Free assistance section */}
-            <Layout.Section>
-            <Banner
-              title={'Welcome to OSCP Upsell & Cross Sell App'}
-              tone="info"
-            >
-              <BlockStack gap="300">
-              <InlineGrid columns="1fr auto">
-                <BlockStack gap="300">
-                  <Text variant="headingMd" as="h6" fontWeight="bold">
-                    Free assistance
-                  </Text>
-                  <Text variant="bodyLg" as="p">
-                    If you need support with any features or setup, please reach out to our support team.</Text>
-                  <ButtonGroup>
-                    <Button variant="primary" target="_blank" url="https://www.oscprofessionals.com/upsell-cross-sell-app-user-guide/">Get Started</Button>
-                    <Button variant="primary" onClick={handleClick} icon={ChatIcon}>Chat with us</Button>
-                  </ButtonGroup>
-                </BlockStack>
-                <img
-                  alt="Theme Setup"
-                  src={support}
-                />
-              </InlineGrid>
-              <InlineGrid columns="1fr auto">
-                <BlockStack gap="300">
-                  <Text variant="headingMd" as="h6" fontWeight="bold">
-                    Feedback
-                  </Text>
-                  <Text variant="bodyLg" as="p">
-                    I wish you all the best on this day! Your feedback is valuable to us! Share your experience of using the OSCP Upsell & Cross Sell App.</Text>
-                  <ButtonGroup><Button variant="primary" target="_blank" url="https://apps.shopify.com/oscp-upsell-cross-sell-1#modal-show=ReviewListingModal">Share Feedback</Button></ButtonGroup>
-                  <Text variant="bodyLg" as="p" tone="success" fontWeight="bold">
-                    YOUR REVIEW WILL BE OUR MOTIVATION!</Text>
-                </BlockStack>
-              </InlineGrid>
-              </BlockStack>
-            </Banner>
-          </Layout.Section>
           {(settingsData.themeStatus.blocks[0].is_configured === true) && (settingsData.themeStatus.embedBlock?.is_disabled === false) ? "" : (
             <Layout.Section>
               <Banner

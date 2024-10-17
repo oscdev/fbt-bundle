@@ -108,6 +108,7 @@ export default function Help() {
           </Card>
         </InlineGrid>
       </BlockStack>
+      <script src="//code.tidio.co/q0squwybsexugfdrwpuxt4cvrtsaxkzo.js" />
     </Page>
   );
 }
