@@ -3,10 +3,8 @@ import { Page, Layout, Card, BlockStack, Text, Button, Badge, InlineStack, Inlin
 import { authenticate } from "~/shopify.server";
 import logo from "../assets/images/oscLogo.png";
 import { ExternalIcon } from "@shopify/polaris-icons";
-// import { cnf } from "../../cnf.js";
 import { settings } from "../services/settings";
 import { useLoaderData, json, useNavigate, useSubmit } from "@remix-run/react";
-import support from "../assets/images/support.png";
 import FBT from "../assets/images/fbt.jpg";
 import Bundle from "../assets/images/bundle.jpg";
 
