@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
-import { Page, Layout, Card, BlockStack, Text, Button, Badge, InlineStack, InlineGrid, Banner, ButtonGroup } from "@shopify/polaris";
+import { Page, Layout, Card, BlockStack, Text, Button, Badge, InlineStack, InlineGrid, Banner } from "@shopify/polaris";
 import { authenticate } from "~/shopify.server";
 import logo from "../assets/images/oscLogo.png";
-import { ExternalIcon, ChatIcon } from "@shopify/polaris-icons";
+import { ExternalIcon } from "@shopify/polaris-icons";
 // import { cnf } from "../../cnf.js";
 import { settings } from "../services/settings";
 import { useLoaderData, json, useNavigate, useSubmit } from "@remix-run/react";
-import support from "../assets/images/support.png";
 import FBT from "../assets/images/fbt.jpg";
 import Bundle from "../assets/images/bundle.jpg";
 import { useAppBridge } from '@shopify/app-bridge-react';
-import { Redirect } from '@shopify/app-bridge/actions';
-
 // get loader data for app settings and theme settings (Enable/Disable) 
 async function getLoaderData(request) {
   const { admin } = await authenticate.admin(request);
@@ -78,9 +75,7 @@ export default function Index() {
       : "attention";
 
   // redirect chat button on click
-  const handleClick = () => {
-    window.tidioChatApi.open();
-  };
+
 
   function handleFBTRedirection() {
     window.open(`https://${settingsData.shopUrl}/admin/products`, "_blank");
