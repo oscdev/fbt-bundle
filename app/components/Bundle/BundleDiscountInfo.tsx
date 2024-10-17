@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { TextField, Card, Form, FormLayout, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker, Button, PageActions, IndexTable, Box } from "@shopify/polaris";
+import { TextField, Card, Form, FormLayout, Text, BlockStack, InlineStack, Checkbox, Popover, DatePicker, Button, PageActions, IndexTable, Box, Tooltip } from "@shopify/polaris";
 import { XIcon } from '@shopify/polaris-icons';
 export function BundleDiscountInfo(pros) {
   const { globalPriceRules, onAddGlobalPriceRules, onRemoveGlobalPriceRules, bundlePrice, cartItems, cartItemsMedia, currencyCodes, calculatePrice, onCalculatePrice } = pros;
@@ -160,14 +160,14 @@ export function BundleDiscountInfo(pros) {
                 onChange={(e) => { bundlePrice.onChange(e) }}
                 placeholder="0.00"
                 autoComplete="off"
-                connectedRight={<Checkbox
+                connectedRight={ <Tooltip content="Hint : When you uncheck the box, manually set a price for the bundle"><Checkbox
                   label="Set price manually"
                   checked={calculatePrice.value}
                   onChange={(e) => {
                     calculatePrice.onChange(e);
                     if (e) onCalculatePrice(cartItems, cartItemsMedia);
                   }}
-                />}
+                /></Tooltip>}
               />
               <Checkbox
                 label={"Apply Discounts"}
