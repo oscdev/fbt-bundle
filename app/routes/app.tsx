@@ -12,7 +12,10 @@ import fs from "fs";
 import { Footer } from "../components/Footer";
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const requestInfo = {};
+  requestInfo.timeBeforeAuth = new Date();
   const { session } = await authenticate.admin(request);
+  requestInfo.timeAfterAuth = new Date();
   
   // const { billing } = await authenticate.admin(request);
   // await billing.require({
@@ -27,15 +30,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // });
 
   // Log the complete request information
-  const requestInfo = {
-    date: new Date(),
-    method: request.method,
-    url: request.url,
-    body: request.body,
-    headers: Object.fromEntries(request.headers),
-    query: request.query,
-    params: request.params,
-  };
+  requestInfo.date = new Date();
+  requestInfo.method = request.method;
+  requestInfo.url = request.url;
+  requestInfo.body = request.body;
+  requestInfo.headers = Object.fromEntries(request.headers);
+  requestInfo.query = request.query;
+  requestInfo.params = request.params;
 
   // Write the request information to a log file
   fs.appendFile(`${process.cwd()}/storage/logs/${session?.shop}.txt`, " --------------------Generated Request Logs----------- \n\n " + JSON.stringify(requestInfo, null, 2),  err => {  })
