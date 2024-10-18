@@ -39,7 +39,7 @@ export default function Help() {
   }
 
   function redirectAppSettings() {
-    window.open(`https://${settingsData.appSettingsData.shopUrl}/admin/settings/apps/app_installations/app/${settingsData.appName}`, "_blank");
+    window.open(`https://${settingsData.appSettingsData.shopUrl}/admin/settings/apps/app_installations/app/${settingsData.appName}`, "_parent");
 
   }
 
@@ -101,7 +101,7 @@ export default function Help() {
           {/* faq section */}
           <InlineGrid columns="1fr auto">
             <Text variant="headingMd" as="h2">Check the FAQs</Text>
-            <a style={{ textDecoration: 'none' }} target='blank' href={`${settingsData.siteUrl}/oscp-upsell-cross-sell-app#oscp-upsell-cross-sell-faq`}><Button variant="plain" icon={ExternalIcon}>FAQs</Button></a>
+            <a style={{ textDecoration: 'none' }} target='blank' href={`${settingsData?.siteUrl}/oscp-upsell-cross-sell-app#oscp-upsell-cross-sell-faq`}><Button variant="plain" icon={ExternalIcon}>FAQs</Button></a>
           </InlineGrid>
           <InlineGrid columns="1fr auto">
             <Text variant="bodyMd" as="span">Check out our FAQ section for detailed answers about app functionalities and compatibility.</Text>

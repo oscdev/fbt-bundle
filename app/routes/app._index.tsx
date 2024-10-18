@@ -46,7 +46,7 @@ export default function Index() {
   const submitForm = useSubmit();
   const navigate = useNavigate();
   const [appSettings, setAppSettings] = useState({
-    appStatus: false,
+    appStatus: true,
     themeStatus: null
   });
   const settingsData = useLoaderData();
@@ -60,17 +60,17 @@ export default function Index() {
   }
 
   const buttonText =
-    appSettings.appStatus === true
+    appSettings?.appStatus === true
       ? "Disable"
       : "Enable";
 
   const badgeContent =
-    appSettings.appStatus === true
+    appSettings?.appStatus === true
       ? "ON"
       : "OFF";
 
   const badgeColor =
-    appSettings.appStatus === true
+    appSettings?.appStatus === true
       ? "success"
       : "attention";
 
@@ -80,11 +80,11 @@ export default function Index() {
   // };
 
   function handleFBTRedirection() {
-    window.open(`https://${settingsData.shopUrl}/admin/products`, "_blank");
+    window.open(`https://${settingsData?.shopUrl}/admin/products`, "_parent");
   }
 
   return (
-    <Page title={'Hi' + (settingsData.shopName.name ? ', ' + settingsData.shopName.name + ' ' : ' ') + '👋'}>
+    <Page title={'Hi' + (settingsData?.shopName?.name ? ', ' + settingsData?.shopName?.name + ' ' : ' ') + '👋'}>
       <BlockStack gap="500">
         <Layout>
           <Layout.Section>
@@ -127,7 +127,7 @@ export default function Index() {
               </InlineGrid>
             </Card>
           </Layout.Section> */}
-          {(settingsData.themeStatus.blocks[0].is_configured === true) && (settingsData.themeStatus.embedBlock?.is_disabled === false) ? "":(
+          {(settingsData.themeStatus?.blocks[0]?.is_configured === true) && (settingsData.themeStatus?.embedBlock?.is_disabled === false) ? "":(
             <Layout.Section>
               <Banner
                 title={'Activate our app on your theme'}
