@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Page, Layout, Card, BlockStack, Text, Button, Badge, InlineStack, InlineGrid, Banner, ButtonGroup} from "@shopify/polaris";
+import { Page, Layout, Card, BlockStack, Text, Button, Badge, InlineStack, InlineGrid, Banner, ButtonGroup } from "@shopify/polaris";
 import { authenticate } from "~/shopify.server";
 import logo from "../assets/images/oscLogo.png";
 import { ExternalIcon } from "@shopify/polaris-icons";
@@ -105,7 +105,7 @@ export default function Index() {
               </BlockStack>
             </Card>
           </Layout.Section>
-            {/* Free assistance section */}
+          {/* Free assistance section */}
           {/* <Layout.Section>
             <Card>
               <InlineGrid columns="1fr auto">
@@ -127,44 +127,47 @@ export default function Index() {
               </InlineGrid>
             </Card>
           </Layout.Section> */}
-          {(settingsData.themeStatus?.blocks[0]?.is_configured === true) && (settingsData.themeStatus?.embedBlock?.is_disabled === false) ? "":(
+          {(settingsData.themeStatus?.blocks[0]?.is_configured === true) && (settingsData.themeStatus?.embedBlock?.is_disabled === false) ? "" : (
             <Layout.Section>
               <Banner
                 title={'Activate our app on your theme'}
                 tone="warning"
               >
                 <BlockStack gap="200">
-                 <Text variant="bodyLg" as="p">
-                 Our application Grid is not configured in your theme. It is required to be enabled to start storefront integration.</Text>
-                 <Text variant="bodyLg" as="p" alignment="end"><Button url="/app/theme-setup" variant="primary">Activate App</Button></Text>
-               </BlockStack>
+                  <Text variant="bodyLg" as="p">
+                    Our application Grid is not configured in your theme. It is required to be enabled to start storefront integration.</Text>
+                  <Text variant="bodyLg" as="p" alignment="end"><Button url="/app/theme-setup" variant="primary">Activate App</Button></Text>
+                </BlockStack>
               </Banner>
             </Layout.Section>
           )}
           <Layout.Section>
             <InlineGrid gap="400" columns={2}>
-                <Card roundedAbove="sm">
-                    <BlockStack gap="200">
-                    <InlineGrid columns="1fr auto">
+              <Card roundedAbove="sm">
+                <BlockStack gap="200">
+                  <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">Frequently Bought Together</Text>
                     <Button variant="primary" onClick={handleFBTRedirection} icon={ExternalIcon}>
                       Create FBT
-                    </Button>                  
-                    </InlineGrid>
-                    <Text  variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text> 
-                    </BlockStack>
-                </Card>
-                <Card roundedAbove="sm">
-                    <BlockStack gap="200">
-                    <InlineGrid columns="1fr auto">
+                    </Button>
+                  </InlineGrid>
+                  <Text variant="headingMd" as="h6" alignment="center">
+                    <img src={FBT} alt="fbt" height="300" width="300" loading="lazy"/>
+                  </Text>
+                </BlockStack>
+              </Card>
+              <Card roundedAbove="sm">
+                <BlockStack gap="200">
+                  <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">FBT Bundle</Text>
                     <Button variant="primary" onClick={() => navigate("/app/bundle/new")} icon={ExternalIcon}>Create FBT Bundle</Button>
                   </InlineGrid>
-                  <Text  variant="headingMd" as="h6" alignment="center"><img src={Bundle} alt="Theme Setup" width="300px" /></Text>   
-                    </BlockStack>
-                </Card>
+                  <Text variant="headingMd" as="h6" alignment="center">
+                    <img src={Bundle} alt="fbt bundle" height="300" width="300" loading="lazy"/></Text>
+                </BlockStack>
+              </Card>
             </InlineGrid>
-        </Layout.Section>
+          </Layout.Section>
         </Layout>
       </BlockStack>
     </Page>
