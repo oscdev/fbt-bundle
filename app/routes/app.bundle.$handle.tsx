@@ -7,6 +7,8 @@ import { useLoaderData, useSubmit, useNavigate, useActionData  } from "@remix-ru
 import { Confirm } from "~/components/Confirm";
 import { bundle, settings } from "../services/index";
 import { ExternalIcon } from "@shopify/polaris-icons";
+import { authenticate } from "~/shopify.server";
+
 export const action = async ({ params, request }) => {
   const formData = await request.formData();
   const bundleData = JSON.parse(formData.get("bundleData"));
@@ -22,8 +24,9 @@ export const action = async ({ params, request }) => {
 
 export const loader = async ({ params, request }) => {
   const handle = params.handle;
-  const bundleResult = (handle == "new") ? {} : await bundle.getProduct(request, handle);
-  const shopData = await settings.shopDetail(request);
+  const { admin } = await authenticate.admin(request);
+  const bundleResult = (handle == "new") ? {} : await bundle.getProduct(admin, handle);
+  const shopData = await settings.shopDetail(admin);
   return json({ bundleResult, handle, shopData });
 };
 

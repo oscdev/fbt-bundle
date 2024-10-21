@@ -17,8 +17,8 @@ export const bundle = {
         return productsJson.data.products.edges
     },
 
-    getProduct: async function (request, id) {
-        const { admin } = await authenticate.admin(request);
+    getProduct: async function (admin, id) {
+        //const { admin } = await authenticate.admin(request);
         const GET_BUNDLE_MUTATION = QL.GET_BUNDLE_MUTATION.replace("$ID", "gid://shopify/Product/" + id);
         const product = await admin.graphql(GET_BUNDLE_MUTATION);
         //const productJson = await product.json();
