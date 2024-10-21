@@ -12,13 +12,13 @@ export const settings = {
         return (appStatus == 'true') ? true : false
     },
 
-    shopDetail : async function (request) {
-       const shopdata = await modelShopSettings.shopDetail(request);
+    shopDetail : async function (admin) {
+       const shopdata = await modelShopSettings.shopDetail(admin);
        return shopdata;
    },
 
     getThemeStatus: async function (admin, session) {
-        const theme = await modelShopSettings.getThemeStatus(admin);
+        const theme = await modelShopSettings.getThemeStatus(admin, session);
         return theme;
     },
 

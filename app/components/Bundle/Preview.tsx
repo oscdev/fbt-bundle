@@ -22,8 +22,8 @@ export function Preview(pros) {
     });
     
     return (highestValueObject) ? <>
-      <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">{currency.replace('{{amount}}', (bundlePrice.value - ((highestValueObject.value.value / 100) * bundlePrice.value)).toFixed(2))}</Text>
       <Text variant="bodyLg" as="p" fontWeight="semibold" textDecorationLine="line-through">{currency.replace('{{amount}}', bundlePrice.value)}</Text>
+      <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">{currency.replace('{{amount}}', (bundlePrice.value - ((highestValueObject.value.value / 100) * bundlePrice.value)).toFixed(2))}</Text>     
     </> : <Text variant="bodyLg" as="p" fontWeight="semibold" tone="critical">{currency.replace('{{amount}}', bundlePrice.value)}</Text>
   }
 
@@ -91,12 +91,12 @@ export function Preview(pros) {
 
           {(cartItemsMedia.length && bundlePrice.value) ? <Box padding="100">
             {/* Display the total price */}
-            <InlineStack wrap={false} gap="300" align="end">
+            <InlineStack wrap={false} gap="300" align="center">
               <Text variant="bodyLg" as="p" fontWeight="semibold">Total: </Text>
               {totalWithHighestDiscount()}
             </InlineStack>
           </Box> : <Box padding="100">
-            <InlineStack wrap={false} gap="300" align="end">
+            <InlineStack wrap={false} gap="300" align="center">
               <Text variant="bodyLg" as="p" fontWeight="semibold">Total: </Text>
               <SkeletonBodyText lines={1} />
               <SkeletonBodyText lines={1} />

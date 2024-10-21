@@ -1,4 +1,4 @@
-import { Card, Box, Text, Layout, IndexTable, ButtonGroup, Button, EmptyState } from "@shopify/polaris";
+import { Card, Layout, IndexTable, ButtonGroup, Button, EmptyState } from "@shopify/polaris";
 import { useNavigate } from "@remix-run/react";
 import { PlusIcon } from '@shopify/polaris-icons';
 export function BundleProductList(props) {
@@ -27,13 +27,12 @@ export function BundleProductList(props) {
         const metafieldValue = (node.metafield) ? JSON.parse(node.metafield.value) : null;
         if(!metafieldValue) return null;
         const expandedCartItemsLength = metafieldValue.expand?.expandedCartItems.length;
-        const globalPriceRule = metafieldValue.expand?.globalPriceRules[0];
-
+        const globalPriceRulesLength = metafieldValue.expand?.globalPriceRules.length;
         return (
             <IndexTable.Row id={'id-' + index} key={'key-' + index} position={index} disabled={true}>
                 <IndexTable.Cell>{node.title}</IndexTable.Cell>
                 <IndexTable.Cell>{expandedCartItemsLength}</IndexTable.Cell>
-                <IndexTable.Cell>{globalPriceRule.value}%</IndexTable.Cell>
+                <IndexTable.Cell>{globalPriceRulesLength ? "Yes" : 'No'}</IndexTable.Cell>
                 <IndexTable.Cell>
                     <div className="customTableRow">
                         <ButtonGroup>

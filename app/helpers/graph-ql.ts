@@ -295,5 +295,19 @@ GET_SUBSCRIPTIONS: `query {
       }
     }
   }	
+}`,
+SHOP: `query shopInfo {
+	shop {
+	  id
+	  name
+	  url
+	  myshopifyDomain
+	  email
+	  plan {
+		displayName
+		partnerDevelopment
+		shopifyPlus
+	  }
+}
 }`
 };
