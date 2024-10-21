@@ -7,10 +7,10 @@ Output:
 */
 export const modelShopSettings = {
     // The getAppStatus method is an asynchronous function that takes a request object as a parameter
-    getAppStatus: async function (request) {
+    getAppStatus: async function (admin) {
         try {
             // Authenticate the admin using the request object
-            const { admin } = await authenticate.admin(request);
+            
             // Execute a GraphQL query to get the app status
             const shopData = await admin.graphql(
                 QL.APP_SETTING_GET_MUTATION
@@ -79,12 +79,12 @@ export const modelShopSettings = {
 		}
 	},
 
-    getThemeStatus: async function (request) {
+    getThemeStatus: async function (admin, session) {
         try {
             // Initialize an empty object to store the active theme
             let activeTheme = {};
             // Authenticate the admin using the request object
-            const { session, admin } = await authenticate.admin(request);
+            //const { session, admin } = await authenticate.admin(request);
             // Get all themes using the admin's REST API
             const themes = await admin.rest.resources.Theme.all({
                 session: session

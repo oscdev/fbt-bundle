@@ -2,8 +2,8 @@ import { modelShopSettings } from "../models/api/settings";
 
 export const settings = {
 
-    getAppStatus: async function (request) {
-        const appStatus = await modelShopSettings.getAppStatus(request);
+    getAppStatus: async function (admin) {
+        const appStatus = await modelShopSettings.getAppStatus(admin);
         return (appStatus == 'true') ? true : false
     },
 
@@ -17,8 +17,8 @@ export const settings = {
        return shopdata;
    },
 
-    getThemeStatus: async function (request) {
-        const theme = await modelShopSettings.getThemeStatus(request);
+    getThemeStatus: async function (admin, session) {
+        const theme = await modelShopSettings.getThemeStatus(admin);
         return theme;
     },
 

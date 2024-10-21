@@ -14,10 +14,10 @@ import { Redirect } from '@shopify/app-bridge/actions';
 
 // get loader data for app settings and theme settings (Enable/Disable) 
 async function getLoaderData(request) {
-  const { admin } = await authenticate.admin(request);
+  const { admin, session } = await authenticate.admin(request);
   const [appStatus, themeStatus] = await Promise.all([
-    await settings.getAppStatus(request),
-    await settings.getThemeStatus(request)
+    await settings.getAppStatus(admin),
+    await settings.getThemeStatus(admi, session)
   ])
   return {
     appStatus,
@@ -28,7 +28,9 @@ async function getLoaderData(request) {
 
 // get loader data for app settings and theme settings (Enable/Disable)
 export const loader = async ({ request }) => {
+  console.log('Before data fetch', new Date());
   const appSettingsData = await getLoaderData(request);
+  console.log('After data fetch', new Date());
   return json(appSettingsData);
 };
 
