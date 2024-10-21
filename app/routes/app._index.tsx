@@ -1,25 +1,26 @@
 import { useState, useEffect } from "react";
-import { Page, Layout, Card, BlockStack, Text, Button, Badge, InlineStack, InlineGrid, Banner } from "@shopify/polaris";
+import { Page, Layout, Card, BlockStack, Text, Button, Badge, InlineStack, InlineGrid, Banner, ButtonGroup } from "@shopify/polaris";
 import { authenticate } from "~/shopify.server";
 import logo from "../assets/images/oscLogo.png";
 import { ExternalIcon } from "@shopify/polaris-icons";
-// import { cnf } from "../../cnf.js";
 import { settings } from "../services/settings";
 import { useLoaderData, json, useNavigate, useSubmit } from "@remix-run/react";
 import FBT from "../assets/images/fbt.jpg";
 import Bundle from "../assets/images/bundle.jpg";
-import { useAppBridge } from '@shopify/app-bridge-react';
+
 // get loader data for app settings and theme settings (Enable/Disable) 
 async function getLoaderData(request) {
   const { admin } = await authenticate.admin(request);
-  const [appStatus, themeStatus] = await Promise.all([
+  const [appStatus, themeStatus, shopName] = await Promise.all([
     await settings.getAppStatus(request),
-    await settings.getThemeStatus(request)
+    await settings.getThemeStatus(request),
+    await settings.shopDetail(request)
   ])
   return {
     appStatus,
     themeStatus,
-    shopUrl: admin.rest.session.shop || ''
+    shopUrl: admin.rest.session.shop || '',
+    shopName
   };
 }
 
@@ -42,11 +43,10 @@ export const action = async ({ request }) => {
   return json({ status });
 };
 export default function Index() {
-  const app = useAppBridge();
   const submitForm = useSubmit();
   const navigate = useNavigate();
   const [appSettings, setAppSettings] = useState({
-    appStatus: false,
+    appStatus: true,
     themeStatus: null
   });
   const settingsData = useLoaderData();
@@ -60,29 +60,31 @@ export default function Index() {
   }
 
   const buttonText =
-    appSettings.appStatus === true
+    appSettings?.appStatus === true
       ? "Disable"
       : "Enable";
 
   const badgeContent =
-    appSettings.appStatus === true
+    appSettings?.appStatus === true
       ? "ON"
       : "OFF";
 
   const badgeColor =
-    appSettings.appStatus === true
+    appSettings?.appStatus === true
       ? "success"
       : "attention";
 
   // redirect chat button on click
-
+  // const handleClick = () => {
+  //   window.tidioChatApi.open();
+  // };
 
   function handleFBTRedirection() {
-    window.open(`https://${settingsData.shopUrl}/admin/products`, "_blank");
+    window.open(`https://${settingsData?.shopUrl}/admin/products`, "_parent");
   }
 
   return (
-    <Page title="Hi, Welcome to OSCP Upsell & Cross Sell App">
+    <Page title={'Hi' + (settingsData?.shopName?.name ? ', ' + settingsData?.shopName?.name + ' ' : ' ') + '👋'}>
       <BlockStack gap="500">
         <Layout>
           <Layout.Section>
@@ -103,7 +105,29 @@ export default function Index() {
               </BlockStack>
             </Card>
           </Layout.Section>
-          {(settingsData.themeStatus.blocks[0].is_configured === true) && (settingsData.themeStatus.embedBlock?.is_disabled === false) ? "" : (
+          {/* Free assistance section */}
+          {/* <Layout.Section>
+            <Card>
+              <InlineGrid columns="1fr auto">
+                <BlockStack gap="300">
+                  <Text variant="headingMd" as="h6" fontWeight="bold">
+                    Free assistance
+                  </Text>
+                  <Text variant="bodyLg" as="p">
+                    If you need support with any features or setup, please reach out to our support team.</Text>
+                  <ButtonGroup>
+                  <Button variant="primary" target="_blank" url="https://www.oscprofessionals.com/upsell-cross-sell-app-user-guide/">Get Started</Button>
+                    <Button variant="primary" onClick={handleClick} icon={ChatIcon}>Chat with us</Button>
+                  </ButtonGroup>
+                </BlockStack>
+                <img
+                  alt="Theme Setup"
+                  src={support}
+                />
+              </InlineGrid>
+            </Card>
+          </Layout.Section> */}
+          {(settingsData.themeStatus?.blocks[0]?.is_configured === true) && (settingsData.themeStatus?.embedBlock?.is_disabled === false) ? "" : (
             <Layout.Section>
               <Banner
                 title={'Activate our app on your theme'}
@@ -123,12 +147,13 @@ export default function Index() {
                 <BlockStack gap="200">
                   <InlineGrid columns="1fr auto">
                     <Text variant="headingMd" as="h6" fontWeight="bold">Frequently Bought Together</Text>
-                    {/* <Button variant="primary" onClick={() => navigate("/products")} icon={ExternalIcon}>Create FBT</Button> */}
                     <Button variant="primary" onClick={handleFBTRedirection} icon={ExternalIcon}>
                       Create FBT
                     </Button>
                   </InlineGrid>
-                  <Text variant="headingMd" as="h6" alignment="center"><img src={FBT} alt="Theme Setup" width="300px" /></Text>
+                  <Text variant="headingMd" as="h6" alignment="center">
+                    <img src={FBT} alt="fbt" height="300" width="300" loading="lazy"/>
+                  </Text>
                 </BlockStack>
               </Card>
               <Card roundedAbove="sm">
@@ -137,7 +162,8 @@ export default function Index() {
                     <Text variant="headingMd" as="h6" fontWeight="bold">FBT Bundle</Text>
                     <Button variant="primary" onClick={() => navigate("/app/bundle/new")} icon={ExternalIcon}>Create FBT Bundle</Button>
                   </InlineGrid>
-                  <Text variant="headingMd" as="h6" alignment="center"><img src={Bundle} alt="Theme Setup" width="300px" /></Text>
+                  <Text variant="headingMd" as="h6" alignment="center">
+                    <img src={Bundle} alt="fbt bundle" height="300" width="300" loading="lazy"/></Text>
                 </BlockStack>
               </Card>
             </InlineGrid>

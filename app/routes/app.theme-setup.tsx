@@ -18,7 +18,8 @@ async function getLoaderData(request) {
   // get loader data for app settings and theme settings (Enable/Disable)
   export const loader = async ({ request }) => {
     const appSettingsData = await getLoaderData(request);
-    return json(appSettingsData);
+    const uuid = process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID;
+    return json({ uuid, appSettingsData});
   };
 
 //@ts-ignore
@@ -27,13 +28,11 @@ export default function Index() {
     const settingsData = useLoaderData();
   return (
     <Page title="Theme Setup" backAction={{ onAction: () => navigate("/app") }}>
-      <Frame>
         <Layout> 
-          {settingsData.themeStatus !== null ? (
+          {settingsData?.themeStatus !== null ? (
             <ThemeSetup settingsData={settingsData} />
           ): null}
         </Layout>
-      </Frame>     
     </Page>
   );
 }

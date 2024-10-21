@@ -11,7 +11,9 @@
 fieldset .submit {
     text-align: center;
 }
-
+.priceupdate .uaf__price {
+	padding-left: 10px;
+}
 ul.recommended-products {
     height: auto;
     width: 100%;

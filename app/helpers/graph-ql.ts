@@ -249,5 +249,65 @@ UPDATE_BUNDLE_PRODUCT_PRICE:`mutation productVariantsBulkUpdate($productId: ID!,
 			moneyWithCurrencyInEmailsFormat
 		}
 	}
+}`,
+FETCH_PUBLICATIONS: `{
+  publications(first: 10) {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
+}`,
+PUBLICATIONS_MUTATION: `mutation publishablePublish($id: ID!, $input: [PublicationInput!]!) {
+  publishablePublish(id: $id, input: $input) {
+    publishable {
+      resourcePublications(first:10){
+        edges{
+          node{
+           publication{
+            autoPublish
+          }
+          }
+        }
+      }      
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}`,
+GET_SUBSCRIPTIONS: `query {
+  app(id: "gid://shopify/App/170736975873"){
+    installation {
+      launchUrl
+      activeSubscriptions {
+        id
+        name
+        createdAt
+        returnUrl
+        status
+        currentPeriodEnd
+        trialDays
+        test
+      }
+    }
+  }	
+}`,
+SHOP: `query shopInfo {
+	shop {
+	  id
+	  name
+	  url
+	  myshopifyDomain
+	  email
+	  plan {
+		displayName
+		partnerDevelopment
+		shopifyPlus
+	  }
+}
 }`
 };

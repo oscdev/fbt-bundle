@@ -2,22 +2,24 @@
 {% assign cart_items = product.metafields.oscp.fbtBundle.value.expand.expandedCartItems %}
 {% assign cart_discount = product.metafields.oscp.fbtBundle.value.expand.globalPriceRules[0].value %}
 {% assign disc_text = product.metafields.oscp.fbtBundle.value.expand.config.labelOnCard %}
-{% comment %}
-{% assign offer_rule = product.metafields.oscp.fbtBundle.value.expand.globalPriceRules[0] %}
-{% assign current_date = 'now' | date: '%Y-%m-%d' %}
-{% assign highest_value_object = nil %}
-{% assign highest_value = 0 %}
-{{ offer_rule.startAt }} <br/>
-{{ current_date }}
-{% endcomment %}
-
+{% assign multi_disc = product.metafields.oscp.fbtBundle.value.expand.globalPriceRules %}
 {% if product.metafields.oscp.fbtBundle %}
   <div id="fbt-block">
     <div class="fbt-bundle_container bundle_main">
       <div class="fbt_container-inner">
         <div class="fbt_title">{{ product.title }}</div>
           {% assign total_price = 0 %}
-          {% assign discount_percentage = cart_discount %}
+          {% assign highest_discount = 0 %}
+        {% assign current_date = 'now' | date: '%Y-%m-%d' %}
+        {% comment %} Loop through the global price rules to find the highest valid discount {% endcomment %}
+        {% for rule in multi_disc %}
+          {% if rule.value and rule.startAt <= current_date and rule.endAt >= current_date or rule.endAt == nil %}
+            {% assign discount_value = rule.value | plus: 0 %}
+            {% if discount_value > highest_discount %}
+              {% assign highest_discount = discount_value %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
           {% comment %}
             'total_price' will calculate total of all product prices in the bundle.
             'discount_percentage' holds the discount to apply.
@@ -36,16 +38,16 @@
                   <div class="fbt_item">
                     <img src="{{ product_item.featured_image | img_url: 'large' }}" alt="{{ product_item.title }}" height="50" width="50" loading="eager">
                       <div class="fbt_item-info">
-                        <a class="fbt_product-url" href="{{ product_item.url }}" target="_blank">{{ product_item.title }}</a>
+                        <a class="fbt_product-url" href="{{ product_item.url }}" target="_blank">{{ item.defaultQuantity }} x {{ product_item.title }}</a>
                         <div class="fbt_item-price">
-                        <span class="money">{{ product_item.price | money }}</span>
+                        <span class="money">{{ product_item.variants.first.price | money }}</span>
                       </div>
                     </div>
                   <div class="plus-icon"></div>
                   <div class="plus-line-icon"></div>
                 </div>
-                {% assign total_price = multiplied_price | plus: product_item.price %}
-                {% assign multiplied_price = total_price | times: item.defaultQuantity %}
+                  {% assign multiplied_price = product_item.price | times: item.defaultQuantity %}
+                  {% assign total_price = total_price | plus: multiplied_price %}
                 {% comment %}
                   Add each product's price to 'total_price'.
                 {% endcomment %}
@@ -55,29 +57,31 @@
 
           <p class="fbt_description">{{ disc_text }}</p>
             {% comment %} Shows the discount percentage for the bundle {% endcomment %}
-              {% assign discount_amount = multiplied_price | times: discount_percentage | divided_by: 100 %}
-              {% assign final_price = multiplied_price | minus: discount_amount %}
+              {% if highest_discount > 0 %}
+                {% assign discount_amount = total_price | times: highest_discount | divided_by: 100 %}
+                {% assign final_price = total_price | minus: discount_amount %}
+              {% else %}
+                {% assign final_price = total_price %}
+              {% endif %}
               {% comment %} Calculate discount amount and final price after applying discount {% endcomment %}
 
               <div class="fbt_footer">
-                <p class="fbt_footer__total-label">Total</p>
+                <p class="fbt_footer__total-label">Total:</p>
                   <div class="fbt_footer__total-price">
-                    {% if cart_discount != blank %}
-                      <span class="money discounted">{{ final_price | money }}</span>
-                      <del class="money">{{ multiplied_price | money }}</del>
-                    {% else %}
-                      <span class="money discounted">{{ final_price | money }}</span>
-                    {% endif %}
+                      {% if highest_discount > 0 %}
+                        <del class="money org">{{ total_price | money }}</del>
+                        <span class="money discounted">{{ final_price | money }}</span>
+                      {% else %}
+                        <span class="money discounted">{{ final_price | money }}</span>
+                      {% endif %}
                     {% comment %} Display final price with discount and strike through original price {% endcomment %}
                   </div>
               </div>
 
               {%- form 'product', product, id: product_form_id, class: 'form bundle_fbt', novalidate: 'novalidate', data-type:'add-to-cart-form' -%}
-                {% assign count = 0 %}
                 {% for item in cart_items %}
                   {% assign product_handle = item.handle %}
                   {% assign product_item = all_products[product_handle] %}
-                  {% assign count = count | plus: 1 %}
                   {% comment %}
                     Loop through each product in the bundle and assign a count to track them.
                   {% endcomment %}
@@ -92,17 +96,21 @@
                 {% comment %} Hidden input for the main product's variant ID {% endcomment %}
 
                 <div class="product-form__buttons">
+                {%- if product.selected_or_first_available_variant.available -%}
                   <button type="submit" name="add" class="fbt_addcart">
                     <span>
-                      {%- if product.selected_or_first_available_variant.available -%}
-                        {{ block.settings.fbt_cart_text }}
-                        {% comment %} Button text when the product is available {% endcomment %}
-                      {%- else -%}
-                        {{ block.settings.fbt_cart_text }}
-                        {% comment %} Button text when the product is sold out {% endcomment %}
-                      {%- endif -%}
-                    </span>
+                      {{ block.settings.fbt_cart_text }}
+                      </span>
                   </button>
+                      {% comment %} Button text when the product is available {% endcomment %}
+                   {%- else -%}
+                      <button type="submit" name="add" class="11 fbt_addcart" disabled>
+                    <span>
+                      {{ block.settings.fbt_cart_text }}
+                    </span>
+                      {% comment %} Button text when the product is sold out {% endcomment %}
+                  </button>
+                  {%- endif -%}
                   {%- if block.settings.show_dynamic_checkout -%}
                     {{ form | payment_button }}
                     {% comment %} Dynamic checkout button if enabled {% endcomment %}
@@ -119,7 +127,7 @@
 
     {% if bundle_product %}
       {% assign bundle_metafield = bundle_product.metafields.oscp.fbtBundle.value %}
-      {% assign bundle_card_discount = bundle_metafield.expand.globalPriceRules[0].value %}
+      {% assign bundle_card_discount = bundle_metafield.expand.globalPriceRules %}
       {% if bundle_metafield %}
         {% assign product_handles = bundle_metafield.expand.expandedCartItems %}
         <div id="fbt-block">
@@ -128,8 +136,18 @@
               <div class="fbt_title">{{ bundle_product.title }}</div>
       
               {% assign total_price = 0 %}
-              {% assign discount_percentage = bundle_card_discount %}
-      
+               {% assign highest_discount = 0 %}
+        {% assign current_date = 'now' | date: '%Y-%m-%d' %}
+
+        {% comment %} Loop through the global price rules to find the highest valid discount {% endcomment %}
+        {% for rule in bundle_card_discount %}
+          {% if rule.value and rule.startAt <= current_date and rule.endAt >= current_date or rule.endAt == nil %}
+            {% assign discount_value = rule.value | plus: 0 %}
+            {% if discount_value > highest_discount %}
+              {% assign highest_discount = discount_value %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
               <div class="fbt_items">
                 {% for item in product_handles %}
                   {% assign product_item = all_products[item.handle] %}
@@ -137,29 +155,33 @@
                     <div class="fbt_item">
                       <img src="{{ product_item.featured_image | img_url: 'large' }}" alt="{{ product_item.title }}" height="50" width="50" loading="eager">
                       <div class="fbt_item-info">
-                        <a class="fbt_product-url" href="{{ product_item.url }}" target="_blank">{{ product_item.title }}</a>
+                        <a class="fbt_product-url" href="{{ product_item.url }}" target="_blank">{{ item.defaultQuantity }} x {{ product_item.title }}</a>
                         <div class="fbt_item-price">
-                          <span class="money">{{ product_item.price | money }}</span>
+                          <span class="money">{{ product_item.variants.first.price | money }}</span>
                         </div>
                       </div>
                       <div class="plus-icon"></div>
                       <div class="plus-line-icon"></div>
                     </div>
-                    {% assign total_price = multiplied_price | plus: product_item.price %}
-                     {% assign multiplied_price = total_price | times: item.defaultQuantity %}
+                    {% assign multiplied_price = product_item.price | times: item.defaultQuantity %}
+                    {% assign total_price = total_price | plus: multiplied_price %}
                   {% endif %}
                 {% endfor %}
               </div>
       
               <p class="fbt_description">{{ bundle_metafield.expand.config.labelOnCard }}</p>
-              {% assign discount_amount = multiplied_price | times: discount_percentage | divided_by: 100 %}
-              {% assign final_price = multiplied_price | minus: discount_amount %}
+              {% if highest_discount > 0 %}
+                {% assign discount_amount = total_price | times: highest_discount | divided_by: 100 %}
+                {% assign final_price = total_price | minus: discount_amount %}
+              {% else %}
+                {% assign final_price = total_price %}
+              {% endif %}
               <div class="fbt_footer">
-                <p class="fbt_footer__total-label">Total</p>
+                <p class="fbt_footer__total-label">Total:</p>
                 <div class="fbt_footer__total-price">
-                  {% if bundle_card_discount != blank %}
+                  {% if highest_discount > 0 %}
+                    <del class="money org">{{ total_price | money }}</del>
                     <span class="money discounted">{{ final_price | money }}</span>
-                    <del class="money">{{ multiplied_price | money }}</del>
                   {% else %}
                       <span class="money discounted">{{ final_price | money }}</span>
                   {% endif %}
@@ -167,34 +189,43 @@
               </div>
 
               {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type:'add-to-cart-form' -%}
-                {% assign count = 0 %}
                 {% for item in product_handles %}
                   {% assign product_handle = item.handle %}
                   {% assign product_item = all_products[product_handle] %}
                   {% assign product_variant_id = product_item.variants.first.id %}
-                  {% assign count = count | plus: 1 %}
               
                   {% if product_item %}
                     <input class="itemsProductt" type="hidden" name="id" value="{{ product_variant_id }}">
                   {% endif %}
                 {% endfor %}
-              
+                {% assign available = true %}
+                {% for item in product_handles %}
+                  {% assign product_handle = item.handle %}
+                  {% assign product_item = all_products[product_handle] %}
+                    {% if product_item.selected_or_first_available_variant.inventory_quantity < 1 %}
+                      {% assign available = false %}
+                      {% break %}
+                    {% endif %}
+                {% endfor %}
                 <input type="hidden" name="id" value="{{ bundle_product_variant_id }}">
-              
-                <div class="product-form__buttons">
-                  <button type="submit" name="add" class="11 fbt_addcart">
-                    <span>
-                      {%- if product.selected_or_first_available_variant.available -%}
-                  {{ block.settings.fbt_cart_text }}
-                      {%- else -%}
-                  {{ block.settings.fbt_cart_text }}
-                      {%- endif -%}
-                    </span>
-                  </button>
-                  {%- if block.settings.show_dynamic_checkout -%}
-                    {{ form | payment_button }}
-                  {%- endif -%}
-                </div>
+                  <div class="product-form__buttons">
+                        {%- if product.selected_or_first_available_variant.available and available -%}
+                          <button type="submit" name="add" class="11 fbt_addcart">
+                            <span>
+                              {{ block.settings.fbt_cart_text }}
+                            </span>
+                          </button>
+                          {%- else -%}
+                            <button type="submit" name="add" class="11 fbt_addcart" disabled>
+                                <span>
+                                  {{ block.settings.fbt_cart_text }}
+                                </span>
+                            </button>
+                        {%- endif -%}
+                    {%- if block.settings.show_dynamic_checkout -%}
+                      {{ form | payment_button }}
+                    {%- endif -%}
+                  </div>
               {%- endform -%}
             </div>
           </div>
@@ -204,7 +235,8 @@
 {% endif %}
 
 <style>
-    .fbt_container-inner {
+
+    .fbt-bundle_container {
       border: 2px solid {{ block.settings.border_color }} !important;
       background: {{ block.settings.container_background_color }} !important;
     }
@@ -222,6 +254,11 @@
     .money.discounted {
       color: {{ block.settings.discount_text_color }} !important;
     }
+
+    .fbt_addcart {
+      border-radius: {{ block.settings.button_border_radius }}px !important;
+    }
+
 </style>
 
 {% schema %}
@@ -236,13 +273,13 @@
             "type": "color",
             "id": "border_color",
             "label": "Container Border Color",
-            "default": "#000000"
+            "default": "#EDEDED"
         },
         {
             "type": "color",
             "id": "container_background_color",
             "label": "Container Background Color",
-            "default": "#f0f0f0"
+            "default": "#ffffff"
         },
         {
             "type": "color",
@@ -273,8 +310,15 @@
           "id": "button_text_color",
           "label": "Add to Cart Button Text Color",
           "default": "#ffffff"
-        }
-        ,
+        },
+         {
+          "type": "range",
+          "id": "button_border_radius",
+          "label": "Button Border Radius",
+          "default": 0,
+          "min": 0,
+          "max": 50
+        },
         {
           "type": "text",
           "id": "fbt_cart_text",

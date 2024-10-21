@@ -3,12 +3,15 @@ import {
   ApiVersion,
   AppDistribution,
   shopifyApp,
-  DeliveryMethod
+  DeliveryMethod,
+  BillingInterval,
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-07";
 import prisma from "./db.server";
 import { settings } from "./services/index.js";
+export const MONTHLY_PLAN = 'Monthly subscription';
+export const ANNUAL_PLAN = 'Annual subscription';
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
@@ -21,6 +24,18 @@ const shopify = shopifyApp({
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
   restResources,
+  billing: {
+    [MONTHLY_PLAN]: {
+      amount: 5,
+      currencyCode: 'USD',
+      interval: BillingInterval.Every30Days,
+    },
+    [ANNUAL_PLAN]: {
+      amount: 50,
+      currencyCode: 'USD',
+      interval: BillingInterval.Annual
+    }
+  },
   webhooks: {
     APP_UNINSTALLED: {
       deliveryMethod: DeliveryMethod.Http,
@@ -43,9 +58,9 @@ const shopify = shopifyApp({
     afterAuth: async ({ session, admin }) => {
       shopify.registerWebhooks({ session });
       console.log("------------------------afterAuth--------------------------");
-      await settings.setAppStatus(admin, '1'); 
-      await settings.setBundleSearchableDefination(admin);   
-      await settings.cartTransformCreate(admin);    
+      await settings.setAppStatus(admin, '1');
+      await settings.setBundleSearchableDefination(admin);
+      await settings.cartTransformCreate(admin);
     },
   },
   future: {

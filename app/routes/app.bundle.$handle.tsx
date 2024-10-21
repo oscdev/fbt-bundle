@@ -141,7 +141,7 @@ export default function Bundle() {
   }
 
   function onShowForm() {
-    navigate("/app");
+    navigate("/app/bundle/list");
   }
 
   function confirmExit() {

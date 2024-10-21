@@ -6,25 +6,37 @@ import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { NavMenu } from "@shopify/app-bridge-react";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { useNavigation } from "@remix-run/react";
-import { authenticate } from "../shopify.server";
+import { authenticate, MONTHLY_PLAN } from "../shopify.server";
 import { BlockStack, Box, Spinner } from "@shopify/polaris";
 import fs from "fs";
 import { Footer } from "../components/Footer";
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const requestInfo = {};
+  requestInfo.timeBeforeAuth = new Date();
   const { session } = await authenticate.admin(request);
+  requestInfo.timeAfterAuth = new Date();
+  
+  // const { billing } = await authenticate.admin(request);
+  // await billing.require({
+  //   plans: [MONTHLY_PLAN],
+  //   isTest: true,
+  //   returnUrl: "https://admin.shopify.com/store/dev-praful-gupta/apps/pricing-22/app",
+  //   onFailure: async () => billing.request({ 
+  //       plan: MONTHLY_PLAN,
+  //       returnUrl: "https://admin.shopify.com/store/dev-praful-gupta/apps/pricing-22/app",
+  //       isTest: true
+  //   }),
+  // });
 
   // Log the complete request information
-  const requestInfo = {
-    date: new Date(),
-    method: request.method,
-    url: request.url,
-    body: request.body,
-    headers: Object.fromEntries(request.headers),
-    query: request.query,
-    params: request.params,
-  };
+  requestInfo.date = new Date();
+  requestInfo.method = request.method;
+  requestInfo.url = request.url;
+  requestInfo.body = request.body;
+  requestInfo.headers = Object.fromEntries(request.headers);
+  requestInfo.query = request.query;
+  requestInfo.params = request.params;
 
   // Write the request information to a log file
   fs.appendFile(`${process.cwd()}/storage/logs/${session?.shop}.txt`, " --------------------Generated Request Logs----------- \n\n " + JSON.stringify(requestInfo, null, 2),  err => {  })
@@ -43,6 +55,7 @@ export default function App() {
       <NavMenu>
         <Link to="/app" rel="home">Home</Link>
         <Link to="/app/bundle/list">Bundle Offers</Link>
+        <Link to="/app/theme-setup">Settings</Link>
         <Link to="/app/help">Help</Link>
       </NavMenu>
       {navigation.state === "loading" && (
