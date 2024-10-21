@@ -1,6 +1,6 @@
 import { List, BlockStack, Button, Card, Image, Box, InlineGrid, Page, Text, ButtonGroup } from "@shopify/polaris";
 import { EmailIcon, ExternalIcon, PersonFilledIcon, StarFilledIcon } from "@shopify/polaris-icons";
-import logo from "../assets/images/logo.jpg";
+import logo from "../assets/images/oscLogo.png";
 import support from "../assets/images/support.png";
 import { settings } from "../services/index.js";
 import { useLoaderData, json } from "@remix-run/react";
@@ -39,7 +39,7 @@ export default function Help() {
   }
 
   function redirectAppSettings() {
-    window.open(`https://${settingsData.appSettingsData.shopUrl}/admin/settings/apps/app_installations/app/${settingsData.appName}`, "_parent");
+    window.open(`https://${settingsData.appSettingsData.shopUrl}/admin/settings/apps/app_installations/app/${settingsData.appName}`, "_blank");
 
   }
 
@@ -61,7 +61,7 @@ export default function Help() {
                 <Text variant="bodyMd" as="span"> Schedule a Meeting to assist with the setup process, discount configurations, widget customizations, or any other concerns.</Text>
               </BlockStack>
               <Box padding='400' style={{ marginTop: '10px' }}>
-                <a style={{ textDecoration: 'none' }} target='blank'><Button onClick={redirectZoomMeetings}> Schedule a Meeting with Us </Button> </a>
+                <a style={{ textDecoration: 'none' }} target='blank'><Button onClick={redirectZoomMeetings}> Schedule a Meeting with Us </Button></a>
               </Box>
             </div>
 
@@ -101,7 +101,7 @@ export default function Help() {
           {/* faq section */}
           <InlineGrid columns="1fr auto">
             <Text variant="headingMd" as="h2">Check the FAQs</Text>
-            <a style={{ textDecoration: 'none' }} target='blank' href={`${settingsData?.siteUrl}/oscp-upsell-cross-sell-app#oscp-upsell-cross-sell-faq`}><Button variant="plain" icon={ExternalIcon}>FAQs</Button></a>
+            <a style={{ textDecoration: 'none' }} target='blank' href={`${settingsData.siteUrl}/oscp-upsell-cross-sell-app#oscp-upsell-cross-sell-faq`}><Button variant="plain" icon={ExternalIcon}>FAQs</Button></a>
           </InlineGrid>
           <InlineGrid columns="1fr auto">
             <Text variant="bodyMd" as="span">Check out our FAQ section for detailed answers about app functionalities and compatibility.</Text>
@@ -137,16 +137,16 @@ export default function Help() {
                     Feedback
                   </Text>
                   <Text variant="bodyLg" as="p">
-                  Your feedback is valuable to us! Please share your experience using the OSCP Upsell & Cross Sell App.
-                   </Text>
+                    Your feedback is valuable to us! Please share your experience using the OSCP Upsell & Cross Sell App.</Text>
                   <ButtonGroup><Button target="_blank" url="https://apps.shopify.com/oscp-upsell-cross-sell-1#modal-show=ReviewListingModal">Share Feedback</Button></ButtonGroup>
                 </BlockStack>
               </InlineGrid>  
         </Card>
         {/* apps section for other apps */}
         <Text variant="headingMd" as="h2">Try our other apps</Text>
-        <InlineGrid gap="200" columns={2}>
+        <InlineGrid gap="400" columns={2}>
           <Card roundedAbove="sm">
+            <Box padding="400" borderRadius="100">
               <BlockStack gap="200">
                 <InlineGrid columns="1fr auto">
                   <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -165,9 +165,11 @@ export default function Help() {
                   Create Wholesale pricing based on Collections, Products, and their variants using Customer Tags.
                 </Text>
               </BlockStack>
+            </Box>
           </Card>
           <Card roundedAbove="sm">
-              <BlockStack gap="200">
+            <Box padding="400" borderRadius="100">
+              <BlockStack gap="400">
                 <InlineGrid columns="1fr auto">
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <img alt="OSCP Wholesale Logo" width="50px" src={logo} style={{ marginRight: '10px' }} />
@@ -182,9 +184,11 @@ export default function Help() {
                   Enhance sales with volume discounts and tiered discounts.
                 </Text>
               </BlockStack>
+            </Box>
           </Card>
         </InlineGrid>
       </BlockStack>
     </Page>
+    
   );
 }
