@@ -39,7 +39,7 @@ export default function Help() {
   }
 
   function redirectAppSettings() {
-    window.open(`https://${settingsData.appSettingsData.shopUrl}/admin/settings/apps/app_installations/app/${settingsData.appName}`, "_blank");
+    window.open(`https://${settingsData.appSettingsData.shopUrl}/admin/settings/apps/app_installations/app/${settingsData.appName}`, "_parent");
 
   }
 
