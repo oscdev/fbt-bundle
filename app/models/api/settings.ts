@@ -7,10 +7,10 @@ Output:
 */
 export const modelShopSettings = {
     // The getAppStatus method is an asynchronous function that takes a request object as a parameter
-    getAppStatus: async function (request) {
+    getAppStatus: async function (admin) {
         try {
             // Authenticate the admin using the request object
-            const { admin } = await authenticate.admin(request);
+            
             // Execute a GraphQL query to get the app status
             const shopData = await admin.graphql(
                 QL.APP_SETTING_GET_MUTATION
@@ -64,9 +64,9 @@ export const modelShopSettings = {
         }
     },
 
-    shopDetail: async function (request) {
+    shopDetail: async function (admin) {
 		try {
-			const { admin } = await authenticate.admin(request);
+			//const { admin } = await authenticate.admin(request);
 
 			const shopData = await admin.graphql(
 				QL.SHOP_CURRENCY
@@ -79,12 +79,12 @@ export const modelShopSettings = {
 		}
 	},
 
-    getThemeStatus: async function (request) {
+    getThemeStatus: async function (admin, session) {
         try {
             // Initialize an empty object to store the active theme
             let activeTheme = {};
             // Authenticate the admin using the request object
-            const { session, admin } = await authenticate.admin(request);
+            //const { session, admin } = await authenticate.admin(request);
             // Get all themes using the admin's REST API
             const themes = await admin.rest.resources.Theme.all({
                 session: session
@@ -97,7 +97,7 @@ export const modelShopSettings = {
                 }
             }
             // Call the checkTheme method with the active theme and request object, and return the result
-            return await this.checkTheme(activeTheme, request)
+            return await this.checkTheme(activeTheme, admin, session)
         } catch (error) {
             console.warn('getThemeStatus error ===== ', error)
             // Return an empty object as a fallback
@@ -106,11 +106,11 @@ export const modelShopSettings = {
     },
 
     // The checkTheme method is an asynchronous function that takes an activeTheme object and a request object as parameters
-    checkTheme: async function (activeTheme, request) {
+    checkTheme: async function (activeTheme, admin, session) {
         // Use Promise.all to concurrently fetch the supported blocks and embed block for the active theme
         const [blocks, embedBlock] = await Promise.all([
-            await this.getSupportedBlock(activeTheme, request),
-            await this.getEmbedBlock(activeTheme, request)
+            await this.getSupportedBlock(activeTheme, admin, session),
+            await this.getEmbedBlock(activeTheme, admin, session)
         ])
         // Return an object containing the active theme, supported blocks, and embed block
         return {
@@ -121,12 +121,12 @@ export const modelShopSettings = {
     },
 
     // The getSupportedBlock method is an asynchronous function that takes an activeTheme object and a request object as parameters
-    getSupportedBlock: async function (activeTheme, request) {
+    getSupportedBlock: async function (activeTheme, admin, session) {
         try {
             // Define an array of supported block templates
             const APP_BLOCK_TEMPLATES = ['product'];
 
-            const { session, admin } = await authenticate.admin(request);
+            //const { session, admin } = await authenticate.admin(request);
 
             // Get all assets for the active theme using the admin's REST API
             const assets = await admin.rest.resources.Asset.all({
@@ -173,7 +173,7 @@ export const modelShopSettings = {
     },
 
     // The getEmbedBlock method is an asynchronous function that takes an activeTheme object and a request object as parameters
-    getEmbedBlock: async function (activeTheme, request) {
+    getEmbedBlock: async function (activeTheme, admin, session) {
         // Define the key to fetch the embed block
         const key = 'config/settings_data.json';
 
@@ -183,7 +183,7 @@ export const modelShopSettings = {
             is_disabled: true
         };
         try {
-            const { session, admin } = await authenticate.admin(request);
+            //const { session, admin } = await authenticate.admin(request);
 
             // Get the embed block asset for the active theme
             const embedBlock = await admin.rest.resources.Asset.all({

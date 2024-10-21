@@ -5,9 +5,9 @@ import { useLoaderData, json, useNavigate } from "@remix-run/react";
 import { authenticate } from "../shopify.server.js";
 
 async function getLoaderData(request) {
-    const { admin } = await authenticate.admin(request);
+    const { admin, session } = await authenticate.admin(request);
     const [ themeStatus] = await Promise.all([
-      await settings.getThemeStatus(request)
+      await settings.getThemeStatus(admin, session)
     ])
     return {
       themeStatus,

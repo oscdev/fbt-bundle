@@ -18,10 +18,10 @@ export const loader = async ({ params, request }) => {
         await billing.require({
             plans: (plan == 'annual') ? [ANNUAL_PLAN] : [MONTHLY_PLAN],
             isTest: true,
-            returnUrl: `https://${session.shop}/admin/apps/${process.env.SHOPIFY_APP_NAME}/app/subscriptions`,
+            returnUrl: `https://${session.shop}/admin/apps/${process.env.APPNAME}/app/subscriptions`,
             onFailure: async () => billing.request({
                 plan: (plan == 'annual') ? ANNUAL_PLAN : MONTHLY_PLAN, //MONTHLY_PLAN,
-                returnUrl: `https://${session.shop}/admin/apps/${process.env.SHOPIFY_APP_NAME}/app/subscriptions`,
+                returnUrl: `https://${session.shop}/admin/apps/${process.env.APPNAME}/app/subscriptions`,
                 isTest: true
             }),
         });

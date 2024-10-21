@@ -10,11 +10,11 @@ import Bundle from "../assets/images/bundle.jpg";
 
 // get loader data for app settings and theme settings (Enable/Disable) 
 async function getLoaderData(request) {
-  const { admin } = await authenticate.admin(request);
+  const { admin, session } = await authenticate.admin(request);
   const [appStatus, themeStatus, shopName] = await Promise.all([
-    await settings.getAppStatus(request),
-    await settings.getThemeStatus(request),
-    await settings.shopDetail(request)
+    await settings.getAppStatus(admin),
+    await settings.getThemeStatus(admin, session),
+    await settings.shopDetail(admin)
   ])
   return {
     appStatus,
@@ -26,7 +26,9 @@ async function getLoaderData(request) {
 
 // get loader data for app settings and theme settings (Enable/Disable)
 export const loader = async ({ request }) => {
+  console.log('Before data fetch', new Date());
   const appSettingsData = await getLoaderData(request);
+  console.log('After data fetch', new Date());
   return json(appSettingsData);
 };
 
