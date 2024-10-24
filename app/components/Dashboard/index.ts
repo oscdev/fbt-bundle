@@ -1,1 +1,1 @@
-export { ThemeSetup } from "./ThemeSetup";
+export { ThemeAlert } from "./ThemeAlert";

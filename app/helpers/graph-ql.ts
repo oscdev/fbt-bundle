@@ -309,5 +309,25 @@ SHOP: `query shopInfo {
 		shopifyPlus
 	  }
 }
-}`
+}`,
+THEMES: `{
+  themes(first: 1, roles: MAIN) {
+    nodes{
+      role
+      name
+	  id
+      files(filenames: $FILENAMES){
+        nodes{
+          filename
+          contentType
+          body{
+            ... on OnlineStoreThemeFileBodyText {
+              content
+            }
+          }          
+        }
+      }
+    }
+  }
+}`,
 };
