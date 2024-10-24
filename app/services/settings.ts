@@ -17,20 +17,25 @@ export const settings = {
        return shopdata;
    },
 
-    getThemeStatus: async function (admin, session) {
-        const theme = await modelShopSettings.getThemeStatus(admin, session);
+   getThemes: async function (admin, session, fileNames) {
+        const theme = await modelShopSettings.getThemes(admin, session, fileNames);
         return theme;
     },
 
-    getThemes: async function (ids, request) {
-        const theme = await modelShopSettings.requestOperation(ids, request);
-        return theme;
-    },
+    // getThemeStatus: async function (admin, session) {
+    //     const theme = await modelShopSettings.getThemeStatus(admin, session);
+    //     return theme;
+    // },
 
-    checkTheme: async function (ids, request) {
-        const theme = await modelShopSettings.requestOperation(ids, request);
-        return theme;
-    },
+    // getThemes: async function (request) {
+    //     const theme = await modelShopSettings.requestOperation(request);
+    //     return theme;
+    // },
+
+    // checkTheme: async function (ids, request) {
+    //     const theme = await modelShopSettings.requestOperation(ids, request);
+    //     return theme;
+    // },
 
     setBundleSearchableDefination: async function (admin) {
         const def = await modelShopSettings.setBundleSearchableDefination(admin);
