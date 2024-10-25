@@ -1,4 +1,4 @@
-import { Layout, Text, InlineGrid, BlockStack, Banner, PageActions, Spinner } from "@shopify/polaris";
+import { Layout, Text, InlineGrid, BlockStack, Banner, PageActions, Spinner, Badge } from "@shopify/polaris";
 import { useState, useEffect } from "react";
 import { constents } from "../../helpers/constents";
 
@@ -6,7 +6,6 @@ import { constents } from "../../helpers/constents";
 //@ts-ignore
 export function ThemeAlert(props) {
     const { extensionId, shop } = props;
-
     const [loading, setLoading] = useState(true);
     const [themeBlocks, setThemeBlocks] = useState([]);
     const [liveTheme, setLiveTheme] = useState({});
@@ -62,7 +61,9 @@ export function ThemeAlert(props) {
                                     title={blockName}
                                     tone={isEnabled ? "success" : "warning"}
                                 >
-                                    <BlockStack gap="200">
+                                    {(isMandatory && !isEnabled) && <Badge tone="critical">MANDATORY</Badge>}
+                                    {isEnabled && <Badge tone="success">Enabled</Badge>} 
+                                    <BlockStack gap="200">                                                                               
                                         <Text as="p" variant="bodyMd">
                                             {description}
                                         </Text>
