@@ -1,5 +1,6 @@
 import { QL } from "../../helpers/graph-ql";
 import { authenticate } from "~/shopify.server";
+import { constents } from "../../helpers/constents";
 
 /*
 Output:
@@ -86,7 +87,41 @@ export const modelShopSettings = {
 				THEMES_QL
 			);
 			const responseJson = await themes.json();           
-            return responseJson.data.themes.nodes[0];
+            const result = responseJson.data.themes.nodes[0];
+            const extensionId = process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID;
+            /*** */
+            const blocks = constents.theme_extension_blocks;
+            for (let i = 0; i < blocks.length; i++) {
+                blocks[i].editorUri = blocks[i].editorUri.replace('$shopUrl', session.shop).replace('$themeId', result.id.split('/').pop()).replace('$uuid', extensionId);
+
+                for (let j = 0; j < result.files.nodes.length; j++) {
+                    if (blocks[i].fileName === result.files.nodes[j].filename) {
+                        const assetJsonString = JSON.parse(result.files.nodes[j].body.content);
+                        if (blocks[i].extesionHandle == 'app-embed') {
+                            for (const [key, value] of Object.entries(assetJsonString.current.blocks)) {
+                                if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
+                                    blocks[i].isEnabled = !value.disabled;
+                                    blocks[i].customizeSettings = value.settings
+                                }
+                            }
+                        } else {
+                            for (const [key, value] of Object.entries(assetJsonString.sections.main.blocks)) {
+                                if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
+                                    blocks[i].isEnabled = !value.disabled;
+                                    blocks[i].customizeSettings = value.settings;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return {
+                themeName: result.name,
+                themeId: result.id,
+                blocks: blocks,
+            }
+            /*** */
         } catch (error) {
             console.warn('getThemes error === ', error)
             return []

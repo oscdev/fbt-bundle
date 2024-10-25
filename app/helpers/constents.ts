@@ -6,7 +6,8 @@ export const constents = {
       description: "Enable/Disable OSCP Upsell and Cross Sell on App Embeds.",
       isMandatory: true,
       isEnabled: false,
-      editorUri: "https://$shopUrl/admin/themes/$themeId/editor?context=apps&template=index&activateAppId=$uuid/app-embed"
+      editorUri: "https://$shopUrl/admin/themes/$themeId/editor?context=apps&template=index&activateAppId=$uuid/app-embed",
+      customizeSettings: {}
    }, {
       blockName: "Bundle Widget",
       fileName: "templates/product.json",
@@ -14,7 +15,8 @@ export const constents = {
       description: "Enable/Disable layout design to display \"FBT Bundle\" section on the product detail page.",
       isMandatory: true,
       isEnabled: false,
-      editorUri: "https://$shopUrl/admin/themes/$themeId/editor?template=product&addAppBlockId=$uuid/fbt-bundle&target=mainSection"
+      editorUri: "https://$shopUrl/admin/themes/$themeId/editor?template=product&addAppBlockId=$uuid/fbt-bundle&target=mainSection",
+      customizeSettings: {}
    }, {
       blockName: "FBT Widget",
       fileName: "templates/product.json",
@@ -22,7 +24,8 @@ export const constents = {
       description: "Enable/Disable layout design to display \"Frequently Bought Together\" section on the product detail page.",
       isMandatory: true,
       isEnabled: false,
-      editorUri: "https://$shopUrl/admin/themes/$themeId/editor?template=product&addAppBlockId=$uuid/frequently&target=mainSection"
+      editorUri: "https://$shopUrl/admin/themes/$themeId/editor?template=product&addAppBlockId=$uuid/frequently&target=mainSection",
+      customizeSettings: {}
    }],
    subscription_plans: [{
       name: "Basic",

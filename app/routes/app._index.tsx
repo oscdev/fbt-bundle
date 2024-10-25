@@ -9,14 +9,8 @@ import FBT from "../assets/images/fbt.jpg";
 import Bundle from "../assets/images/bundle.jpg";
 import { ThemeAlert } from "../components/Dashboard/index";
 
-export const loader = async ({ request }) => {
-  console.log("loader", new Date().toISOString());
-  const { session } = await authenticate.admin(request);
-  const extensionId = process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID;
-  return json({
-    extensionId,
-    shopUrl: session.shop
-  });
+export const loader = async ({ request }) => {  
+  return json({});
 };
 
 // set app status (Enable/Disable)
@@ -134,10 +128,7 @@ export default function Index() {
             </Card>
           </Layout.Section> */}
 
-          <ThemeAlert
-            extensionId={extensionId}
-            shop={shopUrl}
-          />
+          <ThemeAlert />
 
           <Layout.Section>
             <InlineGrid gap="400" columns={2}>
