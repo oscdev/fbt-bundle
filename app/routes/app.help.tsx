@@ -5,24 +5,15 @@ import support from "../assets/images/support.png";
 import { settings } from "../services/index.js";
 import { useLoaderData, json } from "@remix-run/react";
 import { authenticate } from "../shopify.server.js";
-async function getLoaderData(request) {
-    const { admin } = await authenticate.admin(request);
-    const [ themeStatus] = await Promise.all([
-      await settings.getThemeStatus(request)
-    ])
-    return {
-      themeStatus,
-      shopUrl: admin.rest.session.shop || ''
-    };
-  }
   
   // get loader data for app settings and theme settings (Enable/Disable)
   export const loader = async ({ request }) => {
-    const appSettingsData = await getLoaderData(request);
+    //const appSettingsData = await getLoaderData(request);
+    const { admin } = await authenticate.admin(request);
     const zoomMeet = process.env.ZOOM_MEET_KEY;
     const appName = process.env.APPNAME;
     const siteUrl = process.env.SITEURL;
-    return json({ zoomMeet,appName, siteUrl, appSettingsData});
+    return json({ zoomMeet,appName, siteUrl, shopUrl: admin.rest.session.shop || ''});
   };
 // help component
 export default function Help() {
