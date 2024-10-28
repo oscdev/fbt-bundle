@@ -10,7 +10,8 @@ import Bundle from "../assets/images/bundle.jpg";
 import { ThemeAlert } from "../components/Dashboard/index";
 
 export const loader = async ({ request }) => {  
-  return json({});
+  const { session } = await authenticate.admin(request);
+  return json({ session });
 };
 
 // set app status (Enable/Disable)
@@ -31,7 +32,7 @@ export default function Index() {
   const navigate = useNavigate();
   const [loadCount, setLoadCount] = useState(0)
   const [homeData, setHomeData] = useState({})
-  const { extensionId, shopUrl } = useLoaderData();
+  const { session } = useLoaderData();
 
   async function loadHomeData() {
     const res = await fetch("shopify:admin/api/graphql.json", {
@@ -78,7 +79,7 @@ export default function Index() {
   }
 
   function handleFBTRedirection() {
-    window.open(`https://${shopUrl}/admin/products`, "_parent");
+    window.open(`https://${session.shop}/admin/products`, "_parent");
   }
 
   return (
