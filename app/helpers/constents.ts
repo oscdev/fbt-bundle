@@ -6,7 +6,7 @@ export const constents = {
       description: "Enable/Disable OSCP Upsell and Cross Sell on App Embeds.",
       isMandatory: true,
       isEnabled: false,
-      editorUri: "https://$shopUrl/admin/themes/$themeId/editor?context=apps&template=index&activateAppId=$uuid/app-embed",
+      editorUri: "https://$shopUrl/admin/themes/$themeId/editor?context=apps&template=index&appEmbed=$uuid/app-embed",
       customizeSettings: {}
    }, {
       blockName: "Bundle Widget",
