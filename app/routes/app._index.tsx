@@ -11,6 +11,7 @@ import { ThemeAlert } from "../components/Dashboard/index";
 
 export const loader = async ({ request }) => {  
   const { session } = await authenticate.admin(request);
+  console.log("Home page session -----", session);
   return json({ session });
 };
 

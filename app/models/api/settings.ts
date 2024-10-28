@@ -81,7 +81,10 @@ export const modelShopSettings = {
 	},
 
     getThemes: async function (admin, session, fileNames) {        
-        const THEMES_QL = QL.THEMES.replace("$FILENAMES", JSON.stringify(fileNames));        
+        const THEMES_QL = QL.THEMES.replace("$FILENAMES", JSON.stringify(fileNames)); 
+        
+        console.log("theme page session -----", session);
+
         try {
             const themes = await admin.graphql(
 				THEMES_QL
