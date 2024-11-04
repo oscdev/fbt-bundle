@@ -33,16 +33,20 @@ export const bulkProduct = {
             }
             return relatedProducts;
         });
+
+        console.log("jsonData", JSON.stringify(jsonData));
         return jsonData;
     },
 
-    bulkFormOperation: async function (formRules, request) {
+    bulkFormOperation: async function (fbtItems, request) {
         const { session } = await authenticate.admin(request);
         const { shop } = session;
         const jsonData = [];
 
         // Parse the JSON string in productsJson
-        const productsData = JSON.parse(formRules.productsJson);
+        const productsData = JSON.parse(fbtItems);
+
+        console.log("productsData FBT", productsData);
         for (let i = 0; i < productsData.length; i++) {
             const { id, crossProducts } = productsData[i]; // Changed from productId to id as per the provided JSON structure
 

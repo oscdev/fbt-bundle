@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Form, Text, Button, BlockStack, TextField, FormLayout, Thumbnail, EmptyState, Spinner, Card, Tooltip, InlineGrid, InlineStack } from "@shopify/polaris";
+import { Form, Text, LegacyCard, Button, BlockStack, TextField, FormLayout, Thumbnail, EmptyState, Spinner, Card, Tooltip, InlineGrid, InlineStack } from "@shopify/polaris";
 import { Confirm } from "../Confirm";
 import { XIcon, ArrowDownIcon, ArrowUpIcon } from '@shopify/polaris-icons';
 export function Resource(props) {

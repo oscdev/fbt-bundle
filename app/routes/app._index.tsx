@@ -9,10 +9,10 @@ import FBT from "../assets/images/fbt.jpg";
 import Bundle from "../assets/images/bundle.jpg";
 import { ThemeAlert } from "../components/Dashboard/index";
 
-export const loader = async ({ request }) => {  
-  const { session } = await authenticate.admin(request);
-  console.log("Home page session -----", session);
-  return json({ session });
+export const loader = async ({ request }) => {
+  //const { session } = await authenticate.admin(request);
+  //console.log("Home page session -----", session);
+  return json({});
 };
 
 // set app status (Enable/Disable)
@@ -33,7 +33,7 @@ export default function Index() {
   const navigate = useNavigate();
   const [loadCount, setLoadCount] = useState(0)
   const [homeData, setHomeData] = useState({})
-  const { session } = useLoaderData();
+  //const { session } = useLoaderData();
 
   async function loadHomeData() {
     const res = await fetch("shopify:admin/api/graphql.json", {
@@ -62,7 +62,7 @@ export default function Index() {
     setHomeData(data)
   }
 
-  useEffect(() => {    
+  useEffect(() => {
     loadHomeData();
   }, [loadCount]);
 
@@ -79,8 +79,23 @@ export default function Index() {
     }, 1000)
   }
 
-  function handleFBTRedirection() {
-    window.open(`https://${session.shop}/admin/products`, "_parent");
+  async function handleFBTRedirection() {
+    const filterObj = [];
+    //filterObj.push("NOT metafields.oscp.fbtSearchable:searchable");
+    const pickedResource = await window.shopify.resourcePicker({
+      type: 'product',
+      action: "add",
+      multiple: true,
+      filter: {
+        query: filterObj.join(" AND "),
+        variants: false,
+      },
+    });
+
+    const ids = pickedResource.map((item) => {return "ids[]="+item.id.split("/").pop()});
+    console.log("ids", ids.join("&"));
+    navigate(`/app/bulkform?${ids.join("&")}`);
+    //window.open(`https://${session.shop}/admin/products`, "_parent");
   }
 
   return (

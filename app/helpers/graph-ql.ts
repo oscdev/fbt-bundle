@@ -1,7 +1,7 @@
 
 export const QL = {
 	// Define the specific mutation for creating products IDs and Store data in product metafields
-	PRODUCT_IDS: `query {
+	FBT_PRODUCTS: `query {
       products(query: "$ids", first: 100) {
         edges {
           node {
