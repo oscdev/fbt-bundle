@@ -1,0 +1,1 @@
+export { FbtResource } from "./FbtResource";
