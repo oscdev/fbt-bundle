@@ -29,7 +29,7 @@ export function ThemeAlert(props) {
                     tone="info"
                 >
                     <InlineGrid gap="400" columns={3}>
-                        {liveTheme.blocks.map(({ blockName, fileName, extesionHandle, description, isMandatory, isEnabled, editorUri }, index) => (
+                        {liveTheme.blocks?.map(({ blockName, fileName, extesionHandle, description, isMandatory, isEnabled, editorUri }, index) => (
                             <div key={index}>
                                 <Banner
                                     title={blockName}
