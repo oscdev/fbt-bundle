@@ -1,5 +1,6 @@
 import { QL } from "../../helpers/graph-ql";
 import { authenticate } from "~/shopify.server";
+import { constents } from "../../helpers/constents";
 
 /*
 Output:
@@ -79,137 +80,189 @@ export const modelShopSettings = {
 		}
 	},
 
-    getThemeStatus: async function (admin, session) {
-        try {
-            // Initialize an empty object to store the active theme
-            let activeTheme = {};
-            // Authenticate the admin using the request object
-            //const { session, admin } = await authenticate.admin(request);
-            // Get all themes using the admin's REST API
-            const themes = await admin.rest.resources.Theme.all({
-                session: session
-            });
+    getThemes: async function (admin, session, fileNames) {        
+        const THEMES_QL = QL.THEMES.replace("$FILENAMES", JSON.stringify(fileNames)); 
+        
+        console.log("theme page session -----", session);
 
-            // Loop through each theme and find the active theme with the role 'main'
-            for (var theme of themes.data) {
-                if (theme.role == 'main') {
-                    activeTheme = theme;
+        try {
+            const themes = await admin.graphql(
+				THEMES_QL
+			);
+			const responseJson = await themes.json();           
+            const result = responseJson.data.themes.nodes[0];
+            const extensionId = process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID;
+            /*** */
+            const blocks = constents.theme_extension_blocks;
+            for (let i = 0; i < blocks.length; i++) {
+                blocks[i].editorUri = blocks[i].editorUri.replace('$shopUrl', session.shop).replace('$themeId', result.id.split('/').pop()).replace('$uuid', extensionId);
+
+                for (let j = 0; j < result.files.nodes.length; j++) {
+                    if (blocks[i].fileName === result.files.nodes[j].filename) {
+                        const assetJsonString = JSON.parse(result.files.nodes[j].body.content);
+                        if (blocks[i].extesionHandle == 'app-embed') {
+                            for (const [key, value] of Object.entries(assetJsonString.current.blocks)) {
+                                if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
+                                    blocks[i].isEnabled = !value.disabled;
+                                    blocks[i].customizeSettings = value.settings
+                                }
+                            }
+                        } else {
+                            for (const [key, value] of Object.entries(assetJsonString.sections.main.blocks)) {
+                                if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
+                                    blocks[i].isEnabled = !value.disabled;
+                                    blocks[i].customizeSettings = value.settings;
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            // Call the checkTheme method with the active theme and request object, and return the result
-            return await this.checkTheme(activeTheme, admin, session)
+
+            return {
+                themeName: result.name,
+                themeId: result.id,
+                blocks: blocks,
+            }
+            /*** */
         } catch (error) {
-            console.warn('getThemeStatus error ===== ', error)
-            // Return an empty object as a fallback
-            return {};
-        }
-    },
-
-    // The checkTheme method is an asynchronous function that takes an activeTheme object and a request object as parameters
-    checkTheme: async function (activeTheme, admin, session) {
-        // Use Promise.all to concurrently fetch the supported blocks and embed block for the active theme
-        const [blocks, embedBlock] = await Promise.all([
-            await this.getSupportedBlock(activeTheme, admin, session),
-            await this.getEmbedBlock(activeTheme, admin, session)
-        ])
-        // Return an object containing the active theme, supported blocks, and embed block
-        return {
-            activeTheme,
-            blocks,
-            embedBlock
-        }
-    },
-
-    // The getSupportedBlock method is an asynchronous function that takes an activeTheme object and a request object as parameters
-    getSupportedBlock: async function (activeTheme, admin, session) {
-        try {
-            // Define an array of supported block templates
-            const APP_BLOCK_TEMPLATES = ['product'];
-
-            //const { session, admin } = await authenticate.admin(request);
-
-            // Get all assets for the active theme using the admin's REST API
-            const assets = await admin.rest.resources.Asset.all({
-                session: session,
-                theme_id: activeTheme.id
-            })
-
-            // Filter the assets to find the ones that match the supported block templates
-            const blocks = assets.data.filter((file) => {
-                return APP_BLOCK_TEMPLATES.some(template => file.key === `templates/${template}.json`);
-            })
-
-            // Use Promise.all to concurrently process each block
-            await Promise.all(blocks.map(async (file, index) => {
-                // Get the asset JSON for the current block
-                let assetJson = await admin.rest.resources.Asset.all({
-                    session: session,
-                    theme_id: activeTheme.id,
-                    asset: {
-                        key: file.key,
-                    }
-                })
-
-                // Parse the asset JSON and get the asset JSON string
-                const assetJsonData = JSON.parse(assetJson.data[0].value);
-                const assetJsonString = JSON.stringify(assetJson.data[0].value);
-
-                // Check if the asset JSON string contains the app block extension ID
-                const isAppBlock = assetJsonString.search(`${process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID}`)
-
-                // Find the main section in the asset JSON
-                const main = Object.entries(assetJsonData.sections).find(([id, section]) => id === 'main' || section.type.startsWith("main-"))
-
-                // Set the theme_liquid and is_configured properties of the block object
-                file.theme_liquid = `sections/${main[1].type}.liquid`
-                file.is_configured = (isAppBlock > -1) ? true : false;
-
-            }))
-            return blocks
-        } catch (error) {
-            console.warn('getSupportedBlock error === ', error)
+            console.warn('getThemes error === ', error)
             return []
         }
     },
 
-    // The getEmbedBlock method is an asynchronous function that takes an activeTheme object and a request object as parameters
-    getEmbedBlock: async function (activeTheme, admin, session) {
-        // Define the key to fetch the embed block
-        const key = 'config/settings_data.json';
 
-        // Initialize the output object with default values
-        const output = {
-            is_configured: false,
-            is_disabled: true
-        };
-        try {
-            //const { session, admin } = await authenticate.admin(request);
+    // getThemeStatus: async function (admin, session) {
+    //     try {
+    //         // Initialize an empty object to store the active theme
+    //         let activeTheme = {};
+    //         // Authenticate the admin using the request object
+    //         //const { session, admin } = await authenticate.admin(request);
+    //         // Get all themes using the admin's REST API
+    //         const themes = await admin.rest.resources.Theme.all({
+    //             session: session
+    //         });
 
-            // Get the embed block asset for the active theme
-            const embedBlock = await admin.rest.resources.Asset.all({
-                session: session,
-                theme_id: activeTheme.id,
-                asset: {
-                    key: key,
-                }
-            })
+    //         // Loop through each theme and find the active theme with the role 'main'
+    //         for (var theme of themes.data) {
+    //             if (theme.role == 'main') {
+    //                 activeTheme = theme;
+    //             }
+    //         }
+    //         // Call the checkTheme method with the active theme and request object, and return the result
+    //         return await this.checkTheme(activeTheme, admin, session)
+    //     } catch (error) {
+    //         console.warn('getThemeStatus error ===== ', error)
+    //         // Return an empty object as a fallback
+    //         return {};
+    //     }
+    // },
 
-            const assetJsonString = JSON.parse(embedBlock.data[0].value);
+    // // The checkTheme method is an asynchronous function that takes an activeTheme object and a request object as parameters
+    // checkTheme: async function (activeTheme, admin, session) {
+    //     // Use Promise.all to concurrently fetch the supported blocks and embed block for the active theme
+    //     const [blocks, embedBlock] = await Promise.all([
+    //         await this.getSupportedBlock(activeTheme, admin, session),
+    //         await this.getEmbedBlock(activeTheme, admin, session)
+    //     ])
+    //     // Return an object containing the active theme, supported blocks, and embed block
+    //     return {
+    //         activeTheme,
+    //         blocks,
+    //         embedBlock
+    //     }
+    // },
 
-            // Iterate through the blocks in the asset JSON and check for the app block extension ID
-            for (const [key, value] of Object.entries(assetJsonString.current.blocks)) {
-                if (JSON.stringify(value).search(`${process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID}`) > -1) {
-                    output.is_configured = true;
-                    output.is_disabled = value.disabled;
-                }
-            }
-            // Return the output object
-            return output;
-        } catch (error) {
-            console.warn('getEmbedBlock error === ', error)
-            return output;
-        }
-    },
+    // // The getSupportedBlock method is an asynchronous function that takes an activeTheme object and a request object as parameters
+    // getSupportedBlock: async function (activeTheme, admin, session) {
+    //     try {
+    //         // Define an array of supported block templates
+    //         const APP_BLOCK_TEMPLATES = ['product'];
+
+    //         //const { session, admin } = await authenticate.admin(request);
+
+    //         // Get all assets for the active theme using the admin's REST API
+    //         const assets = await admin.rest.resources.Asset.all({
+    //             session: session,
+    //             theme_id: activeTheme.id
+    //         })
+
+    //         // Filter the assets to find the ones that match the supported block templates
+    //         const blocks = assets.data.filter((file) => {
+    //             return APP_BLOCK_TEMPLATES.some(template => file.key === `templates/${template}.json`);
+    //         })
+
+    //         // Use Promise.all to concurrently process each block
+    //         await Promise.all(blocks.map(async (file, index) => {
+    //             // Get the asset JSON for the current block
+    //             let assetJson = await admin.rest.resources.Asset.all({
+    //                 session: session,
+    //                 theme_id: activeTheme.id,
+    //                 asset: {
+    //                     key: file.key,
+    //                 }
+    //             })
+
+    //             // Parse the asset JSON and get the asset JSON string
+    //             const assetJsonData = JSON.parse(assetJson.data[0].value);
+    //             const assetJsonString = JSON.stringify(assetJson.data[0].value);
+
+    //             // Check if the asset JSON string contains the app block extension ID
+    //             const isAppBlock = assetJsonString.search(`${process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID}`)
+
+    //             // Find the main section in the asset JSON
+    //             const main = Object.entries(assetJsonData.sections).find(([id, section]) => id === 'main' || section.type.startsWith("main-"))
+
+    //             // Set the theme_liquid and is_configured properties of the block object
+    //             file.theme_liquid = `sections/${main[1].type}.liquid`
+    //             file.is_configured = (isAppBlock > -1) ? true : false;
+
+    //         }))
+    //         return blocks
+    //     } catch (error) {
+    //         console.warn('getSupportedBlock error === ', error)
+    //         return []
+    //     }
+    // },
+
+    // // The getEmbedBlock method is an asynchronous function that takes an activeTheme object and a request object as parameters
+    // getEmbedBlock: async function (activeTheme, admin, session) {
+    //     // Define the key to fetch the embed block
+    //     const key = 'config/settings_data.json';
+
+    //     // Initialize the output object with default values
+    //     const output = {
+    //         is_configured: false,
+    //         is_disabled: true
+    //     };
+    //     try {
+    //         //const { session, admin } = await authenticate.admin(request);
+
+    //         // Get the embed block asset for the active theme
+    //         const embedBlock = await admin.rest.resources.Asset.all({
+    //             session: session,
+    //             theme_id: activeTheme.id,
+    //             asset: {
+    //                 key: key,
+    //             }
+    //         })
+
+    //         const assetJsonString = JSON.parse(embedBlock.data[0].value);
+
+    //         // Iterate through the blocks in the asset JSON and check for the app block extension ID
+    //         for (const [key, value] of Object.entries(assetJsonString.current.blocks)) {
+    //             if (JSON.stringify(value).search(`${process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID}`) > -1) {
+    //                 output.is_configured = true;
+    //                 output.is_disabled = value.disabled;
+    //             }
+    //         }
+    //         // Return the output object
+    //         return output;
+    //     } catch (error) {
+    //         console.warn('getEmbedBlock error === ', error)
+    //         return output;
+    //     }
+    // },
 
     setBundleSearchableDefination: async function (admin) {
         try {

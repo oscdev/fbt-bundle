@@ -8,8 +8,8 @@ export const modelProduct = {
 		try {
 			const { admin } = await authenticate.admin(request);
 			let productIds = ids.map(id => `id:${id}`);
-			const SELECTED_PRODUCT_IDS = QL.PRODUCT_IDS.replace("$ids", productIds.join(" OR "));
-			const responseData = await admin.graphql(SELECTED_PRODUCT_IDS);
+			const SELECTED_FBT_PRODUCTS = QL.FBT_PRODUCTS.replace("$ids", productIds.join(" OR "));
+			const responseData = await admin.graphql(SELECTED_FBT_PRODUCTS);
 			const response = await responseData.json();
 			return response.data.products.edges;
 		} catch (error) {

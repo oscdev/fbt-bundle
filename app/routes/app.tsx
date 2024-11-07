@@ -54,11 +54,10 @@ export default function App() {
       {/* <BlockStack gap="300"> */}
       <NavMenu>
         <Link to="/app" rel="home">Home</Link>
-        <Link to="/app/bundle/list">Bundle Offers</Link>
-        <Link to="/app/theme-setup">Settings</Link>
+        <Link to="/app/bundle/list">Bundle Offers</Link>        
         <Link to="/app/help">Help</Link>
       </NavMenu>
-      {navigation.state === "loading" && (
+      {(navigation.state === "loading" || navigation.state === "submitting") && (
         <div className="loading-overlay-container" style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(255, 255, 255, 0.5)", zIndex: 9999, display: "flex", justifyContent: "center", alignItems: "center" }}>
           <Spinner size="large" accessibilityLabel="Loading..." />
           <div className="loading-overlay-spinner">

@@ -1,7 +1,7 @@
 
 export const QL = {
 	// Define the specific mutation for creating products IDs and Store data in product metafields
-	PRODUCT_IDS: `query {
+	FBT_PRODUCTS: `query {
       products(query: "$ids", first: 100) {
         edges {
           node {
@@ -309,5 +309,25 @@ SHOP: `query shopInfo {
 		shopifyPlus
 	  }
 }
-}`
+}`,
+THEMES: `{
+  themes(first: 1, roles: MAIN) {
+    nodes{
+      role
+      name
+	  id
+      files(filenames: $FILENAMES){
+        nodes{
+          filename
+          contentType
+          body{
+            ... on OnlineStoreThemeFileBodyText {
+              content
+            }
+          }          
+        }
+      }
+    }
+  }
+}`,
 };
