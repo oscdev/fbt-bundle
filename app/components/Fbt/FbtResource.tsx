@@ -49,7 +49,8 @@ export function FbtResource(props) {
                     <Text as="h2" variant="headingSm">
                         {productTitle.value}
                     </Text>
-                    <Button
+                    <Button                        
+                        disabled={(fbtCrossItems.length >= 5) ? true : false}
                         onClick={async () => {
                             /**** */
                             const filterObj = [];
@@ -87,7 +88,7 @@ export function FbtResource(props) {
                         heading={"Not Assigned FBT Product yet for " + productTitle.value}
                     />
                 )}
-                <InlineGrid columns={(fbtCrossItems.length > 5) ? 5 : 3}>
+                <InlineGrid columns={(fbtCrossItems.length >= 5) ? 5 : 5}>
                     {fbtCrossItems.map(({ id, title, handle }, index) => (
                         <div style={{ padding: '10px' }} key={index}>
                             <Card>

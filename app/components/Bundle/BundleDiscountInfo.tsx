@@ -161,7 +161,7 @@ export function BundleDiscountInfo(pros) {
                 placeholder="0.00"
                 autoComplete="off"
                 connectedRight={ <Tooltip content="Hint : When you uncheck the box, manually set a price for the bundle"><Checkbox
-                  label="Set price manually"
+                  label="Calculate bundle price dynamically"
                   checked={calculatePrice.value}
                   onChange={(e) => {
                     calculatePrice.onChange(e);
