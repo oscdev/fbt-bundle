@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 //@ts-ignore
 export function ThemeAlert(props) {
     //const { } = props;
-    const [loading, setLoading] = useState(true);    
+    const [loading, setLoading] = useState(true);
     const [liveTheme, setLiveTheme] = useState({});
 
     useEffect(() => {
@@ -15,46 +15,50 @@ export function ThemeAlert(props) {
     async function getThemeFiles() {
         setLoading(true);
         const result = await fetch("/app/theme-json").then((res) => res.json());
-        console.log('theme', result);
+        console.log('theme json', result);
         setLiveTheme(result);
-        setLoading(false);    }
+        setLoading(false);
+    }
 
     return (
-        <Layout.Section>
+        <>
             {(loading) ? (
-                <Spinner accessibilityLabel="Spinner example" size="large" />
-            ) : (
-                <Banner
-                    title={'Activate our app on your live theme (' + liveTheme.themeName + ')'}
-                    tone="info"
-                >
-                    <InlineGrid gap="400" columns={3}>
-                        {liveTheme.blocks?.map(({ blockName, fileName, extesionHandle, description, isMandatory, isEnabled, editorUri }, index) => (
-                            <div key={index}>
-                                <Banner
-                                    title={blockName}
-                                    tone={isEnabled ? "success" : "warning"}
-                                >
-                                    {(isMandatory && !isEnabled) && <Badge tone="critical">MANDATORY</Badge>}
-                                    {isEnabled && <Badge tone="success">Enabled</Badge>} 
-                                    <BlockStack gap="200">                                                                               
-                                        <Text as="p" variant="bodyMd">
-                                            {description}
-                                        </Text>
-                                    </BlockStack>
-                                    <PageActions
-                                        primaryAction={{
-                                            content: (isEnabled) ? 'View' : 'Enable block',
-                                            url: editorUri,
-                                            target: '_blank',
-                                        }}
-                                    />
-                                </Banner>
-                            </div>
-                        ))}
-                    </InlineGrid>
-                </Banner>
+                <Layout.Section><Spinner accessibilityLabel="Spinner example" size="large" /></Layout.Section>
+            ) : ((Object.keys(liveTheme).length) ? 
+                <Layout.Section>
+                    <Banner
+                        title={'Activate our app on your live theme (' + liveTheme.themeName + ')'}
+                        tone="info"
+                    >
+                        <InlineGrid gap="400" columns={3}>
+                            {liveTheme.blocks?.map(({ blockName, fileName, extesionHandle, description, isMandatory, isEnabled, editorUri }, index) => (
+                                <div key={index}>
+                                    <Banner
+                                        title={blockName}
+                                        tone={isEnabled ? "success" : "warning"}
+                                    >
+                                        {(isMandatory && !isEnabled) && <Badge tone="critical">MANDATORY</Badge>}
+                                        {isEnabled && <Badge tone="success">Enabled</Badge>}
+                                        <BlockStack gap="200">
+                                            <Text as="p" variant="bodyMd">
+                                                {description}
+                                            </Text>
+                                        </BlockStack>
+                                        <PageActions
+                                            primaryAction={{
+                                                content: (isEnabled) ? 'View' : 'Enable block',
+                                                url: editorUri,
+                                                target: '_blank',
+                                            }}
+                                        />
+                                    </Banner>
+                                </div>
+                            ))}
+                        </InlineGrid>
+                    </Banner>
+                </Layout.Section>
+                : <></>
             )}
-        </Layout.Section>
+        </>
     );
 }
