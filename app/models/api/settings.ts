@@ -96,10 +96,42 @@ export const modelShopSettings = {
             
             console.log("theme page responseJson -----", responseJson);
 
+            
+
             const result = responseJson.data.themes.nodes[0];
             const extensionId = process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID;
+
+            
             /*** */
-            const blocks = constents.theme_extension_blocks;
+            //const blocks = constents.theme_extension_blocks;
+            const blocks = [{
+                blockName: "App Embeds",
+                fileName: "config/settings_data.json",
+                extesionHandle: "app-embed",
+                description: "Enable/Disable OSCP Upsell and Cross Sell on App Embeds.",
+                isMandatory: true,
+                isEnabled: false,
+                editorUri: "https://$shopUrl/admin/themes/$themeId/editor?context=apps&template=index&appEmbed=$uuid/app-embed",
+                customizeSettings: {}
+             }, {
+                blockName: "Bundle Widget",
+                fileName: "templates/product.json",
+                extesionHandle: "fbt-bundle",
+                description: "Enable/Disable layout design to display \"FBT Bundle\" section on the product detail page.",
+                isMandatory: true,
+                isEnabled: false,
+                editorUri: "https://$shopUrl/admin/themes/$themeId/editor?template=product&addAppBlockId=$uuid/fbt-bundle&target=mainSection",
+                customizeSettings: {}
+             }, {
+                blockName: "FBT Widget",
+                fileName: "templates/product.json",
+                extesionHandle: "frequently",
+                description: "Enable/Disable layout design to display \"Frequently Bought Together\" section on the product detail page.",
+                isMandatory: true,
+                isEnabled: false,
+                editorUri: "https://$shopUrl/admin/themes/$themeId/editor?template=product&addAppBlockId=$uuid/frequently&target=mainSection",
+                customizeSettings: {}
+             }]
             for (let i = 0; i < blocks.length; i++) {
                 blocks[i].editorUri = blocks[i].editorUri.replace('$shopUrl', session.shop).replace('$themeId', result.id.split('/').pop()).replace('$uuid', extensionId);
 
