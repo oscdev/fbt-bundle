@@ -89,7 +89,13 @@ export const modelShopSettings = {
             const themes = await admin.graphql(
 				THEMES_QL
 			);
-			const responseJson = await themes.json();           
+
+            
+
+			const responseJson = await themes.json();     
+            
+            console.log("theme page responseJson -----", responseJson);
+
             const result = responseJson.data.themes.nodes[0];
             const extensionId = process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID;
             /*** */
@@ -99,22 +105,28 @@ export const modelShopSettings = {
 
                 for (let j = 0; j < result.files.nodes.length; j++) {
                     if (blocks[i].fileName === result.files.nodes[j].filename) {
-                        const assetJsonString = JSON.parse(result.files.nodes[j].body.content);
-                        if (blocks[i].extesionHandle == 'app-embed') {
-                            for (const [key, value] of Object.entries(assetJsonString.current.blocks)) {
-                                if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
-                                    blocks[i].isEnabled = !value.disabled;
-                                    blocks[i].customizeSettings = value.settings
-                                }
-                            }
-                        } else {
-                            for (const [key, value] of Object.entries(assetJsonString.sections.main.blocks)) {
-                                if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
-                                    blocks[i].isEnabled = !value.disabled;
-                                    blocks[i].customizeSettings = value.settings;
-                                }
-                            }
+
+                        if ((result.files.nodes[j].body.content.search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
+                            blocks[i].isEnabled = true;
+                            blocks[i].customizeSettings = {}
                         }
+
+                        // const assetJsonString = JSON.parse(result.files.nodes[j].body.content);
+                        // if (blocks[i].extesionHandle == 'app-embed') {
+                        //     for (const [key, value] of Object.entries(assetJsonString.current.blocks)) {
+                        //         if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
+                        //             blocks[i].isEnabled = !value.disabled;
+                        //             blocks[i].customizeSettings = value.settings
+                        //         }
+                        //     }
+                        // } else {
+                        //     for (const [key, value] of Object.entries(assetJsonString.sections.main.blocks)) {
+                        //         if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
+                        //             blocks[i].isEnabled = !value.disabled;
+                        //             blocks[i].customizeSettings = value.settings;
+                        //         }
+                        //     }
+                        // }
                     }
                 }
             }
@@ -127,7 +139,7 @@ export const modelShopSettings = {
             /*** */
         } catch (error) {
             console.warn('getThemes error === ', error)
-            return []
+            return {}
         }
     },
 
