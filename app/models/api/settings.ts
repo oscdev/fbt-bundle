@@ -107,7 +107,7 @@ export const modelShopSettings = {
             /*** */
             //const blocks = constents.theme_extension_blocks;
             const blocks = [{
-                blockName: "App Embeds 123",
+                blockName: "App Embeds",
                 fileName: "config/settings_data.json",
                 extesionHandle: "app-embed",
                 description: "Enable/Disable OSCP Upsell and Cross Sell on App Embeds.",
