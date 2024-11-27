@@ -29,11 +29,6 @@ export default function Help() {
     window.open("https://calendar.app.google/" + settingsData.zoomMeet + "", "_blank");
   }
 
-  function redirectAppSettings() {
-    window.open(``, "_parent");
-
-  }
-
   return (
     <Page
       title="Help"
