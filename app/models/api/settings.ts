@@ -99,7 +99,9 @@ export const modelShopSettings = {
             
 
             const result = responseJson.data.themes.nodes[0];
-            const extensionId = process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID;
+
+            //const extensionId = process.env.SHOPIFY_UPSELL_CROSS_EXTENSION_ID;
+            const extensionId = '';
 
             
             /*** */
@@ -138,30 +140,39 @@ export const modelShopSettings = {
                 for (let j = 0; j < result.files.nodes.length; j++) {
                     if (blocks[i].fileName === result.files.nodes[j].filename) {
 
-                        if ((result.files.nodes[j].body.content.search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
-                            blocks[i].isEnabled = true;
-                            blocks[i].customizeSettings = {}
-                        }
+                        console.log('extensionId', extensionId);
 
-                        // const assetJsonString = JSON.parse(result.files.nodes[j].body.content);
-                        // if (blocks[i].extesionHandle == 'app-embed') {
-                        //     for (const [key, value] of Object.entries(assetJsonString.current.blocks)) {
-                        //         if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
-                        //             blocks[i].isEnabled = !value.disabled;
-                        //             blocks[i].customizeSettings = value.settings
-                        //         }
-                        //     }
-                        // } else {
-                        //     for (const [key, value] of Object.entries(assetJsonString.sections.main.blocks)) {
-                        //         if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
-                        //             blocks[i].isEnabled = !value.disabled;
-                        //             blocks[i].customizeSettings = value.settings;
-                        //         }
-                        //     }
+                        // if ((result.files.nodes[j].body.content.search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
+                        //     blocks[i].isEnabled = true;
+                        //     blocks[i].customizeSettings = {}
                         // }
+
+                        let assetJsonString = result.files.nodes[j].body.content.replace(/\/\*[\s\S]*?\*\//, '').trim();
+
+                        assetJsonString = JSON.parse(assetJsonString);
+
+                        if (blocks[i].extesionHandle == 'app-embed') {
+                            if (assetJsonString.current.hasOwnProperty('blocks')) {
+                                for (const [key, value] of Object.entries(assetJsonString.current.blocks)) {
+                                    if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
+                                        blocks[i].isEnabled = !value.disabled;
+                                        blocks[i].customizeSettings = value.settings
+                                    }
+                                }
+                            }                            
+                        } else {
+                            for (const [key, value] of Object.entries(assetJsonString.sections.main.blocks)) {
+                                if ((JSON.stringify(value).search(`${blocks[i].extesionHandle}/${extensionId}`) > -1)) {
+                                    blocks[i].isEnabled = !value.disabled;
+                                    blocks[i].customizeSettings = value.settings;
+                                }
+                            }
+                        }
                     }
                 }
             }
+
+            //console.log("assetJsonString blocks ---------------------------", JSON.stringify(blocks));
 
             return {
                 themeName: result.name,

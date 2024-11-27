@@ -149,14 +149,16 @@ function App() {
                   <InlineStack gap={'large'} blockAlignment="center" inlineAlignment="start">
                     {productsMedia.length > 0 && (
 
-                      <Box inlineSize='25px'>
+                      <Box>
                         <Image id="ext-image" source={productsMedia.find(media => media.node.id.replace('gid://shopify/Product/', '') === product.id)?.node?.featuredImage?.url || 'https://cdn.shopify.com/shopifycloud/shopify/assets/default-app-74bfb89634baf86f3402062ef55df218fe55b4f2775ff605d0ccfe1a20f9c0d3_36x.png'} />
                       </Box>
                     )}
                     <Text fontWeight="bold">{product.title}</Text></InlineStack>
-                  <InlineStack gap={'large'} inlineAlignment="end"><Checkbox id="checkbox" name="checkbox" onChange={(val) => {
-                    handleInputChange(product.id, val);
-                  }} /></InlineStack>
+                  <InlineStack gap={'large'} inlineAlignment="end">
+                    <Checkbox id="checkbox" name="checkbox" onChange={(val) => {
+                      handleInputChange(product.id, val);
+                    }} />
+                  </InlineStack>
                   {/* <Button
                       variant="tertiary"
                       onClick={() => handleInputChange(product.id, true)}
