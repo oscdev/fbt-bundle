@@ -5,7 +5,7 @@ import support from "../assets/images/support.png";
 import { settings } from "../services/index.js";
 import { useLoaderData, json } from "@remix-run/react";
 import { authenticate } from "../shopify.server.js";
-  
+
   // get loader data for app settings and theme settings (Enable/Disable)
   export const loader = async ({ request }) => {
     //const appSettingsData = await getLoaderData(request);
@@ -30,7 +30,7 @@ export default function Help() {
   }
 
   function redirectAppSettings() {
-    window.open(`https://${settingsData.appSettingsData.shopUrl}/admin/settings/apps/app_installations/app/${settingsData.appName}`, "_parent");
+    window.open(``, "_parent");
 
   }
 
@@ -115,7 +115,7 @@ export default function Help() {
 
             <Text variant="bodyMd" as="h2"> To Send useful information to the support team and solve your issue as soon as possible,please follow these instructions:</Text>
             <List type="number">
-              <List.Item> <Button variant="plain" onClick={redirectAppSettings}>Click Here</Button> to Open the OSCP Upsell & Cross Sell application in Settings </List.Item>
+              <List.Item> <Button variant="plain" url={'https://${settingsData.appSettingsData.shopUrl}/admin/settings/apps/app_installations/app/${settingsData.appName}'}>Click Here</Button> to Open the OSCP Upsell & Cross Sell application in Settings </List.Item>
               <List.Item>Scroll to the bottom of the Page, and click the <b>Share logs</b> button</List.Item>
               <List.Item>After sharing the logs with us,send us a message through the bubble in the buttom-right of the screen and tell us about your issue</List.Item>
             </List>
@@ -131,7 +131,7 @@ export default function Help() {
                     Your feedback is valuable to us! Please share your experience using the OSCP Upsell & Cross Sell App.</Text>
                   <ButtonGroup><Button target="_blank" url="https://apps.shopify.com/oscp-upsell-cross-sell-1#modal-show=ReviewListingModal">Share Feedback</Button></ButtonGroup>
                 </BlockStack>
-              </InlineGrid>  
+              </InlineGrid>
         </Card>
         {/* apps section for other apps */}
         <Text variant="headingMd" as="h2">Try our other apps</Text>
@@ -180,6 +180,6 @@ export default function Help() {
         </InlineGrid>
       </BlockStack>
     </Page>
-    
+
   );
 }
