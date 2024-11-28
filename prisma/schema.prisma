@@ -30,3 +30,11 @@ model Session {
   collaborator  Boolean?  @default(false)
   emailVerified Boolean?  @default(false)
 }
+model Store {
+	  id                Int       @id @default(autoincrement())
+	  shopId            String    @unique
+	  myshopifyDomain   String    @unique
+	  email             String    
+    
+    @@unique([shopId, myshopifyDomain]) 
+}
