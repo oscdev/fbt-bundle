@@ -4,7 +4,7 @@ const USE_ONLINE_TOKENS = false;
 // Create transporter only onc
 export const modelAppInstallation = {
     
-    getshop: async function (admin) {
+    getShopEmail: async function (admin) {
 		try {
 			const segment = await admin.graphql(QL.SHOP);
 			const segmentJson = await segment.json();

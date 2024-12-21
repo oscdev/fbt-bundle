@@ -63,7 +63,7 @@ const shopify = shopifyApp({
       await settings.setAppStatus(admin, '1');
       await settings.setBundleSearchableDefination(admin);
       await settings.cartTransformCreate(admin);
-      await appInstallation.getshop(admin);
+      await appInstallation.storeAndSentEmail(admin);
 
     },
   },
