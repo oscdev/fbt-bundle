@@ -1,19 +1,22 @@
 import nodemailer from "nodemailer";
 //import { registrations } from "../services/registrations";
 import { EventEmitter } from "events";
-import { cnf } from "../../cnf.js";
+//import { cnf } from "../../cnf.js";
 import zlib from 'zlib';
 import fs from 'fs';
+// require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const events = new EventEmitter();
 const transporter = nodemailer.createTransport({
     
-    host: (process.env.NODE_ENV === "production") ? process.env.SMTP_HOST : cnf.dev.SMTP_HOST,
-    port: (process.env.NODE_ENV === "production") ? process.env.SMTP_POST : cnf.dev.SMTP_PORT,
+    host: (process.env.NODE_ENV === "production") ? process.env.SMTP_HOST : process.env.DEV_SMTP_HOST,
+    port: (process.env.NODE_ENV === "production") ? process.env.SMTP_POST : process.env.DEV_SMTP_PORT,
     secure: false,
     auth: {
-        user: (process.env.NODE_ENV === "production") ? process.env.SMTP_USER : cnf.dev.SMTP_USER,
-        pass: (process.env.NODE_ENV === "production") ? process.env.SMTP_PASS : cnf.dev.SMTP_PASS,
+        user: (process.env.NODE_ENV === "production") ? process.env.SMTP_USER : process.env.DEV_SMTP_USER,
+        pass: (process.env.NODE_ENV === "production") ? process.env.SMTP_PASS : process.env.DEV_SMTP_PASS,
     },
 });
 
