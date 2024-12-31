@@ -165,7 +165,7 @@
                   </li>
                   {% comment %} This code for default product end {% endcomment %}
                 {% endif %}
-                {% assign crossProducts = product.metafields.oscp.cross.value.crossProducts | slice: 0, 2 %}
+                {% assign crossProducts = product.metafields.oscp.cross.value.crossProducts | slice: 0, 6 %}
                 {% for item in crossProducts %}
                   {% assign crosssell_item = all_products[item.handle] %}
                   {% if crosssell_item.available == true %}

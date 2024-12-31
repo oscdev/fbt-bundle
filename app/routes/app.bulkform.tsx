@@ -6,7 +6,7 @@ import { bulkProduct } from "../services/index";
 import { useSubmit } from "@remix-run/react";
 import { QL } from "~/helpers/graph-ql";
 import { useField, useDynamicList, useForm } from '@shopify/react-form';
-
+import { Confirm } from "../components/Confirm";
 import { FbtResource } from "../components/Fbt/index";
 
 export const loader = async ({ request }) => {
@@ -26,6 +26,9 @@ export const action = async ({ request }) => {
 };
 
 const Bulkform = () => {
+  const [isConfirmExit, setIsConfirmExit] = useState(false);  
+  const [confirmMsg, setConfirmMsg] = useState("Are you sure you want to exit without saving?");
+  const navigate = useNavigate();
   const submitForm = useSubmit();
   const { ids } = useLoaderData();
   const [fbt, setFbt] = useState([]);
@@ -145,8 +148,26 @@ const Bulkform = () => {
 useEffect(() => {
   getProductsMedia();
 }, [fbtItems]);
-  ////////////
 
+
+  // Confirm exit function to ask the user if they want to exit without saving
+  const confirmExit = () => {
+    setIsConfirmExit(true);  // Open the confirmation modal
+  };
+
+  // Handle user confirming exit action
+
+  const onConfirmExit = () => {
+    setIsConfirmExit(false); // Close the modal
+    // Here you can redirect or perform any back action
+    navigate("/app"); // Example: Go back to the previous page
+  };
+
+   // Handle user canceling exit action
+   const onCancelExit = () => {
+    setIsConfirmExit(false); // Close the confirmation modal
+  };
+  
   return (
     <Page
       title="Frequently Bought Together"
@@ -180,7 +201,16 @@ useEffect(() => {
           </BlockStack>
         </Layout.Section>
       </Layout>
+      <Confirm
+        isConfirm={isConfirmExit}
+        confirmMsg={confirmMsg}
+        onConfirm={onConfirmExit}
+       onCancel={onCancelExit}
+        returnData={null}
+      />
     </Page>
+    
+    
   );
 };
 
