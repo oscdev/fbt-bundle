@@ -110,7 +110,7 @@ export default function Help() {
 
             <Text variant="bodyMd" as="h2"> To Send useful information to the support team and solve your issue as soon as possible,please follow these instructions:</Text>
             <List type="number">
-              <List.Item> <Button variant="plain" url={'https://${settingsData.appSettingsData.shopUrl}/admin/settings/apps/app_installations/app/${settingsData.appName}'}>Click Here</Button> to Open the OSCP Upsell & Cross Sell application in Settings </List.Item>
+              <List.Item> <Button variant="plain" url={'https://${settingsData.appSettingsData.shopUrl}/admin/settings/apps/app_installations/app/${settingsData.appName}'}>Click Here</Button> to Open the OSCP Bundle & Upsell Application in Settings </List.Item>
               <List.Item>Scroll to the bottom of the Page, and click the <b>Share logs</b> button</List.Item>
               <List.Item>After sharing the logs with us,send us a message through the bubble in the buttom-right of the screen and tell us about your issue</List.Item>
             </List>
@@ -123,7 +123,7 @@ export default function Help() {
                     Feedback
                   </Text>
                   <Text variant="bodyLg" as="p">
-                    Your feedback is valuable to us! Please share your experience using the OSCP Upsell & Cross Sell App.</Text>
+                    Your feedback is valuable to us! Please share your experience using the OSCP Bundle & Upsell App.</Text>
                   <ButtonGroup><Button target="_blank" url="https://apps.shopify.com/oscp-upsell-cross-sell-1#modal-show=ReviewListingModal">Share Feedback</Button></ButtonGroup>
                 </BlockStack>
               </InlineGrid>
