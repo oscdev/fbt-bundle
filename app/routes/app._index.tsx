@@ -110,7 +110,7 @@ export default function Index() {
                   <InlineStack blockAlign="center">
                     <img alt="OSCP Wholesale Logo" width="65px" src={logo} style={{ marginRight: '10px' }} />
                     <Text variant="headingLg" as="h5">
-                      Oscp Upsell & Cross Sell
+                      OSCP Bundle & Upsell 
                       {(homeData?.currentAppInstallation?.metafield?.value == "true") ? <Badge tone="success">ON</Badge> : <Badge tone="attention">OFF</Badge>}
 
                     </Text>
