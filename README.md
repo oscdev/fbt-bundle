@@ -1,8 +1,8 @@
-# OSCP Upsell & Cross Sell App
+# OSCP Bundle & Upsell App
 
 ## Description
 
-The Oscp upsell & cross sell app offers a user-friendly interface that allows users to add the related products on the Product page.
+The OSCP Bundle & Upsell App offers a user-friendly interface that allows users to add the related products on the Product page.
 
 ## Requirements
 
