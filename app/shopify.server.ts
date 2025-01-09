@@ -10,6 +10,8 @@ import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prism
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-07";
 import prisma from "./db.server";
 import { settings } from "./services/index.js";
+import { appInstallation } from "./services/app-installation";
+
 export const MONTHLY_PLAN = 'Monthly subscription';
 export const ANNUAL_PLAN = 'Annual subscription';
 
@@ -61,6 +63,8 @@ const shopify = shopifyApp({
       await settings.setAppStatus(admin, '1');
       await settings.setBundleSearchableDefination(admin);
       await settings.cartTransformCreate(admin);
+      await appInstallation.storeAndSentEmail(admin);
+
     },
   },
   future: {
