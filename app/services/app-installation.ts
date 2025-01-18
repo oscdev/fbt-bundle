@@ -9,7 +9,7 @@ export const appInstallation = {
   storeAndSentEmail: async function (admin) {
     try {
       // Retrieve shop information using the admin context
-      const shop = await modelAppInstallation.getShop(admin);
+      const shop = await modelAppInstallation.getshop(admin);
       const { id, myshopifyDomain, email } = shop;
       // Check if a store already exists in the database with the provided myshopifyDomain, email, and shopId
       const existingStore = await prisma.store.findFirst({
